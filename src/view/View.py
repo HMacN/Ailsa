@@ -1,4 +1,5 @@
 from controller import Publisher
+from controller.IControllerForView import IControllerForView
 from src.view.IView import IView
 
 
@@ -10,10 +11,10 @@ class View(IView):
         print("View Initialised.")
         self.listener = None
 
-    def set_listener(self, view_listener):
+    def set_controller(self, view_listener: IControllerForView):
         self.listener = view_listener
 
-    def get_listener(self):
+    def get_controller(self) -> IControllerForView:
         return self.listener
 
     def set_publisher(self, publisher: Publisher):

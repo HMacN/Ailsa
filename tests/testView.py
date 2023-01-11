@@ -1,7 +1,7 @@
 import unittest
 
 from controller.Publisher import Publisher
-from tests.Mocks.MockViewListener import MockViewListener
+from tests.Mocks.MockControllerForView import MockControllerForView
 from src.view.View import View
 
 
@@ -11,17 +11,17 @@ class ViewTests(unittest.TestCase):
         view = View()
 
         self.assertEqual(view.get_publisher(), None)
-        self.assertEqual(view.get_listener(), None)
+        self.assertEqual(view.get_controller(), None)
 
-    def test_get_set_listener(self):
-        given_listener = MockViewListener()
+    def test_get_set_controller(self):
+        given_controller = MockControllerForView()
         view = View()
 
-        view.set_listener(given_listener)
+        view.set_controller(given_controller)
 
-        registered_listener = view.get_listener()
+        registered_controller = view.get_controller()
 
-        self.assertEqual(given_listener, registered_listener)
+        self.assertEqual(given_controller, registered_controller)
 
     def test_get_set_publisher(self):
         view = View()

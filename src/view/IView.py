@@ -1,18 +1,18 @@
 import abc
 
 from controller import Publisher
-from src.view.IViewListener import IViewListener
+from controller.IControllerForView import IControllerForView
 
 
 class IView(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def set_listener(self, view_listener: IViewListener):
+    def set_controller(self, view_listener: IControllerForView):
         """Set the controller"""
         raise NotImplementedError
 
     @abc.abstractmethod
-    def get_listener(self) -> IViewListener:
+    def get_controller(self) -> IControllerForView:
         """Get the controller"""
         raise NotImplementedError
 

@@ -1,5 +1,4 @@
-from controller import Publisher
-from src.view import IViewListener
+from controller import Publisher, IControllerForView
 from src.view.IView import IView
 
 
@@ -10,8 +9,8 @@ class MockView(IView):
     def get_publisher(self) -> Publisher:
         pass
 
-    def get_listener(self) -> IViewListener:
+    def get_controller(self) -> IControllerForView:
         pass
 
-    def set_listener(self, view_listener: IViewListener):
+    def set_controller(self, view_listener: IControllerForView):
         pass
