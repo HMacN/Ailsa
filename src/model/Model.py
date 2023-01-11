@@ -1,10 +1,12 @@
-from controller.IController import IController
+from controller.IControllerForModel import IControllerForModel
 from model.IModel import IModel
 
 
 class Model(IModel):
-    def set_listener(self, controller: IController):
-        pass
+    controller: IControllerForModel = None
 
-    def get_listener(self) -> IController:
-        pass
+    def __init__(self, controller: IControllerForModel):
+        self.controller = controller
+
+    def get_controller(self):
+        return self.controller

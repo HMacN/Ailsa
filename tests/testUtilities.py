@@ -161,3 +161,4 @@ class UtilitiesTests(unittest.TestCase):
         self.assertEqual(bounding_box_width, ident.get_bounding_box_width())
         self.assertEqual(bounding_box_height, ident.get_bounding_box_height())
         self.assertEqual(object_name, ident.get_object_name())
+
