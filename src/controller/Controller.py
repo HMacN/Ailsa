@@ -3,6 +3,7 @@ from src.controller.IController import IController
 
 
 class Controller(IController, IControllerForView):
+
     view = None
 
     def __init__(self):
@@ -13,3 +14,6 @@ class Controller(IController, IControllerForView):
 
     def get_view(self):
         return self.view
+
+    def new_detected_object(self, detected_object):
+        pass

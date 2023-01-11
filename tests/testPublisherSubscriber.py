@@ -1,7 +1,7 @@
 import unittest
 
-from Mocks.MockSubscriber import MockSubscriber
-from controller.Publisher import Publisher
+from mocks.MockSubscriber import MockSubscriber
+from controller.publisher_subscriber.Publisher import Publisher
 
 
 class PublisherSubscriberTests(unittest.TestCase):

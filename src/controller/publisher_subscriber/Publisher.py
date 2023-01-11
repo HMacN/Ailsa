@@ -1,4 +1,4 @@
-from controller import ISubscriber
+from controller.publisher_subscriber import ISubscriber
 
 
 class Publisher:

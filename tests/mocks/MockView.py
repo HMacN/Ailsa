@@ -1,8 +1,12 @@
-from controller import Publisher, IControllerForView
+from controller import IControllerForView, IdentifiedObject
+from controller.publisher_subscriber import Publisher
 from src.view.IView import IView
 
 
 class MockView(IView):
+    def detect(self, identified_object: IdentifiedObject):
+        pass
+
     def set_publisher(self, publisher: Publisher):
         pass
 
@@ -12,5 +16,5 @@ class MockView(IView):
     def get_controller(self) -> IControllerForView:
         pass
 
-    def set_controller(self, view_listener: IControllerForView):
+    def __init__(self, view_listener: IControllerForView):
         pass
