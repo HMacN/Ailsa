@@ -162,3 +162,4 @@ class UtilitiesTests(unittest.TestCase):
         self.assertEqual(bounding_box_height, ident.get_bounding_box_height())
         self.assertEqual(object_name, ident.get_object_name())
 
+    # def test_startup_object_assigns   # todo tests for startup object to go here

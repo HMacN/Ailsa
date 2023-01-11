@@ -1,7 +1,6 @@
 import abc
 
 from controller.IControllerForModel import IControllerForModel
-from src.controller.IController import IController
 
 
 class IModel(metaclass=abc.ABCMeta):
