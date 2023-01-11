@@ -1,17 +1,18 @@
 import unittest
 
 from mocks.MockSubscriber import MockSubscriber
-from controller.publisher_subscriber.Publisher import Publisher
+from util.IdentifiedObject import IdentifiedObject
+from util.publisher_subscriber.Publisher import Publisher
 
 
-class PublisherSubscriberTests(unittest.TestCase):
+class UtilitiesTests(unittest.TestCase):
 
-    def test_initialises_empty(self):
+    def test_publisher_initialises_empty(self):
         publisher = Publisher()
 
         self.assertEqual(publisher.get_subscribers(), set())
 
-    def test_get_set_subscriber(self):
+    def test_publisher_get_set_subscriber(self):
         expected_subscriber = MockSubscriber()
         expected_set_of_subscribers = {expected_subscriber}
         publisher = Publisher()
@@ -21,7 +22,7 @@ class PublisherSubscriberTests(unittest.TestCase):
 
         self.assertEqual(expected_set_of_subscribers, found_set_of_subscribers)
 
-    def test_get_set_multiple_subscribers(self):
+    def test_publisher_get_set_multiple_subscribers(self):
         sub_1 = MockSubscriber()
         sub_2 = MockSubscriber()
         sub_3 = MockSubscriber()
@@ -35,7 +36,7 @@ class PublisherSubscriberTests(unittest.TestCase):
 
         self.assertEqual(expected_set_of_subscribers, found_set_of_subscribers)
 
-    def test_get_subscribers_when_empty(self):
+    def test_publisher_get_subscribers_when_empty(self):
         expected_set_of_subscribers = set()
         publisher = Publisher()
 
@@ -43,7 +44,7 @@ class PublisherSubscriberTests(unittest.TestCase):
 
         self.assertEqual(expected_set_of_subscribers, found_set_of_subscribers)
 
-    def test_remove_subscriber(self):
+    def test_publisher_remove_subscriber(self):
         sub_1 = MockSubscriber()
         sub_2 = MockSubscriber()
         sub_3 = MockSubscriber()
@@ -58,7 +59,7 @@ class PublisherSubscriberTests(unittest.TestCase):
 
         self.assertEqual(expected_set_of_subscribers, found_set_of_subscribers)
 
-    def test_handles_removing_subscriber_that_was_not_added(self):
+    def test_publisher_handles_removing_subscriber_that_was_not_added(self):
         sub_1 = MockSubscriber()
         sub_2 = MockSubscriber()
         sub_3 = MockSubscriber()
@@ -72,7 +73,7 @@ class PublisherSubscriberTests(unittest.TestCase):
 
         self.assertEqual(expected_set_of_subscribers, found_set_of_subscribers)
 
-    def test_handles_removing_subscriber_when_empty(self):
+    def test_publisher_handles_removing_subscriber_when_empty(self):
         sub_1 = MockSubscriber()
         expected_set_of_subscribers = set()
         pub = Publisher()
@@ -82,7 +83,7 @@ class PublisherSubscriberTests(unittest.TestCase):
 
         self.assertEqual(expected_set_of_subscribers, found_set_of_subscribers)
 
-    def test_notifies_subscribers(self):
+    def test_publisher_notifies_subscribers(self):
         sub_1 = MockSubscriber()
         sub_2 = MockSubscriber()
         sub_3 = MockSubscriber()
@@ -97,7 +98,7 @@ class PublisherSubscriberTests(unittest.TestCase):
         self.assertTrue(sub_2.is_notified())
         self.assertTrue(sub_3.is_notified())
 
-    def test_handles_notifying_all_when_empty(self):
+    def test_publisher_handles_notifying_all_when_empty(self):
         sub_1 = MockSubscriber()
         pub = Publisher()
 
@@ -105,7 +106,7 @@ class PublisherSubscriberTests(unittest.TestCase):
 
         self.assertFalse(sub_1.is_notified())
 
-    def test_can_notify_individual_subscriber(self):
+    def test_publisher_can_notify_individual_subscriber(self):
         sub_1 = MockSubscriber()
         sub_2 = MockSubscriber()
         sub_3 = MockSubscriber()
@@ -120,7 +121,7 @@ class PublisherSubscriberTests(unittest.TestCase):
         self.assertTrue(sub_2.is_notified())
         self.assertFalse(sub_3.is_notified())
 
-    def test_handles_notifying_subscriber_that_was_not_added(self):
+    def test_publisher_handles_notifying_subscriber_that_was_not_added(self):
         sub_1 = MockSubscriber()
         sub_2 = MockSubscriber()
         sub_3 = MockSubscriber()
@@ -134,10 +135,29 @@ class PublisherSubscriberTests(unittest.TestCase):
         self.assertFalse(sub_2.is_notified())
         self.assertFalse(sub_3.is_notified())
 
-    def test_handles_notifying_subscriber_when_empty(self):
+    def test_publisher_handles_notifying_subscriber_when_empty(self):
         sub_1 = MockSubscriber()
         pub = Publisher()
 
         pub.notify(sub_1)
 
         self.assertFalse(sub_1.is_notified())
+
+    def test_identified_object_returns_data(self):
+        horizontal_distance_to_origin = 16
+        vertical_distance_to_origin = 17
+        bounding_box_width = 3
+        bounding_box_height = 4
+        object_name = "Name"
+
+        ident = IdentifiedObject(horizontal_distance_to_origin,
+                                 vertical_distance_to_origin,
+                                 bounding_box_width,
+                                 bounding_box_height,
+                                 object_name)
+
+        self.assertEqual(horizontal_distance_to_origin, ident.get_horizontal_distance_to_origin())
+        self.assertEqual(vertical_distance_to_origin, ident.get_vertical_distance_to_origin())
+        self.assertEqual(bounding_box_width, ident.get_bounding_box_width())
+        self.assertEqual(bounding_box_height, ident.get_bounding_box_height())
+        self.assertEqual(object_name, ident.get_object_name())

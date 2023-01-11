@@ -1,4 +1,4 @@
-from controller import IdentifiedObject
+from util import IdentifiedObject
 from controller.IControllerForView import IControllerForView
 
 

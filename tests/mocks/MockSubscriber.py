@@ -1,4 +1,4 @@
-from controller.publisher_subscriber.ISubscriber import ISubscriber
+from util.publisher_subscriber.ISubscriber import ISubscriber
 
 
 class MockSubscriber(ISubscriber):

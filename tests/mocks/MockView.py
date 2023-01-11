@@ -1,5 +1,6 @@
-from controller import IControllerForView, IdentifiedObject
-from controller.publisher_subscriber import Publisher
+from controller import IControllerForView
+from util import IdentifiedObject
+from util.publisher_subscriber import Publisher
 from src.view.IView import IView
 
 

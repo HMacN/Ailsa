@@ -1,7 +1,7 @@
 import unittest
 
-from controller.IdentifiedObject import IdentifiedObject
-from controller.publisher_subscriber.Publisher import Publisher
+from util.IdentifiedObject import IdentifiedObject
+from util.publisher_subscriber.Publisher import Publisher
 from tests.mocks.MockControllerForView import MockControllerForView
 from src.view.View import View
 

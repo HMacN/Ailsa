@@ -1,7 +1,7 @@
 import abc
 
-from controller import IdentifiedObject
-from controller.publisher_subscriber import Publisher
+from util import IdentifiedObject
+from util.publisher_subscriber import Publisher
 from controller.IControllerForView import IControllerForView
 
 
