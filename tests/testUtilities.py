@@ -1,5 +1,6 @@
 import unittest
 
+from util.Starter import Starter
 from mocks.MockSubscriber import MockSubscriber
 from util.IdentifiedObject import IdentifiedObject
 from util.publisher_subscriber.Publisher import Publisher
@@ -162,4 +163,6 @@ class UtilitiesTests(unittest.TestCase):
         self.assertEqual(bounding_box_height, ident.get_bounding_box_height())
         self.assertEqual(object_name, ident.get_object_name())
 
-    # def test_startup_object_assigns   # todo tests for startup object to go here
+    def test_startup_object_assigns_view_to_controller(self):
+        startup = Starter()
+

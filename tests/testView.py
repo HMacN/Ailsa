@@ -1,22 +1,22 @@
 import unittest
 
+from mocks.MockController import MockController
 from util.IdentifiedObject import IdentifiedObject
 from util.publisher_subscriber.Publisher import Publisher
-from tests.mocks.MockControllerForView import MockControllerForView
 from src.view.View import View
 
 
 class ViewTests(unittest.TestCase):
 
     def test_initialises_empty(self):
-        controller = MockControllerForView()
+        controller = MockController()
         view = View(controller)
 
         self.assertEqual(view.get_publisher(), None)
         self.assertEqual(view.get_controller(), controller)
 
     def test_get_set_controller(self):
-        given_controller = MockControllerForView()
+        given_controller = MockController()
         view = View(given_controller)
 
         registered_controller = view.get_controller()
@@ -24,7 +24,7 @@ class ViewTests(unittest.TestCase):
         self.assertEqual(given_controller, registered_controller)
 
     def test_get_set_publisher(self):
-        view = View(MockControllerForView())
+        view = View(MockController())
         pub = Publisher()
 
         view.set_publisher(pub)
@@ -32,7 +32,7 @@ class ViewTests(unittest.TestCase):
         self.assertEqual(pub, view.get_publisher())
 
     def test_identified_objects_are_passed_to_the_controller(self):
-        controller = MockControllerForView()
+        controller = MockController()
         view = View(controller)
         detected_object = IdentifiedObject(1, 2, 3, 4, "test")
 

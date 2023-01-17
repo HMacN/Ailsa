@@ -1,8 +1,7 @@
 import unittest
 
-from mocks.MockControllerForModel import MockControllerForModel
+from mocks.MockController import MockController
 from mocks.MockModel import MockModel
-from tests.mocks.MockControllerForView import MockControllerForView
 from src.controller.Controller import Controller
 from tests.mocks.MockView import MockView
 
@@ -16,7 +15,7 @@ class ControllerTests(unittest.TestCase):
         self.assertEqual(None, controller.get_model())
 
     def test_get_set_view(self):
-        given_view = MockView(MockControllerForView())
+        given_view = MockView(MockController())
         controller = Controller()
 
         controller.set_view(given_view)
@@ -26,7 +25,7 @@ class ControllerTests(unittest.TestCase):
         self.assertEqual(given_view, registered_view)
 
     def test_get_set_model(self):
-        given_model = MockModel(MockControllerForModel())
+        given_model = MockModel(MockController())
         controller = Controller()
 
         controller.set_model(given_model)
