@@ -10,7 +10,7 @@ class Controller(IController, IControllerForView):
     model: IModel = None
 
     def __init__(self):
-        print("Controller Initialised.")
+        pass
 
     def set_view(self, given_view: IView):
         self.view = given_view

@@ -1,9 +1,12 @@
 import unittest
 
+from controller.IController import IController
+from controller.IControllerForView import IControllerForView
 from util.Starter import Starter
 from mocks.MockSubscriber import MockSubscriber
 from util.IdentifiedObject import IdentifiedObject
 from util.publisher_subscriber.Publisher import Publisher
+from view.IView import IView
 
 
 class UtilitiesTests(unittest.TestCase):
@@ -164,5 +167,21 @@ class UtilitiesTests(unittest.TestCase):
         self.assertEqual(object_name, ident.get_object_name())
 
     def test_startup_object_assigns_view_to_controller(self):
-        startup = Starter()
+        starter: Starter = Starter()
+
+        print("Test Starter: " + str(starter))   # todo remove
+
+        controller: IController = starter.get_controller()
+
+        print("Test Controller: " + str(controller))   # todo remove
+
+        view: IView = starter.get_view()
+
+        print("Test View: " + str(view))   # todo remove
+
+        view_controller: IControllerForView = view.get_controller()
+
+        print("Test View Controller: " + str(view_controller))   # todo remove
+
+        self.assertEqual(controller, view_controller)
 
