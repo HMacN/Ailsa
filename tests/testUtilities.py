@@ -1,7 +1,9 @@
 import unittest
 
 from controller.IController import IController
+from controller.IControllerForModel import IControllerForModel
 from controller.IControllerForView import IControllerForView
+from model.IModel import IModel
 from util.Starter import Starter
 from mocks.MockSubscriber import MockSubscriber
 from util.IdentifiedObject import IdentifiedObject
@@ -166,7 +168,7 @@ class UtilitiesTests(unittest.TestCase):
         self.assertEqual(bounding_box_height, ident.get_bounding_box_height())
         self.assertEqual(object_name, ident.get_object_name())
 
-    def test_startup_object_assigns_view_to_controller(self):
+    def test_starter_adds_controller_to_view(self):
         starter: Starter = Starter()
         controller: IController = starter.get_controller()
         view: IView = starter.get_view()
@@ -174,3 +176,26 @@ class UtilitiesTests(unittest.TestCase):
 
         self.assertEqual(controller, view_controller)
 
+    def test_starter_adds_view_to_controller(self):
+        starter: Starter = Starter()
+        controller: IController = starter.get_controller()
+        view: IView = starter.get_view()
+        controller_view: IView = controller.get_view()
+
+        self.assertEqual(view, controller_view)
+
+    def test_starter_adds_controller_to_model(self):
+        starter: Starter = Starter()
+        controller: IController = starter.get_controller()
+        model: IModel = starter.get_model()
+        model_controller: IControllerForModel = model.get_controller()
+
+        self.assertEqual(controller, model_controller)
+
+    def test_starter_adds_model_to_controller(self):
+        starter: Starter = Starter()
+        controller: IController = starter.get_controller()
+        model: IModel = starter.get_model()
+        controller_model: IModel = controller.get_model()
+
+        self.assertEqual(model, controller_model)

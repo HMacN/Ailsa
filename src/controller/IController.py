@@ -21,6 +21,6 @@ class IController(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractmethod
-    def get_model(self) -> IView:
+    def get_model(self) -> IModel:
         """Get the model"""
         ...
