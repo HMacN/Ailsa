@@ -7,8 +7,6 @@ from controller.IControllerForModel import IControllerForModel
 
 
 class MockController(IController, IControllerForView, IControllerForModel):
-    detected_object = None
-
     def __init__(self):
         self.detected_object = None
 

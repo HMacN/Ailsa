@@ -3,8 +3,6 @@ from util.publisher_subscriber.ISubscriber import ISubscriber
 
 class MockSubscriber(ISubscriber):
 
-    has_been_notified: bool = None
-
     def __init__(self):
         self.has_been_notified = False
 

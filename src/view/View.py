@@ -5,11 +5,10 @@ from src.view.IView import IView
 
 
 class View(IView):
-    controller: IControllerForView = None
-    publisher: Publisher = None
 
     def __init__(self, view_listener: IControllerForView):
-        self.controller = view_listener
+        self.controller: IControllerForView = view_listener
+        self.publisher: Publisher = None
 
     def get_controller(self) -> IControllerForView:
         return self.controller

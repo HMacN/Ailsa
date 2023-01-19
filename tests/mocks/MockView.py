@@ -5,6 +5,9 @@ from src.view.IView import IView
 
 
 class MockView(IView):
+    def __init__(self, view_listener: IControllerForView):
+        pass
+
     def detect(self, identified_object: IdentifiedObject):
         pass
 
@@ -15,7 +18,4 @@ class MockView(IView):
         pass
 
     def get_controller(self) -> IControllerForView:
-        pass
-
-    def __init__(self, view_listener: IControllerForView):
         pass
