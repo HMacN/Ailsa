@@ -1,0 +1,2 @@
+class KnownRelationship:
+    pass
