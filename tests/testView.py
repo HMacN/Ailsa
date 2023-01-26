@@ -38,4 +38,4 @@ class ViewTests(unittest.TestCase):
 
         view.detect(detected_object)
 
-        self.assertEqual(detected_object, controller.get_given_identified_object())
+        self.assertTrue(detected_object is controller.get_given_identified_object())

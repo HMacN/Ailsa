@@ -17,6 +17,17 @@ class IdentifiedObject:
         self.bounding_box_height = bounding_box_height
         self.object_name = object_name
 
+    def __eq__(self, other):
+        if isinstance(other, IdentifiedObject):
+            if other.bounding_box_height == self.bounding_box_height & \
+                    other.bounding_box_width == self.bounding_box_width & \
+                    other.vertical_distance_to_origin == self.vertical_distance_to_origin & \
+                    other.horizontal_distance_to_origin == self.horizontal_distance_to_origin & \
+                    other.object_name.__eq__(self.object_name):
+                return True
+            else:
+                return False
+
     def get_horizontal_distance_to_origin(self):
         return self.horizontal_distance_to_origin
 
