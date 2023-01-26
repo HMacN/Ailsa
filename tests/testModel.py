@@ -1,10 +1,8 @@
 import unittest
 
-from model.KnownRelationship import KnownRelationship
-from model.KnownEntity import KnownEntity
-from model.KnowledgeGraph import KnowledgeGraph
 from mocks.MockController import MockController
 from model.Model import Model
+from util.IdentifiedObject import IdentifiedObject
 
 
 class ModelTests(unittest.TestCase):
@@ -15,3 +13,11 @@ class ModelTests(unittest.TestCase):
 
         self.assertEqual(controller, model.get_controller())
 
+    def test_register_new_detected_object(self):
+        controller = MockController()
+        model = Model(controller)
+        item = IdentifiedObject(1, 1, 1, 1, "test")
+
+        model.detect(item)
+
+        # TODO pass in a list of detected objects and then check that the new item is added to the list.

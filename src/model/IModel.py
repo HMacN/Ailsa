@@ -1,6 +1,7 @@
 import abc
 
 from controller.IControllerForModel import IControllerForModel
+from util.IdentifiedObject import IdentifiedObject
 
 
 class IModel(metaclass=abc.ABCMeta):
@@ -8,9 +9,14 @@ class IModel(metaclass=abc.ABCMeta):
     @abc.abstractmethod
     def __init__(self, controller: IControllerForModel):
         """Constructor that requires a Controller to be passed in."""
-        raise NotImplementedError
+        ...
 
     @abc.abstractmethod
     def get_controller(self):
         """Getter for the Controller."""
-        raise NotImplementedError
+        ...
+
+    @abc.abstractmethod
+    def detect(self, item: IdentifiedObject):
+        """Pass a detected object into the model."""
+        ...

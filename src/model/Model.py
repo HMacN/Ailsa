@@ -1,5 +1,6 @@
 from controller.IControllerForModel import IControllerForModel
 from model.IModel import IModel
+from util.IdentifiedObject import IdentifiedObject
 
 
 class Model(IModel):
@@ -9,3 +10,6 @@ class Model(IModel):
 
     def get_controller(self):
         return self.controller
+
+    def detect(self, item: IdentifiedObject):
+        pass

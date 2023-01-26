@@ -1,5 +1,6 @@
 import unittest
 
+from controller.IControllerForModel import IControllerForModel
 from mocks.MockController import MockController
 from mocks.MockModel import MockModel
 from src.controller.Controller import Controller
@@ -33,3 +34,8 @@ class ControllerTests(unittest.TestCase):
         registered_model = controller.get_model()
 
         self.assertEqual(given_model, registered_model)
+
+
+
+
+
