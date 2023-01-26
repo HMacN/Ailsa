@@ -6,11 +6,10 @@ from view.IView import IView
 
 
 class Controller(IController, IControllerForView):
-    view: IView = None
-    model: IModel = None
 
     def __init__(self):
-        pass
+        self.view: IView = None
+        self.model: IModel = None
 
     def set_view(self, given_view: IView):
         self.view = given_view

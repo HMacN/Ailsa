@@ -15,3 +15,6 @@ class MainClass:
 
     if __name__ == "__main__":
         print("Main class running!")
+        c = Controller()
+        v = View()
+        c.set_view(v)
