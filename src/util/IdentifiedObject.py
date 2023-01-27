@@ -28,6 +28,9 @@ class IdentifiedObject:
             else:
                 return False
 
+    def __lt__(self, other):
+        return self.object_name < other.object_name
+
     def get_horizontal_distance_to_origin(self):
         return self.horizontal_distance_to_origin
 
