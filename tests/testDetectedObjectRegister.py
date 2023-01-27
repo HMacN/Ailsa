@@ -71,3 +71,23 @@ class DetectedObjectRegisterTests(unittest.TestCase):
         items_found.sort()
 
         self.assertTrue(items_given == items_found)
+
+    def test_register_gets_items_closer_to_horizontal_origin_than_given_value(self):
+        register = DetectedObjectRegister()
+        name_1 = "test"
+        name_2 = "other"
+        item_1 = IdentifiedObject(1, 1, 2, 2, name_1)
+        item_2 = IdentifiedObject(5, 5, 2, 2, name_1)
+        item_3 = IdentifiedObject(9, 9, 2, 2, name_2)
+
+        register.add(item_1)
+        register.add(item_2)
+        register.add(item_3)
+
+        items = list()
+        items.append(item_1)
+        items.append(item_2)
+
+        self.assertEqual(items, register.get_between_horiz_origin_and(8))
+
+

@@ -20,3 +20,15 @@ class DetectedObjectRegister:
                 list_to_return.append(self.__list_of_items[i])
 
         return list_to_return
+
+    def get_between_horiz_origin_and(self, horiz_coord: int):
+        list_to_return = list()
+
+        for i in range(len(self.__list_of_items)):
+            item: IdentifiedObject = self.__list_of_items[i]
+
+            if (item.horizontal_distance_to_origin + item.bounding_box_width) <= horiz_coord:
+                list_to_return.append(item)
+
+        return list_to_return
+
