@@ -17,11 +17,14 @@ class Controller(IController, IControllerForView):
     def get_view(self) -> IView:
         return self.view
 
-    def new_detected_object(self, detected_object: IdentifiedObject):
-        pass
-
     def set_model(self, given_model: IModel):
         self.model = given_model
 
     def get_model(self) -> IModel:
         return self.model
+
+    def detect(self, items: list):
+        self.model.detect(items)
+
+    def get_detected_items(self):
+        return self.model.get_detected_items()

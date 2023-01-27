@@ -7,14 +7,17 @@ from controller.IControllerForModel import IControllerForModel
 
 
 class MockController(IController, IControllerForView, IControllerForModel):
+    def get_detected_items(self):
+        return self.detected_objects
+
     def __init__(self):
-        self.detected_object = None
+        self.detected_objects = None
 
     def get_given_identified_object(self) -> IdentifiedObject:
-        return self.detected_object
+        return self.detected_objects
 
-    def new_detected_object(self, detected_object):
-        self.detected_object = detected_object
+    def detect(self, detected_objects):
+        self.detected_objects = detected_objects
 
     def set_model(self, model: IModel):
         pass

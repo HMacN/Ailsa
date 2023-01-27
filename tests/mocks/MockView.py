@@ -8,7 +8,7 @@ class MockView(IView):
     def __init__(self, view_listener: IControllerForView):
         pass
 
-    def detect(self, identified_object: IdentifiedObject):
+    def detect(self, identified_objects: list):
         pass
 
     def set_publisher(self, publisher: Publisher):

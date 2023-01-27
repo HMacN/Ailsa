@@ -1,6 +1,7 @@
 import unittest
 
 from mocks.MockController import MockController
+from model.DetectedObjectRegister import DetectedObjectRegister
 from model.Model import Model
 from util.IdentifiedObject import IdentifiedObject
 
@@ -13,11 +14,15 @@ class ModelTests(unittest.TestCase):
 
         self.assertEqual(controller, model.get_controller())
 
-    def test_register_new_detected_object(self):
+    def test_register_new_detected_objects_and_gets_all_detected_objects(self):
         controller = MockController()
         model = Model(controller)
-        item = IdentifiedObject(1, 1, 1, 1, "test")
+        item_1 = IdentifiedObject(1, 1, 2, 2, "test")
+        item_2 = IdentifiedObject(5, 5, 2, 2, "test")
+        item_3 = IdentifiedObject(9, 9, 2, 2, "test")
+        items = [item_1, item_2, item_3]
 
-        model.detect(item)
+        model.detect(items)
+        returned_items = model.get_detected_items()
 
-        # TODO pass in a list of detected objects and then check that the new item is added to the list.
+        self.assertEqual(items, returned_items)

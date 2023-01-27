@@ -3,8 +3,10 @@ import unittest
 from controller.IControllerForModel import IControllerForModel
 from mocks.MockController import MockController
 from mocks.MockModel import MockModel
+from model.Model import Model
 from src.controller.Controller import Controller
 from tests.mocks.MockView import MockView
+from util.IdentifiedObject import IdentifiedObject
 
 
 class ControllerTests(unittest.TestCase):
@@ -35,7 +37,21 @@ class ControllerTests(unittest.TestCase):
 
         self.assertEqual(given_model, registered_model)
 
+    def test_detect_and_retrieve_objects(self):
+        controller = Controller()
+        model_controller: IControllerForModel = controller
+        model = Model(model_controller)
+        controller.set_model(model)
 
+        item_1 = IdentifiedObject(1, 1, 2, 2, "test")
+        item_2 = IdentifiedObject(5, 5, 2, 2, "test")
+        item_3 = IdentifiedObject(9, 9, 2, 2, "test")
+        items = [item_1, item_2, item_3]
+
+        controller.detect(items)
+        returned_items = controller.get_detected_items()
+
+        self.assertEqual(items, returned_items)
 
 
 

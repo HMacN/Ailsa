@@ -19,5 +19,8 @@ class View(IView):
     def get_publisher(self) -> Publisher:
         return self.publisher
 
-    def detect(self, detected_object: IdentifiedObject):
-        self.controller.new_detected_object(detected_object)
+    def detect(self, detected_objects: list):
+        self.controller.detect(detected_objects)
+
+    def get_detected_items(self) -> list:
+        return self.controller.get_detected_items()

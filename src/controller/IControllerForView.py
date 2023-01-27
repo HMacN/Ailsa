@@ -4,6 +4,11 @@ import abc
 class IControllerForView(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
-    def new_detected_object(self, detected_object):
-        """Add a newly detected object to the controller"""
+    def detect(self, detected_objects: list):
+        """Add a newly detected objects to the __controller"""
+        ...
+
+    @abc.abstractmethod
+    def get_detected_items(self):
+        """Returns all unique detected items"""
         ...

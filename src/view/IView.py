@@ -9,12 +9,12 @@ class IView(metaclass=abc.ABCMeta):
 
     @abc.abstractmethod
     def __init__(self, view_listener: IControllerForView):
-        """Set the controller"""
+        """Set the __controller"""
         raise NotImplementedError
 
     @abc.abstractmethod
     def get_controller(self) -> IControllerForView:
-        """Get the controller"""
+        """Get the __controller"""
         raise NotImplementedError
 
     @abc.abstractmethod
@@ -28,6 +28,6 @@ class IView(metaclass=abc.ABCMeta):
         raise NotImplementedError
 
     @abc.abstractmethod
-    def detect(self, identified_object: IdentifiedObject):
+    def detect(self, identified_objects: list):
         """Pass a detected object to the view."""
         raise NotImplementedError

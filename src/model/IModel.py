@@ -1,6 +1,7 @@
 import abc
 
 from controller.IControllerForModel import IControllerForModel
+from model.DetectedObjectRegister import DetectedObjectRegister
 from util.IdentifiedObject import IdentifiedObject
 
 
@@ -17,6 +18,11 @@ class IModel(metaclass=abc.ABCMeta):
         ...
 
     @abc.abstractmethod
-    def detect(self, item: IdentifiedObject):
-        """Pass a detected object into the model."""
+    def detect(self, items: list):
+        """Pass detected objects into the model."""
+        ...
+
+    @abc.abstractmethod
+    def get_detected_items(self) -> list:
+        """Get all items recorded by the model"""
         ...

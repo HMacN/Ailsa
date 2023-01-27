@@ -1,5 +1,6 @@
 import unittest
 
+from controller.Controller import Controller
 from mocks.MockController import MockController
 from util.IdentifiedObject import IdentifiedObject
 from util.publisher_subscriber.Publisher import Publisher
@@ -34,8 +35,12 @@ class ViewTests(unittest.TestCase):
     def test_identified_objects_are_passed_to_the_controller(self):
         controller = MockController()
         view = View(controller)
-        detected_object = IdentifiedObject(1, 2, 3, 4, "test")
 
-        view.detect(detected_object)
+        item_1 = IdentifiedObject(1, 1, 2, 2, "test")
+        item_2 = IdentifiedObject(5, 5, 2, 2, "test")
+        item_3 = IdentifiedObject(9, 9, 2, 2, "test")
+        items = [item_1, item_2, item_3]
 
-        self.assertTrue(detected_object is controller.get_given_identified_object())
+        view.detect(items)
+        returned_items = view.get_detected_items()
+        self.assertEqual(items, returned_items)

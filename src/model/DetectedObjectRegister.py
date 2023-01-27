@@ -52,3 +52,6 @@ class DetectedObjectRegister:
 
         return list_to_return
 
+    def get_all(self):
+        return self.__list_of_items
+

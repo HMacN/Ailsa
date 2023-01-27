@@ -227,3 +227,20 @@ class DetectedObjectRegisterTests(unittest.TestCase):
         returned_items_2.sort()
 
         self.assertEqual(given_items_2, returned_items_2)
+
+    def test_get_all_items(self):
+        register = DetectedObjectRegister()
+        name_1 = "test"
+        item_1 = IdentifiedObject(1, 1, 2, 2, name_1)
+        item_2 = IdentifiedObject(5, 5, 2, 2, name_1)
+        item_3 = IdentifiedObject(9, 9, 2, 2, name_1)
+
+        register.add(item_1)
+        register.add(item_2)
+        register.add(item_3)
+
+        given_items_1 = [item_1, item_2, item_3]
+        returned_items_1 = register.get_all()
+        returned_items_1.sort()
+
+        self.assertEqual(given_items_1, returned_items_1)
