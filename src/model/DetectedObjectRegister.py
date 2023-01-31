@@ -2,6 +2,17 @@ from util.DebugPrint import debug_print
 from util.IdentifiedObject import IdentifiedObject
 
 
+def are_boxes_overlapping_on_one_axis(item_far_edge: int, item_near_edge: int, other_far_edge: int,
+                                      other_near_edge: int) -> bool:
+    if item_far_edge < other_near_edge:
+        return False
+
+    if item_near_edge > other_far_edge:
+        return False
+
+    return True
+
+
 class DetectedObjectRegister:
 
     def __init__(self):
@@ -47,45 +58,25 @@ class DetectedObjectRegister:
 
     def get_horiz_overlapping_for(self, item: IdentifiedObject):
         def selection_function(other: IdentifiedObject) -> bool:
-
-            debug_print(item, other)
             if item is other:
                 return False
 
-            item_right_edge = item.horizontal_distance_to_origin + item.bounding_box_width
-            item_left_edge = item.horizontal_distance_to_origin
-            other_right_edge = other.horizontal_distance_to_origin + other.bounding_box_width
-            other_left_edge = other.horizontal_distance_to_origin
-
-            if item_right_edge < other_left_edge:
-                return False
-
-            if item_left_edge > other_right_edge:
-                return False
-
-            return True
+            return are_boxes_overlapping_on_one_axis(item.horizontal_distance_to_origin + item.bounding_box_width,
+                                                     item.horizontal_distance_to_origin,
+                                                     other.horizontal_distance_to_origin + other.bounding_box_width,
+                                                     other.horizontal_distance_to_origin)
 
         return self.__get_sublist(selection_function)
 
     def get_vert_overlapping_for(self, item: IdentifiedObject):
         def selection_function(other: IdentifiedObject) -> bool:
-
-            debug_print(item, other)
             if item is other:
                 return False
 
-            item_top_edge = item.vertical_distance_to_origin + item.bounding_box_height
-            item_bottom_edge = item.vertical_distance_to_origin
-            other_top_edge = other.vertical_distance_to_origin + other.bounding_box_height
-            other_bottom_edge = other.vertical_distance_to_origin
-
-            if item_top_edge < other_bottom_edge:
-                return False
-
-            if item_bottom_edge > other_top_edge:
-                return False
-
-            return True
+            return are_boxes_overlapping_on_one_axis(item.vertical_distance_to_origin + item.bounding_box_height,
+                                                     item.vertical_distance_to_origin,
+                                                     other.vertical_distance_to_origin + other.bounding_box_height,
+                                                     other.vertical_distance_to_origin)
 
         return self.__get_sublist(selection_function)
 
@@ -99,6 +90,3 @@ class DetectedObjectRegister:
                 list_to_return.append(item)
 
         return list_to_return
-
-
-
