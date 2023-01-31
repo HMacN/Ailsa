@@ -244,3 +244,53 @@ class DetectedObjectRegisterTests(unittest.TestCase):
         returned_items_1.sort()
 
         self.assertEqual(given_items_1, returned_items_1)
+
+    def test_get_items_overlapping_horizontally_does_not_return_original_item(self):
+        register = DetectedObjectRegister()
+        name_1 = "test"
+        item_1 = IdentifiedObject(5, 1, 3, 3, name_1)
+
+        register.add(item_1)
+
+        overlapping = []
+        found_overlapping = register.get_horiz_overlapping_for(item_1)
+
+        self.assertEqual(overlapping, found_overlapping)
+
+    def test_get_items_overlapping_horizontally(self):
+        register = DetectedObjectRegister()
+        name_1 = "test"
+        item_1 = IdentifiedObject(5, 1, 3, 3, name_1)
+        item_2 = IdentifiedObject(1, 1, 3, 3, name_1)
+        item_3 = IdentifiedObject(6, 1, 3, 3, name_1)
+        item_4 = IdentifiedObject(4, 1, 3, 3, name_1)
+
+        register.add(item_1)
+        register.add(item_2)
+        register.add(item_3)
+        register.add(item_4)
+
+        overlapping = [item_3, item_4]
+        found_overlapping = register.get_horiz_overlapping_for(item_1)
+        found_overlapping.sort()
+
+        self.assertEqual(overlapping, found_overlapping)
+
+    def test_get_items_overlapping_vertically(self):
+        register = DetectedObjectRegister()
+        name_1 = "test"
+        item_1 = IdentifiedObject(1, 5, 3, 3, name_1)
+        item_2 = IdentifiedObject(1, 1, 3, 3, name_1)
+        item_3 = IdentifiedObject(1, 6, 3, 3, name_1)
+        item_4 = IdentifiedObject(1, 4, 3, 3, name_1)
+
+        register.add(item_1)
+        register.add(item_2)
+        register.add(item_3)
+        register.add(item_4)
+
+        overlapping = [item_3, item_4]
+        found_overlapping = register.get_vert_overlapping_for(item_1)
+        found_overlapping.sort()
+
+        self.assertEqual(overlapping, found_overlapping)
