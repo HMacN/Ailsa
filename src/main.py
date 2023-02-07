@@ -1,20 +1,19 @@
 from controller import IController
-from controller.Controller import Controller
 from model import IModel
-from model.Model import Model
+from util.ObjectRecognition.TFlow import TFlow
+from util.Starter import Starter
 from view import IView
-from view.View import View
 
 
 class MainClass:
-
-    def __init__(self):
-        self.model: IModel = None
-        self.view: IView = None
-        self.controller: IController = None
-
     if __name__ == "__main__":
         print("Main class running!")
-        c = Controller()
-        v = View()
-        c.set_view(v)
+        starter: Starter = Starter()
+
+        model: IModel = starter.get_model()
+        view: IView = starter.get_view()
+        controller: IController = starter.get_controller()
+
+        tf = TFlow()
+        tf.go()
+
