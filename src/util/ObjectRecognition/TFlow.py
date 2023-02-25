@@ -164,6 +164,7 @@ def run_detector(detector, path):
         img.numpy(), result["detection_boxes"],
         result["detection_class_entities"], result["detection_scores"])
 
+    display_image(img)
     display_image(image_with_boxes)
 
 
@@ -172,10 +173,19 @@ class TFlow(IObjectRecognition):
     def go(self):
         # By Heiko Gorski, Source: https://commons.wikimedia.org/wiki/File:Naxos_Taverna.jpg
         image_url = "https://upload.wikimedia.org/wikipedia/commons/6/60/Naxos_Taverna.jpg"  # @param
+        image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/Stafford_livingroom.jpg"  # @param
         downloaded_image_path = download_and_resize_image(image_url, 1280, 856, True)
 
-        module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"  # @param ["https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1", "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"]
+        downloaded_image_path = "C:/Users/hughm/Desktop/Written_Code/Ailsa/virtual_living_room.jpg"
+
+        # TODO different models here
+        # module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"  # @param ["https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1", "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"]
+        module_handle = "https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1"
 
         detector = hub.load(module_handle).signatures['default']
 
+        start_time = time.time()
         run_detector(detector, downloaded_image_path)
+        end_time = time.time()
+        run_time
+        print("Run time: ")
