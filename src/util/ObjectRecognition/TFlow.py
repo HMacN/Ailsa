@@ -6,6 +6,8 @@ import tensorflow as tf
 
 import tensorflow_hub as hub
 
+import cv2
+
 # For downloading the image.
 import matplotlib.pyplot as plt
 import tempfile
@@ -170,22 +172,41 @@ def run_detector(detector, path):
 
 # Apply image detector on a single image.
 class TFlow(IObjectRecognition):
-    def go(self):
+    def go(self, module_handle: str, image_path: str):
         # By Heiko Gorski, Source: https://commons.wikimedia.org/wiki/File:Naxos_Taverna.jpg
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/6/60/Naxos_Taverna.jpg"  # @param
-        image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/Stafford_livingroom.jpg"  # @param
-        downloaded_image_path = download_and_resize_image(image_url, 1280, 856, True)
-
-        downloaded_image_path = "C:/Users/hughm/Desktop/Written_Code/Ailsa/virtual_living_room.jpg"
+        # image_url = "https://upload.wikimedia.org/wikipedia/commons/6/60/Naxos_Taverna.jpg"  # @param
+        # image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/Stafford_livingroom.jpg"  # @param
+        # downloaded_image_path = download_and_resize_image(image_url, 1280, 856, True)
+        #
+        # downloaded_image_path = "C:/Users/hughm/Desktop/Written_Code/Ailsa/virtual_living_room.jpg"
 
         # TODO different models here
         # module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"  # @param ["https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1", "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"]
-        module_handle = "https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1"
+        # module_handle = "https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1"
 
         detector = hub.load(module_handle).signatures['default']
+        iterations = 1
 
         start_time = time.time()
-        run_detector(detector, downloaded_image_path)
+
+        # for i in range(iterations):
+        run_detector(detector, image_path)
+
         end_time = time.time()
-        run_time = end_time - start_time
+        run_time = (end_time - start_time) / iterations
         debug_print("Run Time: ", run_time)
+
+        img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
+        debug_print(img)
+
+        cap = cv2.VideoCapture(0)
+
+        while True:
+
+            ret, image_np = cap.read()
+            cv2.imshow('object detection', cv2.resize(image_np, (800, 600)))
+            if cv2.waitKey(25) & 0xFF == ord('q'):
+                cv2.destroyAllWindows()
+                break
+
+
