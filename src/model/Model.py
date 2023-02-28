@@ -1,16 +1,10 @@
-from controller.IControllerForModel import IControllerForModel
 from model.DetectedObjectRegister import DetectedObjectRegister
-from model.IModel import IModel
 
 
-class Model(IModel):
+class Model:
 
-    def __init__(self, controller: IControllerForModel):
+    def __init__(self):
         self.__register: DetectedObjectRegister = DetectedObjectRegister()
-        self.__controller: IControllerForModel = controller
-
-    def get_controller(self):
-        return self.__controller
 
     def detect(self, items: list):
         for i in items:

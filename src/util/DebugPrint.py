@@ -22,6 +22,6 @@ def __calling_item_on_stack_as_string() -> str:
     line_number: str = str(stack_item[2])
     fn_name: str = str(stack_item[3])
 
-    full_string: str = "  LOCATION >>> " + fn_name + "(), line " + line_number + " in " + file_name
+    full_string: str = " >>> located in the function " + fn_name + "() on line " + line_number + " in " + file_name
 
     return full_string

@@ -187,5 +187,5 @@ class TFlow(IObjectRecognition):
         start_time = time.time()
         run_detector(detector, downloaded_image_path)
         end_time = time.time()
-        run_time
-        print("Run time: ")
+        run_time = end_time - start_time
+        debug_print("Run Time: ", run_time)
