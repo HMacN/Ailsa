@@ -1,4 +1,3 @@
-
 # @title Imports and function definitions
 
 # For running inference on the TF-Hub module.
@@ -8,16 +7,7 @@ import tensorflow_hub as hub
 
 import cv2
 
-# For downloading the image.
-import matplotlib.pyplot as plt
-import tempfile
-
 from PIL.Image import Image
-from six.moves.urllib.request import urlopen
-from six import BytesIO
-
-# from google.colab import files
-
 
 # For drawing onto the image.
 import numpy as np
@@ -25,12 +15,6 @@ from PIL import Image
 from PIL import ImageColor
 from PIL import ImageDraw
 from PIL import ImageFont
-from PIL import ImageOps
-
-# For measuring the inference time.
-import time
-
-from util.DebugPrint import debug_print
 from util.ObjectRecognition.IObjectRecognition import IObjectRecognition
 
 # Print Tensorflow version
@@ -38,29 +22,6 @@ print(tf.__version__)
 
 # Check available GPU devices.
 print("The following GPU devices are available: %s" % tf.test.gpu_device_name())
-
-
-def display_image(image):
-    fig = plt.figure(figsize=(20, 15))
-    plt.grid(False)
-    plt.imshow(image)
-    plt.show()  # needed to actually show image to screen
-
-
-def download_and_resize_image(url, new_width=256, new_height=256,
-                              display=False):
-    _, filename = tempfile.mkstemp(suffix=".jpg")
-    response = urlopen(url)
-    image_data = response.read()
-    image_data = BytesIO(image_data)
-    pil_image = Image.open(image_data)
-    pil_image = ImageOps.fit(pil_image, (new_width, new_height), Image.Resampling.LANCZOS)
-    pil_image_rgb = pil_image.convert("RGB")
-    pil_image_rgb.save(filename, format="JPEG", quality=90)
-    print("Image downloaded to %s." % filename)
-    if display:
-        display_image(pil_image)
-    return filename
 
 
 def draw_bounding_box_on_image(image,
@@ -116,12 +77,7 @@ def draw_boxes(image, boxes, class_names, scores, max_boxes=10, min_score=0.1):
     """Overlay labeled boxes on an image with formatted scores and label names."""
     colors = list(ImageColor.colormap.values())
 
-    try:
-        font = ImageFont.truetype("/usr/share/fonts/truetype/liberation/LiberationSansNarrow-Regular.ttf",
-                                  25)
-    except IOError:
-        print("Font not found, using default font.")
-        font = ImageFont.load_default()
+    font = ImageFont.load_default()
 
     for i in range(min(boxes.shape[0], max_boxes)):
         if scores[i] >= min_score:
@@ -149,64 +105,32 @@ def load_img(path):
     return img
 
 
-def run_detector(detector, path):
-    img = load_img(path)
-
+def run_detector(detector, img):
     converted_img = tf.image.convert_image_dtype(img, tf.float32)[tf.newaxis, ...]
-    start_time = time.time()
     result = detector(converted_img)
-    end_time = time.time()
-
     result = {key: value.numpy() for key, value in result.items()}
 
-    print("Found %d objects." % len(result["detection_scores"]))
-    print("Inference time: ", end_time - start_time)
-
     image_with_boxes = draw_boxes(
-        img.numpy(), result["detection_boxes"],
+        img, result["detection_boxes"],
         result["detection_class_entities"], result["detection_scores"])
 
-    display_image(img)
-    display_image(image_with_boxes)
+    return image_with_boxes
 
 
 # Apply image detector on a single image.
 class TFlow(IObjectRecognition):
     def go(self, module_handle: str, image_path: str):
-        # By Heiko Gorski, Source: https://commons.wikimedia.org/wiki/File:Naxos_Taverna.jpg
-        # image_url = "https://upload.wikimedia.org/wikipedia/commons/6/60/Naxos_Taverna.jpg"  # @param
-        # image_url = "https://upload.wikimedia.org/wikipedia/commons/8/82/Stafford_livingroom.jpg"  # @param
-        # downloaded_image_path = download_and_resize_image(image_url, 1280, 856, True)
-        #
-        # downloaded_image_path = "C:/Users/hughm/Desktop/Written_Code/Ailsa/virtual_living_room.jpg"
-
-        # TODO different models here
-        # module_handle = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"  # @param ["https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1", "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"]
-        # module_handle = "https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1"
-
         detector = hub.load(module_handle).signatures['default']
-        iterations = 1
-
-        start_time = time.time()
-
-        # for i in range(iterations):
-        run_detector(detector, image_path)
-
-        end_time = time.time()
-        run_time = (end_time - start_time) / iterations
-        debug_print("Run Time: ", run_time)
-
-        img = cv2.imread(image_path, cv2.IMREAD_GRAYSCALE)
-        debug_print(img)
 
         cap = cv2.VideoCapture(0)
 
         while True:
 
             ret, image_np = cap.read()
+
+            image_np = run_detector(detector, image_np)
+
             cv2.imshow('object detection', cv2.resize(image_np, (800, 600)))
             if cv2.waitKey(25) & 0xFF == ord('q'):
                 cv2.destroyAllWindows()
                 break
-
-
