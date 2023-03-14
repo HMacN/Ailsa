@@ -9,6 +9,8 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
+from model.cv2wrapper import BoundingBoxFactory
+
 
 def draw_boxes(image, boxes, class_names, scores, max_boxes=10, min_score=0.1):
     """Overlay labeled boxes on an image with formatted scores and label names."""
@@ -94,16 +96,17 @@ class Detector:
         self.detection_results = None
         print_tf_state()
 
-    def get_raw_frame(self) -> Image:
-        ret, frame = self.video_capture.read()
-        return frame
-
-    def get_frame_with_boxes(self) -> Image:
-        image_without_boxes = self.get_raw_frame()
+    def get_frame_with_boxes(self) -> (Image, list):
+        image_without_boxes = self.__get_raw_frame__()
         detection_results = self.__get_detection_results__(image_without_boxes)
+        bounding_boxes = BoundingBoxFactory.get_bounding_box_list(detection_results)
         return draw_boxes(image_without_boxes, detection_results["detection_boxes"],
                           detection_results["detection_class_entities"],
-                          detection_results["detection_scores"])
+                          detection_results["detection_scores"]), bounding_boxes
+
+    def __get_raw_frame__(self) -> Image:
+        ret, frame = self.video_capture.read()
+        return frame
 
     def __get_detection_results__(self, frame):
         converted_img = tf.image.convert_image_dtype(frame, tf.float32)[tf.newaxis, ...]

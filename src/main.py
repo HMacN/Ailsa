@@ -10,9 +10,13 @@ class MainClass:
 
         window_name = 'AILSA System'
         webcam_detector = Detector("https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1")
-        detector = webcam_detector
+        file_detector = Detector("https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1",
+                                 "C:\\Users\\hughm\\Desktop\\Written_Code\\Ailsa\\movie_002_2023-03-11.mp4")
+        detector = file_detector
 
         keep_going = True
         while keep_going:
-            keep_going = Display.show(detector.get_frame_with_boxes())
+            frame, bounding_boxes = detector.get_frame_with_boxes()
+            model.detect(bounding_boxes)
+            keep_going = Display.show(frame)
         Display.hide()

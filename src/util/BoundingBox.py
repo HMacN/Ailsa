@@ -1,7 +1,7 @@
 from util.DebugPrint import debug_print
 
 
-class IdentifiedObject:
+class BoundingBox:
     horizontal_distance_to_origin: int = None
     vertical_distance_to_origin: int = None
     bounding_box_width: int = None
@@ -21,7 +21,7 @@ class IdentifiedObject:
         self.object_name: str = object_name
 
     def __eq__(self, other):
-        if isinstance(other, IdentifiedObject):
+        if isinstance(other, BoundingBox):
 
             names_the_same: bool = False
             numbers_the_same: bool = False
