@@ -5,6 +5,7 @@ from model.cv2wrapper import Display
 from model.cv2wrapper.Detector import Detector
 from model.cv2wrapper.Recorder import Recorder
 from util.DebugPrint import debug_print
+from colorama import Fore, Back, Style
 
 
 class MainClass:
@@ -20,6 +21,8 @@ class MainClass:
         recorder = Recorder(width=detector.get_frame_width(),
                             height=detector.get_frame_height())
 
+        print(Style.BRIGHT, Fore.BLACK, Back.LIGHTYELLOW_EX, end="")
+
         keep_going = True
         while keep_going:
             if detector.try_loading_next_frame():
@@ -27,7 +30,12 @@ class MainClass:
                 recorder.add_frame(frame)
                 model.detect(bounding_boxes)
                 # Display.show(frame)
+                progress_percent = int((detector.get_current_frame_number() / detector.get_total_frame_count()) * 100)
+                print("\r  Progress:" + str(progress_percent) + "%  ", end="")
             else:
                 keep_going = False
+
+        print(Style.RESET_ALL, " ")
+
         debug_print("Detected Items: ", model.get_detected_items())
         Display.hide()

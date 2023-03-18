@@ -133,3 +133,29 @@ class Detector:
         else:
             height = self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
             return int(height)
+
+    def get_progress_summary_string(self) -> str:
+        if self.video_capture is None:
+            return "Error in Detector.get_progress_as_string()!  There is no active cv2.VideoCapture object."
+        else:
+            progress_percent = self.__get_progress_percent__()
+            return "PROGRESS: " + str(progress_percent) + "%"
+
+    def __get_progress_percent__(self) -> int:
+        cap = self.video_capture
+        total_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
+        current_frame = cap.get(cv2.CAP_PROP_POS_FRAMES)
+        progress_decimal = current_frame / total_frames
+        return int(progress_decimal * 100)
+
+    def get_total_frame_count(self) -> int:
+        if self.video_capture is None:
+            return 0
+        else:
+            return self.video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
+
+    def get_current_frame_number(self):
+        if self.video_capture is None:
+            return 0
+        else:
+            return self.video_capture.get(cv2.CAP_PROP_POS_FRAMES)
