@@ -10,6 +10,7 @@ from PIL import ImageDraw
 from PIL import ImageFont
 
 from model.cv2wrapper import BoundingBoxFactory
+from util.DebugPrint import debug_print
 
 
 def draw_boxes(image, boxes, class_names, scores, max_boxes=10, min_score=0.1):
@@ -93,20 +94,40 @@ class Detector:
     def __init__(self, model_url: str, file_path=0):
         self.model = hub.load(model_url).signatures['default']
         self.video_capture = cv2.VideoCapture(file_path)
+        self.next_frame = None
         self.detection_results = None
         print_tf_state()
 
-    def get_frame_with_boxes(self) -> (Image, list):
-        image_without_boxes = self.__get_raw_frame__()
+    def load_next_frame(self) -> bool:
+        try:
+            _, self.next_frame = self.video_capture.read()
+            has_next_frame = self.next_frame is not None
+        except cv2.error:
+            has_next_frame = False
+
+        return has_next_frame
+
+    def get_frame_width(self) -> int:
+        if self.next_frame is not None:
+            height, width, _ = self.next_frame.shape
+            return width
+        else:
+            return 0
+
+    def get_frame_height(self) -> int:
+        if self.next_frame is not None:
+            height, width, _ = self.next_frame.shape
+            return height
+        else:
+            return 0
+
+    def get_frame_with_boxes(self, detection_threshold=0.5) -> (Image, list):
+        image_without_boxes = self.next_frame
         detection_results = self.__get_detection_results__(image_without_boxes)
-        bounding_boxes = BoundingBoxFactory.get_bounding_box_list(detection_results)
+        bounding_boxes = BoundingBoxFactory.get_bounding_box_list(detection_results, detection_threshold)
         return draw_boxes(image_without_boxes, detection_results["detection_boxes"],
                           detection_results["detection_class_entities"],
                           detection_results["detection_scores"]), bounding_boxes
-
-    def __get_raw_frame__(self) -> Image:
-        ret, frame = self.video_capture.read()
-        return frame
 
     def __get_detection_results__(self, frame):
         converted_img = tf.image.convert_image_dtype(frame, tf.float32)[tf.newaxis, ...]

@@ -29,9 +29,9 @@ class BoundingBox:
             if other.object_name == self.object_name:
                 names_the_same = True
 
-            if other.bounding_box_height == self.bounding_box_height & \
-                    other.bounding_box_width == self.bounding_box_width & \
-                    other.vertical_distance_to_origin == self.vertical_distance_to_origin & \
+            if other.bounding_box_height == self.bounding_box_height and \
+                    other.bounding_box_width == self.bounding_box_width and \
+                    other.vertical_distance_to_origin == self.vertical_distance_to_origin and \
                     other.horizontal_distance_to_origin == self.horizontal_distance_to_origin:
                 numbers_the_same = True
 
