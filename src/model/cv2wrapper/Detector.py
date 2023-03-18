@@ -94,38 +94,23 @@ class Detector:
     def __init__(self, model_url: str, file_path=0):
         self.model = hub.load(model_url).signatures['default']
         self.video_capture = cv2.VideoCapture(file_path)
-        self.next_frame = None
-        self.detection_results = None
-        print_tf_state()
+        self.current_frame = None
 
-    def load_next_frame(self) -> bool:
+    def try_loading_next_frame(self) -> bool:
         try:
-            _, self.next_frame = self.video_capture.read()
-            has_next_frame = self.next_frame is not None
+            _, self.current_frame = self.video_capture.read()
+            has_next_frame = self.current_frame is not None
         except cv2.error:
             has_next_frame = False
 
         return has_next_frame
 
-    def get_frame_width(self) -> int:
-        if self.next_frame is not None:
-            height, width, _ = self.next_frame.shape
-            return width
-        else:
-            return 0
-
-    def get_frame_height(self) -> int:
-        if self.next_frame is not None:
-            height, width, _ = self.next_frame.shape
-            return height
-        else:
-            return 0
-
     def get_frame_with_boxes(self, detection_threshold=0.5) -> (Image, list):
-        image_without_boxes = self.next_frame
+        image_without_boxes = self.current_frame
         detection_results = self.__get_detection_results__(image_without_boxes)
         bounding_boxes = BoundingBoxFactory.get_bounding_box_list(detection_results, detection_threshold)
-        return draw_boxes(image_without_boxes, detection_results["detection_boxes"],
+        return draw_boxes(image_without_boxes,
+                          detection_results["detection_boxes"],
                           detection_results["detection_class_entities"],
                           detection_results["detection_scores"]), bounding_boxes
 
@@ -134,3 +119,17 @@ class Detector:
         results = self.model(converted_img)
         results = {key: value.numpy() for key, value in results.items()}
         return results
+
+    def get_frame_width(self) -> int:
+        if self.video_capture is None:
+            return 0
+        else:
+            width = self.video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)
+            return int(width)
+
+    def get_frame_height(self) -> int:
+        if self.video_capture is None:
+            return 0
+        else:
+            height = self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            return int(height)
