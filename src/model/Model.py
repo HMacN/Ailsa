@@ -1,14 +1,13 @@
-from model.DetectedObjectRegister import DetectedObjectRegister
+from util.BoundingBoxCollection import BoundingBoxCollection
 
 
 class Model:
 
     def __init__(self):
-        self.__register: DetectedObjectRegister = DetectedObjectRegister()
+        ...
 
-    def detect(self, items: list):
-        for i in items:
-            self.__register.add(i)
+    def detect(self, bounding_boxes: BoundingBoxCollection):
+        ...
 
     def get_detected_items(self):
-        return self.__register.get_all()
+        ...

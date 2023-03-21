@@ -1,3 +1,5 @@
+from time import sleep
+
 import cv2
 import numpy as np
 import tensorflow_hub as hub
@@ -9,8 +11,9 @@ from PIL import Image
 from PIL import ImageDraw
 from PIL import ImageFont
 
-from model.cv2wrapper import BoundingBoxFactory
-from util.DebugPrint import debug_print
+from util.BoundingBoxCollection import BoundingBoxCollection
+from util.Box import Box
+from util.Debugging import debug_print
 
 
 def draw_boxes(image, boxes, class_names, scores, max_boxes=10, min_score=0.1):
@@ -89,73 +92,95 @@ def print_tf_state():
     print("The following GPU devices are available: %s" % tf.test.gpu_device_name())
 
 
+def __convert_cv2_results_to_bounding_box_collection__(detection_results) -> BoundingBoxCollection:
+    number_of_boxes = len(detection_results["detection_boxes"])
+    boxes = BoundingBoxCollection()
+
+    for i in range(number_of_boxes):
+        new_box = Box(left_edge=detection_results["detection_boxes"][i][1],
+                      right_edge=detection_results["detection_boxes"][i][0],
+                      lower_edge=detection_results["detection_boxes"][i][2],
+                      upper_edge=detection_results["detection_boxes"][i][3],
+                      confidence=detection_results["detection_scores"][i],
+                      label=detection_results["detection_class_entities"][i])
+        boxes.add(new_box)
+
+    return boxes
+
+
 class Detector:
 
     def __init__(self, model_url: str, file_path=0):
-        self.model = hub.load(model_url).signatures['default']
-        self.video_capture = cv2.VideoCapture(file_path)
-        self.current_frame = None
+        self.__model__ = hub.load(model_url).signatures['default']
+        self.__video_capture__ = cv2.VideoCapture(file_path)
+        self.__current_frame__ = None
+        self.__current_frame_with_bounding_boxes__ = None
+        self.__current_bounding_boxes__ = None
 
     def try_loading_next_frame(self) -> bool:
         try:
-            _, self.current_frame = self.video_capture.read()
-            has_next_frame = self.current_frame is not None
+            _, self.__current_frame__ = self.__video_capture__.read()
+            has_next_frame = self.__current_frame__ is not None
         except cv2.error:
             has_next_frame = False
 
         return has_next_frame
 
-    def get_frame_with_boxes(self, detection_threshold=0.5) -> (Image, list):
-        image_without_boxes = self.current_frame
-        detection_results = self.__get_detection_results__(image_without_boxes)
-        bounding_boxes = BoundingBoxFactory.get_bounding_box_list(detection_results, detection_threshold)
-        return draw_boxes(image_without_boxes,
-                          detection_results["detection_boxes"],
-                          detection_results["detection_class_entities"],
-                          detection_results["detection_scores"]), bounding_boxes
+    def run_detection_on_current_frame(self, detection_threshold=0.5):
+        detection_results = self.__get_detection_results__()
+        bounding_boxes = __convert_cv2_results_to_bounding_box_collection__(detection_results)
+        bounding_boxes.trim_by_confidence(detection_threshold)
+        self.__current_bounding_boxes__ = bounding_boxes
+        self.__current_frame_with_bounding_boxes__ = draw_boxes(self.__current_frame__,
+                                                                detection_results["detection_boxes"],
+                                                                detection_results["detection_class_entities"],
+                                                                detection_results["detection_scores"],
+                                                                min_score=detection_threshold)
 
-    def __get_detection_results__(self, frame):
-        converted_img = tf.image.convert_image_dtype(frame, tf.float32)[tf.newaxis, ...]
-        results = self.model(converted_img)
+    def get_frame_without_bounding_boxes(self) -> Image:
+        return self.__current_frame__
+
+    def get_frame_with_bounding_boxes(self) -> Image:
+        return self.__current_frame_with_bounding_boxes__
+
+    def get_bounding_boxes(self) -> BoundingBoxCollection:
+        return self.__current_bounding_boxes__
+
+    def __get_detection_results__(self):
+        converted_img = tf.image.convert_image_dtype(self.__current_frame__, tf.float32)[tf.newaxis, ...]
+        results = self.__model__(converted_img)
         results = {key: value.numpy() for key, value in results.items()}
         return results
 
     def get_frame_width(self) -> int:
-        if self.video_capture is None:
+        if self.__video_capture__ is None:
             return 0
         else:
-            width = self.video_capture.get(cv2.CAP_PROP_FRAME_WIDTH)
+            width = self.__video_capture__.get(cv2.CAP_PROP_FRAME_WIDTH)
             return int(width)
 
     def get_frame_height(self) -> int:
-        if self.video_capture is None:
+        if self.__video_capture__ is None:
             return 0
         else:
-            height = self.video_capture.get(cv2.CAP_PROP_FRAME_HEIGHT)
+            height = self.__video_capture__.get(cv2.CAP_PROP_FRAME_HEIGHT)
             return int(height)
 
-    def get_progress_summary_string(self) -> str:
-        if self.video_capture is None:
-            return "Error in Detector.get_progress_as_string()!  There is no active cv2.VideoCapture object."
-        else:
-            progress_percent = self.__get_progress_percent__()
-            return "PROGRESS: " + str(progress_percent) + "%"
-
     def __get_progress_percent__(self) -> int:
-        cap = self.video_capture
+        cap = self.__video_capture__
         total_frames = cap.get(cv2.CAP_PROP_FRAME_COUNT)
         current_frame = cap.get(cv2.CAP_PROP_POS_FRAMES)
         progress_decimal = current_frame / total_frames
         return int(progress_decimal * 100)
 
     def get_total_frame_count(self) -> int:
-        if self.video_capture is None:
+        if self.__video_capture__ is None:
             return 0
         else:
-            return self.video_capture.get(cv2.CAP_PROP_FRAME_COUNT)
+            return self.__video_capture__.get(cv2.CAP_PROP_FRAME_COUNT)
 
     def get_current_frame_number(self):
-        if self.video_capture is None:
+        if self.__video_capture__ is None:
             return 0
         else:
-            return self.video_capture.get(cv2.CAP_PROP_POS_FRAMES)
+            return self.__video_capture__.get(cv2.CAP_PROP_POS_FRAMES)

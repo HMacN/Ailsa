@@ -1,7 +1,7 @@
 import cv2
 import numpy as np
 
-from util.DebugPrint import debug_print
+from util.Debugging import debug_print
 
 
 def show(frame=np.zeros((350, 700, 3), dtype=np.uint8), window_name='AILSA System', window_width=800,
