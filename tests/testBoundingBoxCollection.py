@@ -100,3 +100,43 @@ class BoundingBoxCollectionTests(unittest.TestCase):
                        "Box 2: [" + str(box_2) + "]"
 
         self.assertEqual(expected_str, str(box_collection))
+
+    def test_equality_check(self):
+        box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
+        box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.7, "test3")
+
+        c_1 = BoundingBoxCollection()
+        c_2 = BoundingBoxCollection()
+
+        c_1.add(box_0)
+        c_1.add(box_1)
+        c_1.add(box_2)
+
+        c_2.add(box_0)
+        c_2.add(box_1)
+        c_2.add(box_2)
+
+        self.assertEqual(c_1, c_2)
+
+    def test_inequality_check(self):
+        box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
+        box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.7, "test3")
+        box_3 = Box(0.0, 0.4, 0.2, 0.3, 0.7, "test3")
+
+        c_1 = BoundingBoxCollection()
+        c_2 = BoundingBoxCollection()
+
+        c_1.add(box_0)
+        c_1.add(box_1)
+        c_1.add(box_2)
+
+        c_2.add(box_0)
+        c_2.add(box_1)
+        c_2.add(box_3)
+
+        self.assertNotEqual(c_1, c_2)
+
+
+

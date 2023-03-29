@@ -20,6 +20,18 @@ class BoundingBoxCollection:
 
         return string
 
+    def __eq__(self, other) -> bool:
+        if not isinstance(other, self.__class__):
+            return False
+
+        self_str = str(self)
+        other_str = str(other)
+
+        if self_str != other_str:
+            return False
+
+        return True
+
     def add(self, box: Box):
         self.__boxes__.append(box)
 

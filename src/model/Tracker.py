@@ -6,7 +6,7 @@ class Tracker:
     def __init__(self):
         self.__tracks__: BoundingBoxCollection | None = None
 
-    def detect(self, bounding_boxes: BoundingBoxCollection):
+    def add_new_frame(self, bounding_boxes: BoundingBoxCollection):
         self.__tracks__ = bounding_boxes
 
     def get_current_tracks(self) -> BoundingBoxCollection | None:

@@ -30,7 +30,7 @@ class MainClass:
                 Display.show(frame)  # Comment out to stop video display.
                 recorder.add_frame(frame)  # Comment out to stop video recording.
 
-                tracker.detect(detector.get_bounding_boxes())
+                tracker.add_new_frame(detector.get_bounding_boxes())
 
                 display_progress_percent(detector.get_current_frame_number(),
                                          detector.get_total_frame_count())
