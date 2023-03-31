@@ -10,3 +10,10 @@ class BoxTests(unittest.TestCase):
         expected_str = "left: 0.2, right: 0.3, lower: 0.2, upper: 0.6, conf: 0.5, label: test1"
 
         self.assertEqual(expected_str, str(box))
+
+    def test_given_byte_strings_converted_to_str(self):
+        box = Box(0.2, 0.3, 0.2, 0.6, 0.5, b'test1')
+
+        expected_str = "test1"
+
+        self.assertEqual(expected_str, box.label)

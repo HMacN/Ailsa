@@ -1,3 +1,12 @@
+def __get_as_str__(string):
+    if isinstance(string, (bytes, bytearray)):
+        return str(string, "utf-8")
+    elif isinstance(string, str):
+        return string
+    else:
+        return str(string)
+
+
 class Box:
 
     def __init__(self, left_edge: float, right_edge: float,
@@ -7,7 +16,7 @@ class Box:
         self.lower_edge: float = lower_edge
         self.upper_edge: float = upper_edge
         self.confidence: float = confidence
-        self.label: str = label
+        self.label: str = __get_as_str__(label)
 
     def __str__(self) -> str:
         left = "left: " + str(self.left_edge)
@@ -19,3 +28,4 @@ class Box:
         c = ", "
 
         return left + c + right + c + lower + c + upper + c + conf + c + label
+

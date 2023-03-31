@@ -1,4 +1,5 @@
 from util.Box import Box
+from util.Debugging import debug_print
 
 
 class BoundingBoxCollection:
@@ -48,9 +49,15 @@ class BoundingBoxCollection:
         self.__boxes__.sort(key=k, reverse=True)
 
     def trim_by_confidence(self, min_confidence: float):
+
+        boxes_to_remove = list()
+
         for box in self.__boxes__:
             if box.confidence < min_confidence:
-                self.__boxes__.remove(box)
+                boxes_to_remove.append(box)
+
+        for box_to_remove in boxes_to_remove:
+            self.__boxes__.remove(box_to_remove)
 
     def size(self):
         return len(self.__boxes__)

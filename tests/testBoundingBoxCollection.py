@@ -68,6 +68,22 @@ class BoundingBoxCollectionTests(unittest.TestCase):
         self.assertEqual(box_2, box_collection.get(1))
         self.assertEqual(None, box_collection.get(2))
 
+    def test_trim_boxes_by_confidence_gives_empty_list_if_no_valid_boxes(self):
+        box_collection = BoundingBoxCollection()
+        box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.1, "test1")
+        box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.3, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.2, "test3")
+
+        box_collection.add(box_0)
+        box_collection.add(box_1)
+        box_collection.add(box_2)
+
+        box_collection.trim_by_confidence(0.5)
+
+        self.assertEqual(None, box_collection.get(0))
+        self.assertEqual(None, box_collection.get(1))
+        self.assertEqual(None, box_collection.get(2))
+
     def test_get_size(self):
         box_collection = BoundingBoxCollection()
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
