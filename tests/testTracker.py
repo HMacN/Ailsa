@@ -3,6 +3,7 @@ import unittest
 from model.Tracker import Tracker
 from util.BoundingBoxCollection import BoundingBoxCollection
 from util.Box import Box
+from util.Debugging import debug_print
 
 
 class ModelTests(unittest.TestCase):
@@ -25,7 +26,7 @@ class ModelTests(unittest.TestCase):
 
         self.assertEqual(box_collection, current_tracks)
 
-    def test_track_existing_items_after_one_frame_absence(self):
+    def test_track_existing_items_after_multiple_frame_absence(self):
         tracker = Tracker()
 
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
@@ -42,6 +43,10 @@ class ModelTests(unittest.TestCase):
         box_collection_2.add(box_1)
 
         tracker.add_new_frame(box_collection_1)
+        tracker.add_new_frame(box_collection_2)
+        tracker.add_new_frame(box_collection_2)
+        tracker.add_new_frame(box_collection_2)
+        tracker.add_new_frame(box_collection_2)
         tracker.add_new_frame(box_collection_2)
 
         current_tracks = tracker.get_current_tracks()

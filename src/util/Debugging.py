@@ -4,14 +4,18 @@ from colorama import Fore, Back, Style
 
 
 def debug_print(*messages):
+    print(Fore.YELLOW, end="")
     print("DEBUG >>> ", end='')
 
     for item in messages:
         print(item, end='')
 
-    print(__calling_item_on_stack_as_string__(), end='')
+    calling_location: str = __calling_item_on_stack_as_string__()
+    print(Fore.YELLOW, end="")
+    print(calling_location, end='')
 
     print("")
+    print(Style.RESET_ALL, end="")
 
 
 def __calling_item_on_stack_as_string__() -> str:
@@ -37,4 +41,3 @@ def display_progress_percent(current_value: int, final_value: int):
 
     if current_value == final_value:
         print("")
-
