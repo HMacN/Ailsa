@@ -64,3 +64,6 @@ class BoundingBoxCollection:
 
     def contains(self, box: Box) -> bool:
         return box in self.__boxes__
+
+    def pop(self, index: int):
+        self.__boxes__.pop(index)
