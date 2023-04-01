@@ -61,3 +61,6 @@ class BoundingBoxCollection:
 
     def size(self):
         return len(self.__boxes__)
+
+    def contains(self, box: Box) -> bool:
+        return box in self.__boxes__
