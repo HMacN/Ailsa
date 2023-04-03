@@ -1,5 +1,6 @@
 from util.BoundingBoxCollection import BoundingBoxCollection
 from util.Box import Box
+from util.Debugging import debug_print
 
 
 class Tracker:
@@ -8,6 +9,7 @@ class Tracker:
         self.__tracks__: BoundingBoxCollection = BoundingBoxCollection()
         self.__age_of_tracks__: list = list()
         self.__frame_count__: int = 0
+        self.__allowed_absence__ = 0
 
     def add_new_frame(self, frame_bounding_boxes: BoundingBoxCollection):
         self.__frame_count__ = self.__frame_count__ + 1
@@ -15,10 +17,18 @@ class Tracker:
         self.__remove_old_tracks__()
 
     def __remove_old_tracks__(self):
+        oldest_allowed_track = self.__frame_count__ - self.__allowed_absence__
+        debug_print("frame count: ", self.__frame_count__)
+        debug_print("allowed absence: ", self.__allowed_absence__)
+        debug_print("tracks size: ", self.__tracks__.size())
+        indexes_to_remove = list()
         for i in range(self.__tracks__.size()):
-            if self.__age_of_tracks__[i] < self.__frame_count__ - 5:
-                self.__age_of_tracks__.pop(i)
-                self.__tracks__.pop(i)
+            if self.__age_of_tracks__[i] < oldest_allowed_track:
+                indexes_to_remove.append(i)
+
+        for i in sorted(indexes_to_remove, reverse=True):
+            self.__age_of_tracks__.pop(i)
+            self.__tracks__.pop(i)
 
     def __add_frame_bounding_boxes_to_tracks__(self, frame_boxes: BoundingBoxCollection):
         track_age = self.__frame_count__
@@ -33,3 +43,6 @@ class Tracker:
 
     def get_current_tracks(self) -> BoundingBoxCollection:
         return self.__tracks__
+
+    def set_allowed_absence(self, allowed_absence: int):
+        self.__allowed_absence__ = allowed_absence

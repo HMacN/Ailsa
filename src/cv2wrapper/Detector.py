@@ -1,6 +1,9 @@
+import cv as cv
 import cv2
 import tensorflow_hub as hub
 import tensorflow as tf
+from cv2.gapi.wip.draw import Rect
+# include <opencv2/core/types.hpp>
 
 from cv2wrapper.Frame import Frame
 from util.BoundingBoxCollection import BoundingBoxCollection
@@ -27,9 +30,9 @@ class Detector:
         return has_next_frame
 
     def run_detection_on_current_frame(self):
-        detection_results = self.__get_detection_results__()
+        detection_results, nms_indexes = self.__get_detection_results__()
 
-        bounding_boxes = self.__convert_cv2_results_to_bounding_box_collection__(detection_results)
+        bounding_boxes = self.__convert_cv2_results_to_bounding_box_collection__(detection_results, nms_indexes)
 
         self.__current_bounding_boxes__ = bounding_boxes
 
@@ -43,7 +46,10 @@ class Detector:
         converted_img = tf.image.convert_image_dtype(self.__current_frame__.get_cv2_img(), tf.float32)[tf.newaxis, ...]
         results = self.__model__(converted_img)
         results = {key: value.numpy() for key, value in results.items()}
-        return results
+
+        nms_indexes = self.nms(results["detection_boxes"], results["detection_scores"])
+
+        return results, nms_indexes
 
     def get_frame_width(self) -> int:
         if self.__video_capture__ is None:
@@ -79,11 +85,27 @@ class Detector:
             return self.__video_capture__.get(cv2.CAP_PROP_POS_FRAMES)
 
     @staticmethod
-    def __convert_cv2_results_to_bounding_box_collection__(detection_results) -> BoundingBoxCollection:
-        number_of_boxes = len(detection_results["detection_boxes"])
+    def nms(bboxes, conf_scores) -> list:
+
+        integer_bboxes = list()
+        for i in bboxes:
+            a = int(i[0] * 1000)
+            b = int(i[1] * 1000)
+            c = int(i[2] * 1000) - a
+            d = int(i[3] * 1000) - b
+            integer_bboxes.append([a, b, c, d])
+
+        indexes = cv2.dnn.NMSBoxes(integer_bboxes, conf_scores, 0.1, 0.1)   # TODO set these values from calling process
+
+        return indexes
+
+    @staticmethod
+    def __convert_cv2_results_to_bounding_box_collection__(detection_results,
+                                                           nms_indexes: list) -> BoundingBoxCollection:
+
         boxes = BoundingBoxCollection()
 
-        for i in range(number_of_boxes):
+        for i in nms_indexes:
             new_box = Box(left_edge=detection_results["detection_boxes"][i][1],
                           right_edge=detection_results["detection_boxes"][i][3],
                           lower_edge=detection_results["detection_boxes"][i][0],
