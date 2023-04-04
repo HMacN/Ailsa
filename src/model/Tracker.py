@@ -18,9 +18,6 @@ class Tracker:
 
     def __remove_old_tracks__(self):
         oldest_allowed_track = self.__frame_count__ - self.__allowed_absence__
-        debug_print("frame count: ", self.__frame_count__)
-        debug_print("allowed absence: ", self.__allowed_absence__)
-        debug_print("tracks size: ", self.__tracks__.size())
         indexes_to_remove = list()
         for i in range(self.__tracks__.size()):
             if self.__age_of_tracks__[i] < oldest_allowed_track:

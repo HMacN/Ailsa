@@ -19,6 +19,11 @@ class Detector:
         self.__current_frame__: Frame | None = None
         self.__current_bounding_boxes__: BoundingBoxCollection | None = None
 
+        self.__detection_confidence_threshold__: float = 0.1
+        self.__nms_overlap_threshold__: float = 0.1
+        self.__nms_eta__: float | None = None
+        self.__nms_keep_top_k_indices__: float | None = None
+
     def try_loading_next_frame(self) -> bool:
         try:
             _, frame = self.__video_capture__.read()
@@ -47,7 +52,7 @@ class Detector:
         results = self.__model__(converted_img)
         results = {key: value.numpy() for key, value in results.items()}
 
-        nms_indexes = self.nms(results["detection_boxes"], results["detection_scores"])
+        nms_indexes = self.__perform_nms__(results["detection_boxes"], results["detection_scores"])
 
         return results, nms_indexes
 
@@ -84,8 +89,19 @@ class Detector:
         else:
             return self.__video_capture__.get(cv2.CAP_PROP_POS_FRAMES)
 
-    @staticmethod
-    def nms(bboxes, conf_scores) -> list:
+    def set_detection_confidence_threshold(self, threshold: float):
+        self.__detection_confidence_threshold__ = threshold
+
+    def set_nms_overlap_threshold(self, threshold: float):
+        self.__nms_overlap_threshold__ = threshold
+
+    def set_nms_eta_parameter(self, eta: float | None):
+        self.__nms_eta__ = eta
+
+    def set_nms_top_k_parameter(self, top_k: float | None):
+        self.__nms_keep_top_k_indices__ = top_k
+
+    def __perform_nms__(self, bboxes, conf_scores) -> list:
 
         integer_bboxes = list()
         for i in bboxes:
@@ -95,7 +111,11 @@ class Detector:
             d = int(i[3] * 1000) - b
             integer_bboxes.append([a, b, c, d])
 
-        indexes = cv2.dnn.NMSBoxes(integer_bboxes, conf_scores, 0.1, 0.1)   # TODO set these values from calling process
+        indexes = cv2.dnn.NMSBoxes(integer_bboxes, conf_scores,
+                                   self.__detection_confidence_threshold__,
+                                   self.__nms_overlap_threshold__,
+                                   self.__nms_eta__,
+                                   self.__nms_keep_top_k_indices__)
 
         return indexes
 
