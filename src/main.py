@@ -21,6 +21,12 @@ class MainClass:
 
         display = Display()
         detector = file_detector
+
+        detector.set_detection_confidence_threshold(0.1)
+        detector.set_nms_overlap_threshold(0.1)
+        detector.set_nms_eta_parameter(None)
+        detector.set_nms_top_k_parameter(None)
+
         recorder = Recorder(file_name=video_file+with_bounding_boxes,
                             width=detector.get_frame_width(),
                             height=detector.get_frame_height())
@@ -32,8 +38,6 @@ class MainClass:
 
                 frame: Frame = detector.get_frame()
                 detected_items = detector.get_bounding_boxes()
-
-                detected_items.trim_by_confidence(0.1)
                 frame.draw_bounding_boxes(detected_items)
 
                 display.show(frame)  # Comment out to stop video display.
