@@ -79,3 +79,12 @@ class BoundingBoxCollection:
             return box
         else:
             raise StopIteration
+
+    def __getitem__(self, key):
+        return self.__boxes__[key]
+
+    def __setitem__(self, key, value):
+        self.__boxes__[key] = value
+
+    def __delitem__(self, key):
+        del self.__boxes__[key]

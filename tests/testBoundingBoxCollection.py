@@ -2,6 +2,7 @@ import unittest
 
 from util.Box import Box
 from util.BoundingBoxCollection import BoundingBoxCollection
+from util.Debugging import debug_print
 
 
 class BoundingBoxCollectionTests(unittest.TestCase):
@@ -112,8 +113,8 @@ class BoundingBoxCollectionTests(unittest.TestCase):
         box_collection.add(box_2)
 
         expected_str = "Box 0: [" + str(box_0) + "]\n" \
-                       "Box 1: [" + str(box_1) + "]\n" \
-                       "Box 2: [" + str(box_2) + "]"
+                                                 "Box 1: [" + str(box_1) + "]\n" \
+                                                                           "Box 2: [" + str(box_2) + "]"
 
         self.assertEqual(expected_str, str(box_collection))
 
@@ -208,5 +209,43 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         self.assertEqual(box_collection, box_collection_2)
 
+    def test_can_retrieve_item_by_index(self):
+        box_collection = BoundingBoxCollection()
+        box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
+        box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
 
+        box_collection.add(box_0)
+        box_collection.add(box_1)
+        box_collection.add(box_2)
 
+        self.assertEqual(box_collection[0], box_0)
+        self.assertEqual(box_collection[1], box_1)
+        self.assertEqual(box_collection[2], box_2)
+
+    def test_can_set_items_by_index(self):
+        box_collection = BoundingBoxCollection()
+        box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
+        box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
+
+        box_collection.add(box_0)
+        box_collection.add(box_1)
+
+        box_collection[1] = box_2
+
+        self.assertEqual(box_collection[1], box_2)
+
+    def test_can_remove_item_by_index(self):
+        box_collection = BoundingBoxCollection()
+        box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
+        box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
+
+        box_collection.add(box_0)
+        box_collection.add(box_1)
+        box_collection.add(box_2)
+
+        del box_collection[1]
+
+        self.assertFalse(box_collection.contains(box_1))

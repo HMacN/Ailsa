@@ -8,8 +8,6 @@ def floats_eq_7_dp(float_1: float, float_2: float) -> bool:
     rounded_1 = round(float_1, 7)
     rounded_2 = round(float_2, 7)
 
-    debug_print("rounding: ", rounded_1, ", ", rounded_2)
-
     return rounded_1 == rounded_2
 
 
