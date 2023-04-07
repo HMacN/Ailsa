@@ -8,12 +8,12 @@ from util.Debugging import debug_print
 
 class Tracker:
 
-    def __init__(self):
+    def __init__(self, iou_threshold=0.9):
         self.__tracks__: BoundingBoxCollection = BoundingBoxCollection()
         self.__age_of_tracks__: list = list()
         self.__frame_count__: int = 0
         self.__allowed_absence__ = 0
-        self.__min_iou_to_continue_track__ = 0.9
+        self.__min_iou_to_continue_track__ = iou_threshold
 
     def add_new_frame(self, frame_bounding_boxes: BoundingBoxCollection):
         self.__frame_count__ = self.__frame_count__ + 1
@@ -46,7 +46,8 @@ class Tracker:
         new_bbox: Box = boxes[box_index]
         iou_threshold = self.__min_iou_to_continue_track__
 
-        if existing_track.get_iou(new_bbox) > iou_threshold:
+        iou = existing_track.get_iou(new_bbox)
+        if iou > iou_threshold:
             self.__tracks__[track_index] = copy.deepcopy(new_bbox)
             self.__age_of_tracks__[track_index] = self.__frame_count__
             return True

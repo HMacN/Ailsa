@@ -120,7 +120,7 @@ class ModelTests(unittest.TestCase):
                          msg=("Expected tracks after allowed absence ends: \n" + str(box_collection_2) +
                               "\n does not equal current tracks: \n" + str(tracker.get_current_tracks())))
 
-    def test_90_percent_frame_overlap_to_keep_tracking(self):
+    def test_frame_overlap_to_keep_tracking(self):
         tracker = Tracker()
         tracker.set_allowed_absence(2)
 
@@ -139,4 +139,34 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(box_collection_2, tracker.get_current_tracks(),
                          msg="Expected tracks after new frame: \n" + str(box_collection_2) +
                          "\n does not equal current tracks: \n" + str(tracker.get_current_tracks()))
+
+    def test_set_frame_iou_to_keep_tracking(self):
+        tracker = Tracker(iou_threshold=0.143)
+        tracker.set_allowed_absence(20)
+
+        box_1 = Box(0.0, 0.1, 0.0, 0.1, 0.7, "test3")
+        box_2 = Box(0.05, 0.15, 0.05, 0.15, 0.7, "test3")
+        box_3 = Box(0.0499, 0.15, 0.05, 0.15, 0.7, "test3")
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(box_1)
+
+        frame_2 = BoundingBoxCollection()
+        frame_2.add(box_2)
+
+        frame_3 = BoundingBoxCollection()
+        frame_3.add(box_3)
+
+        tracker.add_new_frame(copy.deepcopy(frame_1))
+        tracker.add_new_frame(copy.deepcopy(frame_2))
+        tracker.add_new_frame(copy.deepcopy(frame_3))
+
+        expected_result = BoundingBoxCollection()
+        expected_result.add(box_3)
+        expected_result.add(box_2)
+        actual_result = tracker.get_current_tracks()
+        self.assertEqual(expected_result, actual_result,
+                         msg="Expected tracks before IoU change: \n" + str(expected_result) +
+                         "\n does not equal current tracks: \n" + str(actual_result))
+
 
