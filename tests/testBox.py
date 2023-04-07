@@ -57,7 +57,10 @@ class BoxTests(unittest.TestCase):
         box_1 = Box(0.1, 0.2, 0.1, 0.2, 0.5, "test1")
         box_2 = Box(0.05, 0.15, 0.15, 0.25, 0.5, "test2")
 
-        self.assertTrue(floats_eq_7_dp(0.1428571, box_1.get_iou(box_2)))
+        expected_iou = 0.1428571
+        actual_iou = box_1.get_iou(box_2)
+
+        self.assertTrue(floats_eq_7_dp(expected_iou, actual_iou))
 
     def test_get_iou_gives_zero_when_not_overlapping(self):
         box_1 = Box(0.1, 0.2, 0.1, 0.2, 0.5, "test1")

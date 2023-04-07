@@ -263,3 +263,15 @@ class BoundingBoxCollectionTests(unittest.TestCase):
         box_collection.remove(box_1)
 
         self.assertFalse(box_collection.contains(box_1))
+
+    def test_has_len_implementation(self):
+        box_collection = BoundingBoxCollection()
+        box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
+        box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
+
+        box_collection.add(box_0)
+        box_collection.add(box_1)
+        box_collection.add(box_2)
+
+        self.assertEqual(box_collection.__len__(), 3)

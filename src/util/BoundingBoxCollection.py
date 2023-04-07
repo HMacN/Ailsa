@@ -91,3 +91,6 @@ class BoundingBoxCollection:
 
     def remove(self, box: Box):
         self.__boxes__.remove(box)
+
+    def __len__(self):
+        return len(self.__boxes__)
