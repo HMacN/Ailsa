@@ -125,7 +125,7 @@ class ModelTests(unittest.TestCase):
         tracker.set_allowed_absence(2)
 
         box_1 = Box(0.0, 0.1, 0.0, 0.1, 0.7, "test3")
-        box_2 = Box(0.0, 0.11, 0.0, 0.1, 0.7, "test3")
+        box_2 = Box(0.0, 0.101, 0.0, 0.1, 0.7, "test3")
 
         box_collection_1 = BoundingBoxCollection()
         box_collection_1.add(box_1)
@@ -136,5 +136,7 @@ class ModelTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection_1))
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
 
-        self.assertEqual(box_collection_2, tracker.get_current_tracks())
+        self.assertEqual(box_collection_2, tracker.get_current_tracks(),
+                         msg="Expected tracks after new frame: \n" + str(box_collection_2) +
+                         "\n does not equal current tracks: \n" + str(tracker.get_current_tracks()))
 
