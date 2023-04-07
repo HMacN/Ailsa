@@ -32,7 +32,7 @@ class Box:
 
         return left + c + right + c + lower + c + upper + c + conf + c + label
 
-    def get_overlap(self, overlapping_box: 'Box') -> float:
+    def get_overlap_area(self, overlapping_box: 'Box') -> float:
         no_overlap = 0.0
 
         if self.left_edge > overlapping_box.right_edge:
@@ -50,8 +50,21 @@ class Box:
         overlap_right_edge = min(self.right_edge, overlapping_box.right_edge)
 
         overlap_area = (overlap_upper_edge - overlap_lower_edge) * (overlap_right_edge - overlap_left_edge)
-        own_area = (self.upper_edge - self.lower_edge) * (self.right_edge - self.left_edge)
 
-        overlap = overlap_area / own_area
+        return overlap_area
 
-        return overlap
+    def get_iou(self, other_box: 'Box') -> float:
+        intersection_area = self.get_overlap_area(other_box)
+        this_box_area = (self.right_edge - self.left_edge) * (self.upper_edge - self.lower_edge)
+        other_box_area = (other_box.right_edge - other_box.left_edge) * (other_box.upper_edge - other_box.lower_edge)
+        union_area = this_box_area + other_box_area - intersection_area
+
+        intersection_over_union = intersection_area / union_area
+
+        debug_print("intersection area: ", intersection_area)
+        debug_print("this box area: ", this_box_area)
+        debug_print("other box area: ", other_box_area)
+        debug_print("union area: ", union_area)
+        debug_print("intersection over union: ", intersection_over_union)
+
+        return intersection_over_union

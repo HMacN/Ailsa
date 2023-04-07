@@ -30,7 +30,10 @@ class BoxTests(unittest.TestCase):
         box_1 = Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1")
         box_2 = Box(0.0, 0.1, 0.0, 0.1, 0.5, "test2")
 
-        self.assertTrue(floats_eq_7_dp(1.0, box_1.get_overlap(box_2)))
+        expected_overlap_area = 0.01
+        actual_overlap_area = box_1.get_overlap_area(box_2)
+
+        self.assertTrue(floats_eq_7_dp(expected_overlap_area, actual_overlap_area))
 
     def test_get_overlap_area_with_non_overlapping_boxes(self):
         box_1 = Box(0.1, 0.2, 0.1, 0.2, 0.5, "test1")
@@ -39,13 +42,25 @@ class BoxTests(unittest.TestCase):
         box_4 = Box(0.20000001, 0.3, 0.1, 0.2, 0.5, "test4")
         box_5 = Box(0.1, 0.2, 0.0, 0.0999999, 0.5, "test5")
 
-        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_overlap(box_2)))
-        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_overlap(box_3)))
-        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_overlap(box_4)))
-        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_overlap(box_5)))
+        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_overlap_area(box_2)))
+        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_overlap_area(box_3)))
+        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_overlap_area(box_4)))
+        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_overlap_area(box_5)))
 
     def test_get_overlap_gives_decimal_when_partially_overlapping(self):
         box_1 = Box(0.1, 0.2, 0.1, 0.2, 0.5, "test1")
         box_2 = Box(0.05, 0.15, 0.15, 0.25, 0.5, "test2")
 
-        self.assertTrue(floats_eq_7_dp(0.25, box_1.get_overlap(box_2)))
+        self.assertTrue(floats_eq_7_dp(0.0025, box_1.get_overlap_area(box_2)))
+
+    def test_get_intersection_over_union(self):
+        box_1 = Box(0.1, 0.2, 0.1, 0.2, 0.5, "test1")
+        box_2 = Box(0.05, 0.15, 0.15, 0.25, 0.5, "test2")
+
+        self.assertTrue(floats_eq_7_dp(0.1428571, box_1.get_iou(box_2)))
+
+    def test_get_iou_gives_zero_when_not_overlapping(self):
+        box_1 = Box(0.1, 0.2, 0.1, 0.2, 0.5, "test1")
+        box_2 = Box(0.5, 0.6, 0.1, 0.2, 0.5, "test2")
+
+        self.assertTrue(floats_eq_7_dp(0.0, box_1.get_iou(box_2)))
