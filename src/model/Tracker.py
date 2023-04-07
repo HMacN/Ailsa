@@ -1,4 +1,5 @@
 from util.BoundingBoxCollection import BoundingBoxCollection
+from util.SafeListEditor import safely_remove_list_indexes as safe_rm
 from util.Box import Box
 from util.Debugging import debug_print
 
@@ -10,6 +11,7 @@ class Tracker:
         self.__age_of_tracks__: list = list()
         self.__frame_count__: int = 0
         self.__allowed_absence__ = 0
+        self.__min_iou_to_continue_track__ = 0.9
 
     def add_new_frame(self, frame_bounding_boxes: BoundingBoxCollection):
         self.__frame_count__ = self.__frame_count__ + 1
@@ -23,20 +25,28 @@ class Tracker:
             if self.__age_of_tracks__[i] < oldest_allowed_track:
                 indexes_to_remove.append(i)
 
-        for i in sorted(indexes_to_remove, reverse=True):
-            self.__age_of_tracks__.pop(i)
-            self.__tracks__.pop(i)
+        safe_rm(self.__age_of_tracks__, indexes_to_remove)
+        safe_rm(self.__tracks__, indexes_to_remove)
 
     def __add_frame_bounding_boxes_to_tracks__(self, frame_boxes: BoundingBoxCollection):
-        track_age = self.__frame_count__
+        new_track_age = self.__frame_count__
+        iou_threshold = self.__min_iou_to_continue_track__
+        bbox_indexes_to_remove = list()
 
-        for i in range(frame_boxes.size()):
-            box = frame_boxes.get(i)
-            if not self.__tracks__.contains(box):
-                self.__tracks__.add(box)
-                self.__age_of_tracks__.append(track_age)
-            else:
-                self.__age_of_tracks__[i] = track_age
+        for track_index in range(self.__tracks__.size()):
+            for bbox_index in range(frame_boxes.size()):
+                track: Box = self.__tracks__[track_index]
+                bbox: Box = frame_boxes[bbox_index]
+
+                if track.get_iou(bbox) < iou_threshold:
+                    self.__age_of_tracks__[track_index] = new_track_age
+                    bbox_indexes_to_remove.append(bbox_index)
+
+            safe_rm(frame_boxes, bbox_indexes_to_remove)
+
+        for bbox in frame_boxes:
+            self.__tracks__.add(bbox)
+            self.__age_of_tracks__.append(new_track_age)
 
     def get_current_tracks(self) -> BoundingBoxCollection:
         return self.__tracks__
