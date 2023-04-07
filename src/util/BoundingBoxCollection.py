@@ -88,3 +88,6 @@ class BoundingBoxCollection:
 
     def __delitem__(self, key):
         del self.__boxes__[key]
+
+    def remove(self, box: Box):
+        self.__boxes__.remove(box)
