@@ -67,3 +67,15 @@ class BoundingBoxCollection:
 
     def pop(self, index: int):
         self.__boxes__.pop(index)
+
+    def __iter__(self):
+        self.iter_value = 0
+        return self
+
+    def __next__(self):
+        if self.iter_value < self.size():
+            box = self.__boxes__[self.iter_value]
+            self.iter_value += 1
+            return box
+        else:
+            raise StopIteration
