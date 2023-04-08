@@ -68,11 +68,11 @@ class BoundingBoxCollection:
     def pop(self, index: int):
         self.__boxes__.pop(index)
 
-    def __iter__(self):
+    def __iter__(self) -> 'BoundingBoxCollection':
         self.iter_value = 0
         return self
 
-    def __next__(self):
+    def __next__(self) -> Box:
         if self.iter_value < self.size():
             box = self.__boxes__[self.iter_value]
             self.iter_value += 1
@@ -80,17 +80,17 @@ class BoundingBoxCollection:
         else:
             raise StopIteration
 
-    def __getitem__(self, key):
+    def __getitem__(self, key) -> Box:
         return self.__boxes__[key]
 
-    def __setitem__(self, key, value):
+    def __setitem__(self, key: int, value: Box):
         self.__boxes__[key] = value
 
-    def __delitem__(self, key):
+    def __delitem__(self, key: int):
         del self.__boxes__[key]
 
     def remove(self, box: Box):
         self.__boxes__.remove(box)
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.__boxes__)

@@ -9,7 +9,7 @@ from util.Debugging import display_progress_percent
 class MainClass:
     if __name__ == "__main__":
         print("Main class running!")
-        tracker = Tracker()
+        tracker = Tracker(min_frames=20, allowed_absence=20)
         detector_model = "https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1"
         # video_file = ".\\movie_002_2023-03-11"  # First Unity scene.
         video_file = ".\\..\\Videos\\tracker_test_video"  # Tracker test (living room chair).

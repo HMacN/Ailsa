@@ -7,7 +7,7 @@ from util.Box import Box
 from util.Debugging import debug_print
 
 
-class ModelTests(unittest.TestCase):
+class TrackerTests(unittest.TestCase):
 
     def test_track_new_items(self):
         tracker = Tracker()
