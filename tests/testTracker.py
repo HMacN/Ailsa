@@ -30,8 +30,7 @@ class ModelTests(unittest.TestCase):
                               "\n does not equal tracked boxes: \n" + str(current_tracks)))
 
     def test_track_existing_items_after_multiple_frame_absence(self):
-        tracker = Tracker()
-        tracker.set_allowed_absence(6)
+        tracker = Tracker(allowed_absence=6)
 
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
@@ -60,8 +59,7 @@ class ModelTests(unittest.TestCase):
                               "\n does not equal tracked items: \n" + str(current_tracks)))
 
     def test_stop_tracking_items_after_multiple_frame_absence(self):
-        tracker = Tracker()
-        tracker.set_allowed_absence(6)
+        tracker = Tracker(allowed_absence=6)
 
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
@@ -89,11 +87,10 @@ class ModelTests(unittest.TestCase):
 
         self.assertEqual(box_collection_2, current_tracks,
                          msg=("Expected tracks after absence: \n" + str(box_collection_2) +
-                              "\n does not tracked items: \n" + str(current_tracks)))
+                              "\n does not equal tracked items: \n" + str(current_tracks)))
 
     def test_set_allowed_frame_absence(self):
-        tracker = Tracker()
-        tracker.set_allowed_absence(2)
+        tracker = Tracker(allowed_absence=2)
 
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
@@ -121,8 +118,7 @@ class ModelTests(unittest.TestCase):
                               "\n does not equal current tracks: \n" + str(tracker.get_current_tracks())))
 
     def test_frame_overlap_to_keep_tracking(self):
-        tracker = Tracker()
-        tracker.set_allowed_absence(2)
+        tracker = Tracker(allowed_absence=2)
 
         box_1 = Box(0.0, 0.1, 0.0, 0.1, 0.7, "test3")
         box_2 = Box(0.0, 0.101, 0.0, 0.1, 0.7, "test3")
@@ -141,8 +137,7 @@ class ModelTests(unittest.TestCase):
                          "\n does not equal current tracks: \n" + str(tracker.get_current_tracks()))
 
     def test_set_frame_iou_to_keep_tracking(self):
-        tracker = Tracker(iou_threshold=0.143)
-        tracker.set_allowed_absence(20)
+        tracker = Tracker(iou_threshold=0.143, allowed_absence=20)
 
         box_1 = Box(0.0, 0.1, 0.0, 0.1, 0.7, "test3")
         box_2 = Box(0.05, 0.15, 0.05, 0.15, 0.7, "test3")
@@ -168,5 +163,44 @@ class ModelTests(unittest.TestCase):
         self.assertEqual(expected_result, actual_result,
                          msg="Expected tracks before IoU change: \n" + str(expected_result) +
                          "\n does not equal current tracks: \n" + str(actual_result))
+
+    def test_does_not_return_track_if_below_min_frames(self):
+        tracker = Tracker(min_frames=5)
+
+        box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
+
+        box_collection = BoundingBoxCollection()
+        box_collection.add(box_1)
+
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+
+        expected_result = BoundingBoxCollection()
+        actual_result = tracker.get_current_tracks()
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks before minimum frames: \n" + str(expected_result) +
+                              "\n does not equal tracked items: \n" + str(actual_result)))
+
+    def test_returns_track_if_above_min_frames(self):
+        tracker = Tracker(min_frames=5)
+
+        box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
+
+        box_collection = BoundingBoxCollection()
+        box_collection.add(box_1)
+
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+
+        expected_result = box_collection
+        actual_result = tracker.get_current_tracks()
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks after minimum frames: \n" + str(expected_result) +
+                              "\n does not equal tracked items: \n" + str(actual_result)))
 
 
