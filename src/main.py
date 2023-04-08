@@ -38,12 +38,11 @@ class MainClass:
 
                 frame: Frame = detector.get_frame()
                 detected_items = detector.get_bounding_boxes()
-                frame.draw_bounding_boxes(detected_items)
+                tracker.add_new_frame(detector.get_bounding_boxes())
+                frame.draw_bounding_boxes(tracker.get_current_tracks())
 
                 display.show(frame)  # Comment out to stop video display.
                 recorder.add_frame(frame)  # Comment out to stop video recording.
-
-                tracker.add_new_frame(detector.get_bounding_boxes())
 
                 display_progress_percent(detector.get_current_frame_number(),
                                          detector.get_total_frame_count())

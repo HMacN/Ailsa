@@ -48,10 +48,17 @@ class Tracker:
 
         iou = existing_track.get_box().get_iou(new_bbox)
         if iou > iou_threshold:
+            self.__replace_bbox_label_if_conf_lower_than_existing_label__(existing_track.get_box(), new_bbox)
             existing_track.sighted(new_bbox, current_frame)
             return True
         else:
             return False
+
+    @classmethod
+    def __replace_bbox_label_if_conf_lower_than_existing_label__(cls, tracked_bbox: Box, new_bbox: Box):
+        if tracked_bbox.confidence > new_bbox.confidence:
+            new_bbox.confidence = tracked_bbox.confidence
+            new_bbox.label = tracked_bbox.label
 
     @classmethod
     def __get_rid_of_boxes_that_are_now_updated_tracks__(cls, boxes, indexes: list):

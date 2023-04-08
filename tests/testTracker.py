@@ -183,7 +183,7 @@ class ModelTests(unittest.TestCase):
                          msg=("Expected tracks before minimum frames: \n" + str(expected_result) +
                               "\n does not equal tracked items: \n" + str(actual_result)))
 
-    def test_returns_track_if_above_min_frames(self):
+    def test_returns_track_after_min_frames(self):
         tracker = Tracker(min_frames=5)
 
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
@@ -203,4 +203,38 @@ class ModelTests(unittest.TestCase):
                          msg=("Expected tracks after minimum frames: \n" + str(expected_result) +
                               "\n does not equal tracked items: \n" + str(actual_result)))
 
+    def test_returns_most_likely_object_classification(self):
+        tracker = Tracker()
 
+        box_collection = BoundingBoxCollection()
+        box_collection.add(Box(0.1, 0.4, 0.1, 0.6, 0.5, "test1"))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+
+        box_collection_2 = BoundingBoxCollection()
+        box_collection_2.add(Box(0.1, 0.4, 0.1, 0.6, 0.7, "test2"))
+        tracker.add_new_frame(copy.deepcopy(box_collection_2))
+
+        expected_result = box_collection_2
+        actual_result = tracker.get_current_tracks()
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks after higher confidence classification: \n" + str(expected_result) +
+                              "\n does not equal tracked items: \n" + str(actual_result)))
+
+    def test_returns_most_likely_object_classification_after_lower_likelihood_classification(self):
+        tracker = Tracker()
+
+        box_collection = BoundingBoxCollection()
+        box_collection.add(Box(0.1, 0.4, 0.1, 0.6, 0.5, "possibly this"))
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+
+        box_collection_2 = BoundingBoxCollection()
+        box_collection_2.add(Box(0.1, 0.4, 0.1, 0.6, 0.7, "probably this"))
+        tracker.add_new_frame(copy.deepcopy(box_collection_2))
+
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+
+        expected_result = box_collection_2
+        actual_result = tracker.get_current_tracks()
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks after higher confidence classification: \n" + str(expected_result) +
+                              "\n does not equal tracked items: \n" + str(actual_result)))
