@@ -21,19 +21,27 @@ class KnowledgeUnit:
             item = frame.item_types[i]
             count = frame.item_counts[i]
             if not self.__seen_items__.__contains__(item):
-                self.__seen_items__.append(item)
-                self.__item_counts__.append(count)
-                self.__time_item_last_seen__.append([time])
+                self.__add_new_item__(item, count, time)
             else:
                 index = self.__seen_items__.index(item)
-                if self.__item_counts__[index] < count:
-                    self.__item_counts__[index] = count
+                self.__update_item_counts__(count, index)
+                self.__update_list_of_times_item_seen__(index, time)
 
-                list_of_times_item_seen: list = self.__time_item_last_seen__[index]
-                if list_of_times_item_seen[-1] == time - 1:
-                    list_of_times_item_seen[-1] = time
-                else:
-                    list_of_times_item_seen.append(time)
+    def __update_list_of_times_item_seen__(self, index: int, time: int):
+        list_of_times_item_seen: list = self.__time_item_last_seen__[index]
+        if list_of_times_item_seen[-1] == time - 1:
+            list_of_times_item_seen[-1] = time
+        else:
+            list_of_times_item_seen.append(time)
+
+    def __update_item_counts__(self, count: int, index: int):
+        if self.__item_counts__[index] < count:
+            self.__item_counts__[index] = count
+
+    def __add_new_item__(self, item: str, count: int, time: int):
+        self.__seen_items__.append(item)
+        self.__item_counts__.append(count)
+        self.__time_item_last_seen__.append([time])
 
     def how_many_have_you_seen(self, item_label: str) -> int:
         for i in range(len(self.__seen_items__)):
