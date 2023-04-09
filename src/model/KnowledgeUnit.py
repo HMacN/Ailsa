@@ -9,6 +9,7 @@ class KnowledgeUnit:
         self.__seen_items__: list = list()
         self.__item_counts__: list = list()
         self.__time_item_last_seen__: list = list()
+        self.__facts__: KnowledgeUnit.Facts = KnowledgeUnit.Facts()
 
     def get_seen_items(self) -> list:
         return sorted(self.__seen_items__)
@@ -73,5 +74,14 @@ class KnowledgeUnit:
 
     def where_did_you_see(self, item: str) -> list:
         if self.__seen_items__.__contains__(item):
-            return ["on the floor"]
+            if self.__facts__.items_not_normally_on_floor.__contains__(item):
+                return ["on the floor"]
+            return [""]
         return list()
+
+    def set_items_not_normally_on_floor(self, items: list):
+        self.__facts__.items_not_normally_on_floor = items
+
+    class Facts:
+        def __init__(self):
+            self.items_not_normally_on_floor: list = list()

@@ -237,7 +237,7 @@ class KnowledgeUnitTests(unittest.TestCase):
                          msg="The expected value: \n" + str(expected_results) +
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
-    def test_where_did_you_see_item_returns_on_the_floor_for_lone_object(self):
+    def test_where_item_returns_empty_str_for_lone_object(self):
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -252,8 +252,23 @@ class KnowledgeUnitTests(unittest.TestCase):
         frame_3.add(Box(0.3, 0.3, 0.4, 0.4, 0.5, "C"))
         ku.add_frame(frame_3, 4)
 
-        expected_results: list = ["on the floor"]
+        expected_results: list = [""]
         actual_results: list = ku.where_did_you_see("B")
+
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
+    def test_where_item_returns_on_floor_if_item_not_normally_on_floor(self):
+        ku = KnowledgeUnit()
+        ku.set_items_not_normally_on_floor(["A"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
+        ku.add_frame(frame_1, 2)
+
+        expected_results: list = ["on the floor"]
+        actual_results: list = ku.where_did_you_see("A")
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
