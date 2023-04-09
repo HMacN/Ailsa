@@ -57,3 +57,8 @@ class KnowledgeUnit:
         else:
             return -1
 
+    def where_did_you_see(self, item: str) -> list:
+        if self.__seen_items__.__contains__(item):
+            return ["on the floor"]
+        return list()
+
