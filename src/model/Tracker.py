@@ -9,39 +9,42 @@ from util.Debugging import debug_print
 class Tracker:
 
     def __init__(self, iou_threshold=0.9, min_frames=1, allowed_absence=0):
-        self.__tracks_2__: list = list()
+        self.__tracks__: list = list()
         self.__frame_count__: int = 0
         self.__min_frames_for_track__ = min_frames
         self.__allowed_absence__ = allowed_absence
         self.__min_iou_to_continue_track__ = iou_threshold
+        self.__next_track_uid__ = 0
 
     def add_new_frame(self, frame_bounding_boxes: BoundingBoxCollection):
         self.__frame_count__ = self.__frame_count__ + 1
         self.__add_frame_bounding_boxes_to_tracks__(frame_bounding_boxes)
         self.__remove_old_tracks__()
+        # debug_print("tracks after update: ", self.__tracks__)
 
     def __remove_old_tracks__(self):
         oldest_allowed_track = self.__frame_count__ - self.__allowed_absence__
         indexes_to_remove = list()
-        for i in range(len(self.__tracks_2__)):
-            track: Tracker.Track = self.__tracks_2__[i]
+        for i in range(len(self.__tracks__)):
+            track: Tracker.Track = self.__tracks__[i]
             if track.get_last_seen() < oldest_allowed_track:
                 indexes_to_remove.append(i)
 
-        safe_rm(self.__tracks_2__, indexes_to_remove)
+        safe_rm(self.__tracks__, indexes_to_remove)
 
     def __add_frame_bounding_boxes_to_tracks__(self, frame_boxes: BoundingBoxCollection):
         bbox_indexes_to_remove = list()
 
-        for track_index in range(len(self.__tracks_2__)):
+        for track_index in range(len(self.__tracks__)):
             for bbox_index in range(frame_boxes.size()):
-                if self.__update_track_if_box_overlaps__(track_index, bbox_index, frame_boxes):
+                if self.__update_track_if_box_overlaps__(track_index, bbox_index, frame_boxes) \
+                        and not bbox_indexes_to_remove.__contains__(bbox_index):
                     bbox_indexes_to_remove.append(bbox_index)
-            self.__get_rid_of_boxes_that_are_now_updated_tracks__(frame_boxes, bbox_indexes_to_remove)
+        self.__get_rid_of_boxes_that_are_now_updated_tracks__(frame_boxes, bbox_indexes_to_remove)
         self.__add_remaining_boxes_as_new_tracks__(frame_boxes)
 
     def __update_track_if_box_overlaps__(self, track_index: int, box_index: int, boxes: BoundingBoxCollection) -> bool:
-        existing_track: Tracker.Track = self.__tracks_2__[track_index]
+        existing_track: Tracker.Track = self.__tracks__[track_index]
         new_bbox: Box = boxes[box_index]
         current_frame = copy.deepcopy(self.__frame_count__)
         iou_threshold = self.__min_iou_to_continue_track__
@@ -67,23 +70,27 @@ class Tracker:
     def __add_remaining_boxes_as_new_tracks__(self, frame_boxes: BoundingBoxCollection):
         current_frame = copy.deepcopy(self.__frame_count__)
         for remaining_bbox in frame_boxes:
-            new_track = Tracker.Track(remaining_bbox, current_frame)
-            self.__tracks_2__.append(new_track)
+            new_track = Tracker.Track(remaining_bbox, current_frame, self.__next_track_uid__)
+            self.__tracks__.append(new_track)
+            self.__next_track_uid__ += 1
 
     def get_current_tracks(self) -> (BoundingBoxCollection, list):
         active_tracks = BoundingBoxCollection()
-        for index in range(len(self.__tracks_2__)):
-            track: Tracker.Track = self.__tracks_2__[index]
+        track_uids = list()
+        for index in range(len(self.__tracks__)):
+            track: Tracker.Track = self.__tracks__[index]
             if track.get_frames_detected() >= self.__min_frames_for_track__:
                 active_tracks.add(track.get_box())
-        return copy.deepcopy(active_tracks), list()
+                track_uids.append(track.get_uid())
+        return copy.deepcopy(active_tracks), copy.deepcopy(track_uids)
 
     class Track:
 
-        def __init__(self, box: Box, frame_last_seen: int):
+        def __init__(self, box: Box, frame_last_seen: int, uid: int):
             self.__box__: Box = box
             self.__last_seen__: int = frame_last_seen
             self.__detected_for__: int = 1
+            self.__uid__: int = uid
 
         def lost_contact(self):
             self.__detected_for__ = 0
@@ -101,4 +108,11 @@ class Tracker:
 
         def get_frames_detected(self) -> int:
             return self.__detected_for__
+
+        def get_uid(self) -> int:
+            return self.__uid__
+
+        def __str__(self):
+            return "Track UID: " + str(self.__uid__) + ", last seen on frame: " + str(self.__last_seen__) + ", for " + \
+                str(self.__detected_for__) + " frames"
 

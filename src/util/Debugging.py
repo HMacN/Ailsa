@@ -6,10 +6,12 @@ from colorama import Fore, Back, Style
 def debug_print(*messages):
     print(Fore.YELLOW, end="")
     print("DEBUG >>> ", end='')
+    print(Style.RESET_ALL, end="")
 
     for item in messages:
         print(item, end='')
 
+    print(Fore.YELLOW, end="")
     calling_location: str = __calling_item_on_stack_as_string__()
     print(Fore.YELLOW, end="")
     print(calling_location, end='')
