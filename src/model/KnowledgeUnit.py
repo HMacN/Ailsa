@@ -1,4 +1,5 @@
 from util.BoundingBoxCollection import BoundingBoxCollection
+from util.Debugging import debug_print
 from util.SafeListEditor import safely_remove_list_indexes as safe_del
 
 
@@ -22,12 +23,17 @@ class KnowledgeUnit:
             if not self.__seen_items__.__contains__(item):
                 self.__seen_items__.append(item)
                 self.__item_counts__.append(count)
-                self.__time_item_last_seen__.append(time)
+                self.__time_item_last_seen__.append([time])
             else:
                 index = self.__seen_items__.index(item)
                 if self.__item_counts__[index] < count:
                     self.__item_counts__[index] = count
-                self.__time_item_last_seen__[index] = time
+
+                list_of_times_item_seen: list = self.__time_item_last_seen__[index]
+                if list_of_times_item_seen[-1] == time - 1:
+                    list_of_times_item_seen[-1] = time
+                else:
+                    list_of_times_item_seen.append(time)
 
     def how_many_have_you_seen(self, item_label: str) -> int:
         for i in range(len(self.__seen_items__)):
@@ -53,7 +59,7 @@ class KnowledgeUnit:
     def when_did_you_see(self, item: str):
         if self.__seen_items__.__contains__(item):
             index = self.__seen_items__.index(item)
-            return [self.__time_item_last_seen__[index]]
+            return self.__time_item_last_seen__[index]
         else:
             return list()
 
@@ -61,4 +67,3 @@ class KnowledgeUnit:
         if self.__seen_items__.__contains__(item):
             return ["on the floor"]
         return list()
-

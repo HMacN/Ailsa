@@ -175,7 +175,45 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
+    def test_when_did_you_see_returns_times_item_seen(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
+        ku.add_frame(frame_1, 2)
+
+        frame_2 = BoundingBoxCollection()
+        frame_2.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_2, 3)
+
+        frame_3 = BoundingBoxCollection()
+        frame_3.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_3, 4)
+
+        frame_4 = BoundingBoxCollection()
+        frame_4.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_4, 5)
+
+        frame_5 = BoundingBoxCollection()
+        frame_5.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
+        ku.add_frame(frame_5, 6)
+
+        frame_6 = BoundingBoxCollection()
+        frame_6.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_6, 7)
+
+        frame_7 = BoundingBoxCollection()
+        frame_7.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_7, 8)
+
+        expected_results: list = [5, 8]
+        actual_results: list = ku.when_did_you_see("B")
+
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_where_did_you_see_items_returns_empty_list_if_items_not_seen(self):
         ku = KnowledgeUnit()
