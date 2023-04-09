@@ -70,13 +70,13 @@ class Tracker:
             new_track = Tracker.Track(remaining_bbox, current_frame)
             self.__tracks_2__.append(new_track)
 
-    def get_current_tracks(self) -> BoundingBoxCollection:
+    def get_current_tracks(self) -> (BoundingBoxCollection, list):
         active_tracks = BoundingBoxCollection()
         for index in range(len(self.__tracks_2__)):
             track: Tracker.Track = self.__tracks_2__[index]
             if track.get_frames_detected() >= self.__min_frames_for_track__:
                 active_tracks.add(track.get_box())
-        return copy.deepcopy(active_tracks)
+        return copy.deepcopy(active_tracks), list()
 
     class Track:
 

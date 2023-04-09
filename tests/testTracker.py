@@ -23,7 +23,7 @@ class TrackerTests(unittest.TestCase):
 
         tracker.add_new_frame(copy.deepcopy(box_collection))
 
-        current_tracks = tracker.get_current_tracks()
+        current_tracks, _ = tracker.get_current_tracks()
 
         self.assertEqual(box_collection, current_tracks,
                          msg=("Given tracks: \n" + str(box_collection) +
@@ -52,7 +52,7 @@ class TrackerTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
 
-        current_tracks = tracker.get_current_tracks()
+        current_tracks, _ = tracker.get_current_tracks()
 
         self.assertEqual(box_collection_1, current_tracks,
                          msg=("Expected tracks before absence: \n" + str(box_collection_1) +
@@ -83,7 +83,7 @@ class TrackerTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
 
-        current_tracks = tracker.get_current_tracks()
+        current_tracks, _ = tracker.get_current_tracks()
 
         self.assertEqual(box_collection_2, current_tracks,
                          msg=("Expected tracks after absence: \n" + str(box_collection_2) +
@@ -109,13 +109,18 @@ class TrackerTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
 
-        self.assertEqual(box_collection_1, tracker.get_current_tracks(),
-                         msg=("Expected tracks before allowed absence ends:\n" + str(box_collection_1) +
-                              "\n does not equal current tracks: \n" + str(tracker.get_current_tracks())))
+        expected_result = box_collection_1
+        actual_result, _ = tracker.get_current_tracks()
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks before allowed absence ends:\n" + str(expected_result) +
+                              "\n does not equal current tracks: \n" + str(actual_result)))
+
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
-        self.assertEqual(box_collection_2, tracker.get_current_tracks(),
-                         msg=("Expected tracks after allowed absence ends: \n" + str(box_collection_2) +
-                              "\n does not equal current tracks: \n" + str(tracker.get_current_tracks())))
+        expected_result = box_collection_2
+        actual_result, _ = tracker.get_current_tracks()
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks after allowed absence ends: \n" + str(expected_result) +
+                              "\n does not equal current tracks: \n" + str(actual_result)))
 
     def test_frame_overlap_to_keep_tracking(self):
         tracker = Tracker(allowed_absence=2)
@@ -132,9 +137,11 @@ class TrackerTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection_1))
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
 
-        self.assertEqual(box_collection_2, tracker.get_current_tracks(),
-                         msg="Expected tracks after new frame: \n" + str(box_collection_2) +
-                         "\n does not equal current tracks: \n" + str(tracker.get_current_tracks()))
+        expected_result = box_collection_2
+        actual_result, _ = tracker.get_current_tracks()
+        self.assertEqual(expected_result, actual_result,
+                         msg="Expected tracks after new frame: \n" + str(expected_result) +
+                         "\n does not equal current tracks: \n" + str(actual_result))
 
     def test_set_frame_iou_to_keep_tracking(self):
         tracker = Tracker(iou_threshold=0.143, allowed_absence=20)
@@ -159,7 +166,7 @@ class TrackerTests(unittest.TestCase):
         expected_result = BoundingBoxCollection()
         expected_result.add(box_3)
         expected_result.add(box_2)
-        actual_result = tracker.get_current_tracks()
+        actual_result, _ = tracker.get_current_tracks()
         self.assertEqual(expected_result, actual_result,
                          msg="Expected tracks before IoU change: \n" + str(expected_result) +
                          "\n does not equal current tracks: \n" + str(actual_result))
@@ -178,7 +185,7 @@ class TrackerTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection))
 
         expected_result = BoundingBoxCollection()
-        actual_result = tracker.get_current_tracks()
+        actual_result, _ = tracker.get_current_tracks()
         self.assertEqual(expected_result, actual_result,
                          msg=("Expected tracks before minimum frames: \n" + str(expected_result) +
                               "\n does not equal tracked items: \n" + str(actual_result)))
@@ -198,7 +205,7 @@ class TrackerTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection))
 
         expected_result = box_collection
-        actual_result = tracker.get_current_tracks()
+        actual_result, _ = tracker.get_current_tracks()
         self.assertEqual(expected_result, actual_result,
                          msg=("Expected tracks after minimum frames: \n" + str(expected_result) +
                               "\n does not equal tracked items: \n" + str(actual_result)))
@@ -215,7 +222,7 @@ class TrackerTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection_2))
 
         expected_result = box_collection_2
-        actual_result = tracker.get_current_tracks()
+        actual_result, _ = tracker.get_current_tracks()
         self.assertEqual(expected_result, actual_result,
                          msg=("Expected tracks after higher confidence classification: \n" + str(expected_result) +
                               "\n does not equal tracked items: \n" + str(actual_result)))
@@ -234,7 +241,42 @@ class TrackerTests(unittest.TestCase):
         tracker.add_new_frame(copy.deepcopy(box_collection))
 
         expected_result = box_collection_2
-        actual_result = tracker.get_current_tracks()
+        actual_result, _ = tracker.get_current_tracks()
         self.assertEqual(expected_result, actual_result,
                          msg=("Expected tracks after higher confidence classification: \n" + str(expected_result) +
                               "\n does not equal tracked items: \n" + str(actual_result)))
+
+    def test_tracker_returns_empty_list_of_track_ids_when_no_tracks(self):
+        tracker = Tracker()
+
+        box_collection = BoundingBoxCollection()
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+
+        expected_result = list()
+        _, actual_result = tracker.get_current_tracks()
+
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected track ids: \n" + str(box_collection) +
+                              "\n does not equal actual track ids: \n" + str(actual_result)))
+
+    def test_tracker_returns_unique_track_ids(self):
+        tracker = Tracker()
+
+        box_collection = BoundingBoxCollection()
+        box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
+        box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.7, "test3")
+
+        box_collection.add(box_0)
+        box_collection.add(box_1)
+        box_collection.add(box_2)
+
+        tracker.add_new_frame(copy.deepcopy(box_collection))
+
+        expected_result = [1, 2, 3]
+        _, actual_result = tracker.get_current_tracks()
+
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected track ids: \n" + str(box_collection) +
+                              "\n does not equal actual track ids: \n" + str(actual_result)))
+
