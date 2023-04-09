@@ -21,7 +21,7 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_returns_seen_items_in_alphabetical_order(self):
         ku = KnowledgeUnit()
@@ -38,7 +38,7 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_remembers_seen_items_across_multiple_frames(self):
         ku = KnowledgeUnit()
@@ -60,7 +60,7 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_have_you_seen_an_item_returns_1(self):
         ku = KnowledgeUnit()
@@ -82,7 +82,7 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_have_you_seen_an_item_returns_0(self):
         ku = KnowledgeUnit()
@@ -104,7 +104,7 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_have_you_seen_item_returns_count_of_max_number_seen_at_one_time(self):
         ku = KnowledgeUnit()
@@ -127,9 +127,9 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
-    def test_how_long_since_you_saw_returns_minus_1_if_not_seen(self):
+    def test_when_did_you_see_returns_empty_list_if_not_seen(self):
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -144,14 +144,14 @@ class KnowledgeUnitTests(unittest.TestCase):
         frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_3, 3)
 
-        expected_results: int = -1
-        actual_results: int = ku.how_long_since_you_saw("D", 4)
+        expected_results: list = list()
+        actual_results: list = ku.when_did_you_see("D")
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
-    def test_how_long_since_you_saw_returns_time_since_last_seen(self):
+    def test_when_did_you_see_returns_time_last_seen(self):
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -163,11 +163,15 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku.add_frame(frame_2, 3)
 
         frame_3 = BoundingBoxCollection()
-        frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
+        frame_3.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_3, 4)
 
-        expected_results: int = 2
-        actual_results: int = ku.how_long_since_you_saw("B", 5)
+        frame_4 = BoundingBoxCollection()
+        frame_4.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
+        ku.add_frame(frame_4, 5)
+
+        expected_results: list = [4]
+        actual_results: list = ku.when_did_you_see("B")
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
@@ -193,7 +197,7 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_where_did_you_see_item_returns_on_the_floor_for_lone_object(self):
         ku = KnowledgeUnit()
@@ -215,4 +219,4 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
-                         "\ndid not equal the actual value: \n" + str(actual_results))
+                             "\ndid not equal the actual value: \n" + str(actual_results))
