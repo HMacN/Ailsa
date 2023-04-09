@@ -156,18 +156,18 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         frame_1 = BoundingBoxCollection()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
-        ku.add_frame(frame_1, 1)
+        ku.add_frame(frame_1, 2)
 
         frame_2 = BoundingBoxCollection()
         frame_2.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
-        ku.add_frame(frame_2, 2)
+        ku.add_frame(frame_2, 3)
 
         frame_3 = BoundingBoxCollection()
         frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
-        ku.add_frame(frame_3, 3)
+        ku.add_frame(frame_3, 4)
 
         expected_results: int = 2
-        actual_results: int = ku.how_long_since_you_saw("B", 4)
+        actual_results: int = ku.how_long_since_you_saw("B", 5)
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +

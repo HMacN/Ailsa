@@ -53,7 +53,7 @@ class KnowledgeUnit:
     def how_long_since_you_saw(self, item: str, current_time: int):
         if self.__seen_items__.__contains__(item):
             index = self.__seen_items__.index(item)
-            return self.__time_item_last_seen__[index]
+            return current_time - self.__time_item_last_seen__[index]
         else:
             return -1
 
