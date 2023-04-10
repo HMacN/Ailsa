@@ -273,3 +273,29 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
                              "\ndid not equal the actual value: \n" + str(actual_results))
+
+    def test_where_item_returns_on_floor_for_multiple_items(self):
+        ku = KnowledgeUnit()
+        ku.set_items_not_normally_on_floor(["A", "B"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
+        ku.add_frame(frame_1, 2)
+
+        frame_2 = BoundingBoxCollection()
+        frame_2.add(Box(0.2, 0.2, 0.3, 0.3, 0.5, "B"))
+        ku.add_frame(frame_2, 3)
+
+        expected_results: list = ["on the floor"]
+        actual_results: list = ku.where_did_you_see("A")
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
+        expected_results: list = ["on the floor"]
+        actual_results: list = ku.where_did_you_see("B")
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
+    # def test_where_item_returns_
