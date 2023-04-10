@@ -67,3 +67,12 @@ class BoxTests(unittest.TestCase):
         box_2 = Box(0.5, 0.6, 0.1, 0.2, 0.5, "test2")
 
         self.assertTrue(floats_eq_7_dp(0.0, box_1.get_iou(box_2)))
+
+    def test_get_area(self):
+        box_1 = Box(0.0, 0.3, 0.0, 0.1, 0.5, "test1")
+
+        expected_result = 0.03
+        actual_result = box_1.get_area()
+
+        self.assertTrue(floats_eq_7_dp(expected_result, actual_result))
+
