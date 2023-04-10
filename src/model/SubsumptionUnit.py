@@ -5,7 +5,7 @@ from util.Debugging import debug_print
 
 class SubsumptionUnit:
     def __init__(self):
-        self.iou_threshold: float = 0.9
+        self.__overlap_threshold__: float = 0.9
         self.__subsumption_lists__: list = list()
         self.__items_to_sub_into__: list = list()
         self.__items_that_can_be_subbed__: list = list()
@@ -19,14 +19,16 @@ class SubsumptionUnit:
 
         can_be_substituted_for = item
         for sub_able_item in new_list:
-            if not self.__items_to_sub__.__contains__(sub_able_item):
+            if sub_able_item not in self.__items_to_sub__:
                 self.__items_to_sub__[sub_able_item] = [can_be_substituted_for]
             else:
                 self.__items_to_sub__[sub_able_item].append(can_be_substituted_for)
+        debug_print("new list: ", new_list)
+        debug_print("items to sub dict: ", self.__items_to_sub__)
 
     def __add_new_items_that_can_be_subbed__(self, new_list: list):
         for item in new_list:
-            if not self.__items_that_can_be_subbed__.__contains__(item):
+            if item not in self.__items_that_can_be_subbed__:
                 self.__items_that_can_be_subbed__.append(item)
 
     def subsume_bboxes(self, boxes: BoundingBoxCollection) -> BoundingBoxCollection:
@@ -47,15 +49,13 @@ class SubsumptionUnit:
 
         debug_print("box to sub: ", box)
         debug_print("list of items can sub into:", list_of_items_can_sub_into)
-        debug_print("IoU threshold: ", self.iou_threshold)
+        debug_print("IoU threshold: ", self.__overlap_threshold__)
 
         for candidate_box in boxes:
             debug_print("candidate: ", candidate_box)
             if candidate_box.label in list_of_items_can_sub_into:
-                iou = candidate_box.get_iou(box)
-                debug_print("iou: ", iou)
-                if iou > self.iou_threshold:
-                    debug_print()
+                overlap = candidate_box.get_overlap_area(box)
+                if overlap / box.get_area() > self.__overlap_threshold__:
                     return True
 
         return False

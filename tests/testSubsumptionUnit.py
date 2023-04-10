@@ -45,3 +45,23 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(expected_result, actual_result,
                          msg=("Expected tracks: \n" + str(expected_result) +
                               "\n does not equal actual tracks: \n" + str(actual_result)))
+
+    def test_can_subsume_multiple_items(self):
+        su = SubsumptionUnit()
+
+        given_box_collection = BoundingBoxCollection()
+        given_box_collection.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
+        given_box_collection.add(Box(0.0, 0.05, 0.0, 0.1, 0.5, "test2"))
+        given_box_collection.add(Box(0.05, 0.1, 0.0, 0.1, 0.5, "test3"))
+
+        subsumption_list: list = ["test1", "test2", "test3"]
+
+        su.add_list(subsumption_list)
+
+        expected_result = BoundingBoxCollection()
+        expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
+        actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
+
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks: \n" + str(expected_result) +
+                              "\n does not equal actual tracks: \n" + str(actual_result)))
