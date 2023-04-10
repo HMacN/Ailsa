@@ -6,16 +6,10 @@ from util.Debugging import debug_print
 class SubsumptionUnit:
     def __init__(self):
         self.__overlap_threshold__: float = 0.9
-        self.__subsumption_lists__: list = list()
-        self.__items_to_sub_into__: list = list()
-        self.__items_that_can_be_subbed__: list = list()
         self.__items_to_sub__: dict = dict()
 
     def add_list(self, new_list: list):
         item = new_list.pop(0)
-        self.__subsumption_lists__.append(new_list)
-        self.__items_to_sub_into__.append(item)
-        self.__add_new_items_that_can_be_subbed__(new_list)
 
         can_be_substituted_for = item
         for sub_able_item in new_list:
@@ -23,13 +17,6 @@ class SubsumptionUnit:
                 self.__items_to_sub__[sub_able_item] = [can_be_substituted_for]
             else:
                 self.__items_to_sub__[sub_able_item].append(can_be_substituted_for)
-        debug_print("new list: ", new_list)
-        debug_print("items to sub dict: ", self.__items_to_sub__)
-
-    def __add_new_items_that_can_be_subbed__(self, new_list: list):
-        for item in new_list:
-            if item not in self.__items_that_can_be_subbed__:
-                self.__items_that_can_be_subbed__.append(item)
 
     def subsume_bboxes(self, boxes: BoundingBoxCollection) -> BoundingBoxCollection:
         boxes_to_return: BoundingBoxCollection = BoundingBoxCollection()
@@ -47,12 +34,7 @@ class SubsumptionUnit:
         box = boxes[box_index]
         list_of_items_can_sub_into = self.__items_to_sub__[box.label]
 
-        debug_print("box to sub: ", box)
-        debug_print("list of items can sub into:", list_of_items_can_sub_into)
-        debug_print("IoU threshold: ", self.__overlap_threshold__)
-
         for candidate_box in boxes:
-            debug_print("candidate: ", candidate_box)
             if candidate_box.label in list_of_items_can_sub_into:
                 overlap = candidate_box.get_overlap_area(box)
                 if overlap / box.get_area() > self.__overlap_threshold__:
