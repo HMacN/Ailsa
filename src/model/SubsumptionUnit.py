@@ -41,3 +41,6 @@ class SubsumptionUnit:
                     return True
 
         return False
+
+    def set_overlap_threshold(self, allowed_overlap: float):
+        self.__overlap_threshold__ = allowed_overlap
