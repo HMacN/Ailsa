@@ -116,3 +116,5 @@ class Tracker:
             return "Track UID: " + str(self.__uid__) + ", last seen on frame: " + str(self.__last_seen__) + ", for " + \
                 str(self.__detected_for__) + " frames"
 
+
+
