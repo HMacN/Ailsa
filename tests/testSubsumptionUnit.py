@@ -169,15 +169,31 @@ class MyTestCase(unittest.TestCase):
         given_box_collection = BoundingBoxCollection()
         given_box_collection.add(Box(0.0000, 0.1000, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.0499, 0.1499, 0.0, 0.1, 0.5, "test2"))
-        given_box_collection.add(Box(0.0501, 0.1501, 0.0, 0.1, 0.5, "test2"))
+        given_box_collection.add(Box(0.0501, 0.1501, 0.0, 0.1, 0.5, "test3"))
 
-        subsumption_list_1: list = ["test1", "test2"]
+        subsumption_list_1: list = ["test1", "test2", "test3"]
 
         su.add_list(subsumption_list_1)
 
         expected_result = BoundingBoxCollection()
         expected_result.add(Box(0.0000, 0.1000, 0.0, 0.1, 0.5, "test1"))
-        expected_result.add(Box(0.0501, 0.1501, 0.0, 0.1, 0.5, "test2"))
+        expected_result.add(Box(0.0501, 0.1501, 0.0, 0.1, 0.5, "test3"))
+
+        actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
+
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks: \n" + str(expected_result) +
+                              "\n does not equal actual tracks: \n" + str(actual_result)))
+
+    def test_subsumes_items_of_same_type_automatically(self):
+        su = SubsumptionUnit()
+
+        given_box_collection = BoundingBoxCollection()
+        given_box_collection.add(Box(0.0000, 0.1000, 0.0, 0.1, 0.5, "test1"))
+        given_box_collection.add(Box(0.0001, 0.0999, 0.0, 0.1, 0.5, "test1"))
+
+        expected_result = BoundingBoxCollection()
+        expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
 
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
 
