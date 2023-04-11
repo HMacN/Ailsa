@@ -1,5 +1,6 @@
 import cv as cv
 import cv2
+import numpy
 import tensorflow_hub as hub
 import tensorflow as tf
 from cv2.gapi.wip.draw import Rect
@@ -35,9 +36,9 @@ class Detector:
         return has_next_frame
 
     def run_detection_on_current_frame(self):
-        detection_results, nms_indexes = self.__get_detection_results__()
+        detection_results = self.__get_detection_results__()
 
-        bounding_boxes = self.__convert_cv2_results_to_bounding_box_collection__(detection_results, nms_indexes)
+        bounding_boxes = self.__convert_cv2_results_to_bounding_box_collection__(detection_results)
 
         self.__current_bounding_boxes__ = bounding_boxes
 
@@ -52,9 +53,9 @@ class Detector:
         results = self.__model__(converted_img)
         results = {key: value.numpy() for key, value in results.items()}
 
-        nms_indexes = self.__perform_nms__(results["detection_boxes"], results["detection_scores"])
+        results = self.__perform_nms__(results)
 
-        return results, nms_indexes
+        return results
 
     def get_frame_width(self) -> int:
         if self.__video_capture__ is None:
@@ -101,31 +102,48 @@ class Detector:
     def set_nms_top_k_parameter(self, top_k: float | None):
         self.__nms_keep_top_k_indices__ = top_k
 
-    def __perform_nms__(self, bboxes, conf_scores) -> list:
+    def __perform_nms__(self, detection_results: dict) -> dict:
 
         integer_bboxes = list()
-        for i in bboxes:
+        for i in detection_results["detection_boxes"]:
             a = int(i[0] * 1000)
             b = int(i[1] * 1000)
             c = int(i[2] * 1000) - a
             d = int(i[3] * 1000) - b
             integer_bboxes.append([a, b, c, d])
 
-        indexes = cv2.dnn.NMSBoxes(integer_bboxes, conf_scores,
+        indexes = cv2.dnn.NMSBoxes(integer_bboxes, detection_results["detection_scores"],
                                    self.__detection_confidence_threshold__,
                                    self.__nms_overlap_threshold__,
                                    self.__nms_eta__,
                                    self.__nms_keep_top_k_indices__)
 
-        return indexes
+        indexes = list(indexes)
+
+        new_results: dict = dict()
+        new_results["detection_boxes"] = list()
+        new_results["detection_scores"] = list()
+        new_results["detection_class_entities"] = list()
+        new_results["detection_class_names"] = list()
+        new_results["detection_class_labels"] = list()
+
+        for i in reversed(range(len(detection_results["detection_boxes"]))):
+            if i == indexes[-1]:
+                new_results["detection_boxes"].append(detection_results["detection_boxes"][i])
+                new_results["detection_scores"].append(detection_results["detection_scores"][i])
+                new_results["detection_class_entities"].append(detection_results["detection_class_entities"][i])
+                new_results["detection_class_names"].append(detection_results["detection_class_names"][i])
+                new_results["detection_class_labels"].append(detection_results["detection_class_labels"][i])
+
+                del indexes[-1]
+        return new_results
 
     @staticmethod
-    def __convert_cv2_results_to_bounding_box_collection__(detection_results,
-                                                           nms_indexes: list) -> BoundingBoxCollection:
+    def __convert_cv2_results_to_bounding_box_collection__(detection_results) -> BoundingBoxCollection:
 
         boxes = BoundingBoxCollection()
 
-        for i in nms_indexes:
+        for i in range(len(detection_results["detection_boxes"])):
             new_box = Box(left_edge=detection_results["detection_boxes"][i][1],
                           right_edge=detection_results["detection_boxes"][i][3],
                           lower_edge=detection_results["detection_boxes"][i][0],

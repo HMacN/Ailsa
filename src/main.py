@@ -19,7 +19,7 @@ class MainClass:
         with_bounding_boxes = "_with_bounding_boxes"
 
         # webcam_detector = Detector("https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1")
-        file_detector = Detector(detector_model, video_file+file_extension)
+        file_detector = Detector(detector_model, video_file + file_extension)
 
         display = Display()
         detector = file_detector
@@ -29,7 +29,7 @@ class MainClass:
         detector.set_nms_eta_parameter(None)
         detector.set_nms_top_k_parameter(None)
 
-        recorder = Recorder(file_name=video_file+with_bounding_boxes,
+        recorder = Recorder(file_name=video_file + with_bounding_boxes,
                             width=detector.get_frame_width(),
                             height=detector.get_frame_height())
 
@@ -41,7 +41,8 @@ class MainClass:
                 frame: Frame = detector.get_frame()
                 detected_items = detector.get_bounding_boxes()
                 tracker.add_new_frame(detector.get_bounding_boxes())
-                frame.draw_bounding_boxes(tracker.get_current_tracks())
+                current_tracks, track_ids = tracker.get_current_tracks()
+                frame.draw_bounding_boxes(current_tracks)
 
                 display.show(frame)  # Comment out to stop video display.
                 recorder.add_frame(frame)  # Comment out to stop video recording.
