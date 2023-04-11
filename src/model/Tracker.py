@@ -20,7 +20,6 @@ class Tracker:
         self.__frame_count__ = self.__frame_count__ + 1
         self.__add_frame_bounding_boxes_to_tracks__(frame_bounding_boxes)
         self.__remove_old_tracks__()
-        # debug_print("tracks after update: ", self.__tracks__)
 
     def __remove_old_tracks__(self):
         oldest_allowed_track = self.__frame_count__ - self.__allowed_absence__

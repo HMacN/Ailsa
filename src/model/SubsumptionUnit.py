@@ -62,5 +62,5 @@ class SubsumptionUnit:
             list_of_items_can_sub_into.extend(self.__items_to_sub__[box_to_be_subbed.label])
         return list_of_items_can_sub_into
 
-    def set_overlap_threshold(self, allowed_overlap: float):
+    def set_overlap_threshold(self, allowed_overlap=0.9):
         self.__overlap_threshold__ = allowed_overlap
