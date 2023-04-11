@@ -94,3 +94,9 @@ class BoundingBoxCollection:
 
     def __len__(self) -> int:
         return len(self.__boxes__)
+
+    def sort_by_area(self):
+        def foo(e: Box):
+            return e.get_area()
+
+        self.__boxes__.sort(key=foo)

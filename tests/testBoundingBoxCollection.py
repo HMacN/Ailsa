@@ -275,3 +275,25 @@ class BoundingBoxCollectionTests(unittest.TestCase):
         box_collection.add(box_2)
 
         self.assertEqual(box_collection.__len__(), 3)
+
+    def test_can_sort_by_area(self):
+        box_collection = BoundingBoxCollection()
+        box_0 = Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1")
+        box_1 = Box(0.0, 0.2, 0.0, 0.2, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.0, 0.3, 0.5, "test3")
+        box_3 = Box(0.0, 0.4, 0.0, 0.4, 0.5, "test4")
+
+        box_collection.add(box_0)
+        box_collection.add(box_3)
+        box_collection.add(box_1)
+        box_collection.add(box_2)
+
+        box_collection.sort_by_area()
+
+        self.assertEqual(box_collection[0], box_0)
+        self.assertEqual(box_collection[1], box_1)
+        self.assertEqual(box_collection[2], box_2)
+        self.assertEqual(box_collection[3], box_3)
+
+
+
