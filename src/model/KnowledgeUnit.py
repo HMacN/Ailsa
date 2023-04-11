@@ -6,6 +6,7 @@ from util.SafeListEditor import safely_remove_list_indexes as safe_del
 class KnowledgeUnit:
 
     def __init__(self):
+        self.__impossible_items__: list = list()
         self.__seen_items__: list = list()
         self.__item_counts__: list = list()
         self.__time_item_last_seen__: list = list()
@@ -21,9 +22,10 @@ class KnowledgeUnit:
         for i in range(len(frame.item_types)):
             item = frame.item_types[i]
             count = frame.item_counts[i]
-            if not self.__seen_items__.__contains__(item):
+            impossible = item in self.__impossible_items__
+            if not self.__seen_items__.__contains__(item) and not impossible:
                 self.__add_new_item__(item, count, time)
-            else:
+            elif not impossible:
                 index = self.__seen_items__.index(item)
                 self.__update_item_counts__(count, index)
                 self.__update_list_of_times_item_seen__(index, time)
@@ -85,3 +87,6 @@ class KnowledgeUnit:
     class Facts:
         def __init__(self):
             self.items_not_normally_on_floor: list = list()
+
+    def set_impossible_items(self, items: list):
+        self.__impossible_items__ = items

@@ -298,4 +298,20 @@ class KnowledgeUnitTests(unittest.TestCase):
                          msg="The expected value: \n" + str(expected_results) +
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
-    # def test_where_item_returns_
+    def test_ignores_impossible_items(self):
+        ku = KnowledgeUnit()
+        ku.set_impossible_items(["A", "B"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
+        ku.add_frame(frame_1, 2)
+
+        frame_2 = BoundingBoxCollection()
+        frame_2.add(Box(0.2, 0.2, 0.3, 0.3, 0.5, "B"))
+        ku.add_frame(frame_2, 3)
+
+        expected_results: list = list()
+        actual_results: list = ku.get_seen_items()
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
