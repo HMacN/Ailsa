@@ -92,6 +92,12 @@ class Detector:
         else:
             return self.__video_capture__.get(cv2.CAP_PROP_POS_FRAMES)
 
+    def get_fps(self) -> float:
+        if self.__video_capture__ is None:
+            return 0.0
+        else:
+            return self.__video_capture__.get(cv2.CAP_PROP_FPS)
+
     def set_detection_confidence_threshold(self, threshold: float):
         self.__detection_confidence_threshold__ = threshold
 

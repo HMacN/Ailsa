@@ -5,21 +5,23 @@ from util.Debugging import debug_print
 
 
 class Display:
-    @staticmethod
-    def show(frame: Frame, window_name='AILSA System', window_width=800,
-             window_height=600):
-        if frame is not None:  # and window_is_open() is True:
-            cv2.imshow(window_name, cv2.resize(frame.get_cv2_img(), (window_width, window_height)))
-            cv2.waitKey(10)
 
-    @staticmethod
-    def window_is_open(window_name='AILSA System') -> bool:
+    def __init__(self, window_name='AILSA System'):
+        self.__window_name__ = window_name
+
+    def show(self, frame: Frame, window_width=800, window_height=600) -> str:
+        if frame is not None:  # and window_is_open() is True:
+            cv2.imshow(self.__window_name__, cv2.resize(frame.get_cv2_img(), (window_width, window_height)))
+            return cv2.waitKey(10)
+
+    def window_is_open(self) -> bool:
         try:
-            is_open = cv2.getWindowProperty(window_name, 0) > -1
+            is_open = cv2.getWindowProperty(self.__window_name__, 0) > -1
             return is_open
         except cv2.error:
             return False
 
-    @staticmethod
-    def hide():
+    def hide(self):
+        cv2.destroyWindow(self.__window_name__)
         cv2.destroyAllWindows()
+        cv2.waitKey(1)
