@@ -29,6 +29,8 @@ class MainClass:
         detector.set_nms_eta_parameter(None)
         detector.set_nms_top_k_parameter(None)
 
+        detector.set_perform_nms(False)  # Set to not perform NMS so s not to interfere with the Subsumption Unit
+
         recorder = Recorder(file_name=video_file + with_bounding_boxes,
                             width=detector.get_frame_width(),
                             height=detector.get_frame_height())

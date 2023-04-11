@@ -15,6 +15,7 @@ from util.Debugging import debug_print
 class Detector:
 
     def __init__(self, model_url: str, file_path=0):
+        self.__should_perform_nms__ = True
         self.__model__ = hub.load(model_url).signatures['default']
         self.__video_capture__ = cv2.VideoCapture(file_path)
         self.__current_frame__: Frame | None = None
@@ -53,7 +54,8 @@ class Detector:
         results = self.__model__(converted_img)
         results = {key: value.numpy() for key, value in results.items()}
 
-        results = self.__perform_nms__(results)
+        if self.__should_perform_nms__:
+            results = self.__perform_nms__(results)
 
         return results
 
@@ -101,6 +103,9 @@ class Detector:
 
     def set_nms_top_k_parameter(self, top_k: float | None):
         self.__nms_keep_top_k_indices__ = top_k
+
+    def set_perform_nms(self, perform_nms: bool):
+        self.__should_perform_nms__ = perform_nms
 
     def __perform_nms__(self, detection_results: dict) -> dict:
 
