@@ -31,7 +31,7 @@ class MyTestCase(unittest.TestCase):
 
         given_box_collection = BoundingBoxCollection()
         given_box_collection.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
-        given_box_collection.add(Box(0.2, 0.3, 0.2, 0.3, 0.5, "test2"))
+        given_box_collection.add(Box(0.2, 0.35, 0.2, 0.3, 0.5, "test2"))
 
         subsumption_list: list = ["test1", "test2"]
 
@@ -39,7 +39,7 @@ class MyTestCase(unittest.TestCase):
 
         expected_result = BoundingBoxCollection()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
-        expected_result.add(Box(0.2, 0.3, 0.2, 0.3, 0.5, "test2"))
+        expected_result.add(Box(0.2, 0.35, 0.2, 0.3, 0.5, "test2"))
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
 
         self.assertEqual(expected_result, actual_result,

@@ -20,33 +20,37 @@ class SubsumptionUnit:
 
     def subsume_bboxes(self, boxes: BoundingBoxCollection) -> BoundingBoxCollection:
         boxes_to_return: BoundingBoxCollection = BoundingBoxCollection()
+        boxes.sort_by_area()
+        list_of_boxes_subbed_into_own_type: list = [False] * len(boxes)
         for index in range(len(boxes)):
-            box_subbed = self.__try_to_sub_box__(index, boxes)
+            box_subbed, subbed_into_own_type = self.__try_to_sub_box__(index, boxes, list_of_boxes_subbed_into_own_type)
             if not box_subbed:
                 boxes_to_return.add(boxes[index])
+            if subbed_into_own_type:
+                list_of_boxes_subbed_into_own_type[index] = True
 
         return boxes_to_return
 
-    def __try_to_sub_box__(self, index_of_box_to_be_subbed: int, boxes: BoundingBoxCollection) -> bool:
+    def __try_to_sub_box__(self, index_of_box_to_be_subbed: int,
+                           boxes: BoundingBoxCollection,
+                           list_of_boxes_subbed_into_own_type: list) -> (bool, bool):
         box_to_be_subbed = boxes[index_of_box_to_be_subbed]
         list_of_items_can_sub_into: list = self.__generate_list_of_possible_boxes_to_sub_into__(box_to_be_subbed)
-        list_of_boxes_subbed_into_own_type: list = [False] * len(boxes)
 
         for i in range(len(boxes)):
             candidate_box = boxes[i]
 
             candidate_can_be_subbed_into = candidate_box.label in list_of_items_can_sub_into
             they_are_not_the_same_box = candidate_box != box_to_be_subbed
-            candidate_not_subbed_into_box_of_same_type = not list_of_boxes_subbed_into_own_type[i]
-
+            candidate_was_not_subbed_into_own_type = not list_of_boxes_subbed_into_own_type[i]
             if candidate_can_be_subbed_into \
                     and they_are_not_the_same_box \
-                    and candidate_not_subbed_into_box_of_same_type:
+                    and candidate_was_not_subbed_into_own_type:
                 if self.__check_if_overlapping__(box_to_be_subbed, candidate_box):
                     debug_print("\nbox \n", box_to_be_subbed, "\nsubsumed into \n", candidate_box)
-                    list_of_boxes_subbed_into_own_type[i] = True
-                    return True
-        return False
+                    subbed_into_own_type = box_to_be_subbed.label == candidate_box.label
+                    return True, subbed_into_own_type
+        return False, False
 
     def __check_if_overlapping__(self, overlapping_box: Box, overlapped_box: Box) -> bool:
         overlap_area = overlapped_box.get_overlap_area(overlapping_box)
