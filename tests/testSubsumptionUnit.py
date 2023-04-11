@@ -200,3 +200,23 @@ class MyTestCase(unittest.TestCase):
         self.assertEqual(expected_result, actual_result,
                          msg=("Expected tracks: \n" + str(expected_result) +
                               "\n does not equal actual tracks: \n" + str(actual_result)))
+
+    def test_items_of_same_type_subsume_into_largest_box(self):
+        su = SubsumptionUnit()
+
+        given_box_collection = BoundingBoxCollection()
+        given_box_collection.add(Box(0.00, 0.90, 0.00, 0.90, 0.5, "test1"))
+        given_box_collection.add(Box(0.00, 0.10, 0.00, 0.10, 0.5, "test1"))
+        given_box_collection.add(Box(0.01, 0.09, 0.01, 0.09, 0.5, "test1"))
+        given_box_collection.add(Box(0.30, 0.60, 0.30, 0.60, 0.5, "test1"))
+        given_box_collection.add(Box(0.40, 0.50, 0.40, 0.50, 0.5, "test1"))
+
+        expected_result = BoundingBoxCollection()
+        expected_result.add(Box(0.00, 0.90, 0.00, 0.90, 0.5, "test1"))
+
+        actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
+
+        self.assertEqual(expected_result, actual_result,
+                         msg=("Expected tracks: \n" + str(expected_result) +
+                              "\n does not equal actual tracks: \n" + str(actual_result)))
+

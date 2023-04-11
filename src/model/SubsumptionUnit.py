@@ -47,7 +47,6 @@ class SubsumptionUnit:
                     and they_are_not_the_same_box \
                     and candidate_was_not_subbed_into_own_type:
                 if self.__check_if_overlapping__(box_to_be_subbed, candidate_box):
-                    debug_print("\nbox \n", box_to_be_subbed, "\nsubsumed into \n", candidate_box)
                     subbed_into_own_type = box_to_be_subbed.label == candidate_box.label
                     return True, subbed_into_own_type
         return False, False
