@@ -17,7 +17,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku.add_frame(frame, 1)
 
         expected_results: list = ["test1", "test2", "test3"]
-        actual_results: list = ku.get_seen_items()
+        actual_results: list = ku.get_list_of_all_seen_items()
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
@@ -34,7 +34,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku.add_frame(frame, 1)
 
         expected_results: list = ["A", "B", "C"]
-        actual_results: list = ku.get_seen_items()
+        actual_results: list = ku.get_list_of_all_seen_items()
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
@@ -56,7 +56,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku.add_frame(frame_3, 3)
 
         expected_results: list = ["A", "B", "C"]
-        actual_results: list = ku.get_seen_items()
+        actual_results: list = ku.get_list_of_all_seen_items()
 
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
@@ -298,20 +298,29 @@ class KnowledgeUnitTests(unittest.TestCase):
                          msg="The expected value: \n" + str(expected_results) +
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
-    def test_ignores_impossible_items(self):
+    def test_renames_impossible_items(self):
         ku = KnowledgeUnit()
-        ku.set_impossible_items(["A", "B"])
+        ku.set_impossible_items(["A"])
 
         frame_1 = BoundingBoxCollection()
         frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
         ku.add_frame(frame_1, 2)
 
-        frame_2 = BoundingBoxCollection()
-        frame_2.add(Box(0.2, 0.2, 0.3, 0.3, 0.5, "B"))
-        ku.add_frame(frame_2, 3)
+        expected_results: list = list(["unknown item"])
+        actual_results: list = ku.get_list_of_all_seen_items()
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
 
-        expected_results: list = list()
-        actual_results: list = ku.get_seen_items()
+    def test_describe_scene_object_centre(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.45, 0.55, 0.45, 0.55, 0.5, "A"))
+        ku.add_frame(frame_1, 1)
+
+        expected_results: dict = {"ahead of you": ["A"]}
+        actual_results: dict = ku.describe_scene()
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
                              "\ndid not equal the actual value: \n" + str(actual_results))

@@ -11,24 +11,32 @@ class KnowledgeUnit:
         self.__item_counts__: list = list()
         self.__time_item_last_seen__: list = list()
         self.__facts__: KnowledgeUnit.Facts = KnowledgeUnit.Facts()
+        self.__last_frame__: KnowledgeUnit.Frame | None = None
 
-    def get_seen_items(self) -> list:
+    def get_list_of_all_seen_items(self) -> list:
         return sorted(self.__seen_items__)
 
     def add_frame(self, frame_boxes: BoundingBoxCollection, time: int):
 
         frame: KnowledgeUnit.Frame = KnowledgeUnit.Frame(frame_boxes)
+        self.__rename_impossible_items_in_frame__(frame)
+        self.__last_frame__ = frame
 
         for i in range(len(frame.item_types)):
             item = frame.item_types[i]
             count = frame.item_counts[i]
             impossible = item in self.__impossible_items__
-            if not self.__seen_items__.__contains__(item) and not impossible:
+            if not self.__seen_items__.__contains__(item):
                 self.__add_new_item__(item, count, time)
             elif not impossible:
                 index = self.__seen_items__.index(item)
                 self.__update_item_counts__(count, index)
                 self.__update_list_of_times_item_seen__(index, time)
+
+    def __rename_impossible_items_in_frame__(self, frame: 'KnowledgeUnit.Frame'):
+        for i in range(len(frame.item_types)):
+            if frame.item_types[i] in self.__impossible_items__:
+                frame.item_types[i] = "unknown item"
 
     def __update_list_of_times_item_seen__(self, index: int, time: int):
         list_of_times_item_seen: list = self.__time_item_last_seen__[index]
@@ -90,3 +98,11 @@ class KnowledgeUnit:
 
     def set_impossible_items(self, items: list):
         self.__impossible_items__ = items
+
+    def describe_scene(self) -> dict:
+        description = dict()
+        items: list = self.__last_frame__.item_types
+
+        description["ahead of you"] = items
+
+        return description

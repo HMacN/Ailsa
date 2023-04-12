@@ -86,7 +86,7 @@ class MainClass:
 
             # Handle any key presses:
             if key_pressed == ord('z'):
-                print(knowledge.get_seen_items())
+                print(knowledge.get_list_of_all_seen_items())
             elif key_pressed == ord(' '):
                 paused = not paused
             elif key_pressed == 'q':
