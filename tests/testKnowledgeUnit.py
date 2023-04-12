@@ -319,8 +319,95 @@ class KnowledgeUnitTests(unittest.TestCase):
         frame_1.add(Box(0.45, 0.55, 0.45, 0.55, 0.5, "A"))
         ku.add_frame(frame_1, 1)
 
-        expected_results: dict = {"ahead of you": ["A"]}
-        actual_results: dict = ku.describe_scene()
+        expected_results: list = ["A"]
+        actual_results: dict = ku.describe_scene()["ahead"]
         self.assertEqual(expected_results, actual_results,
                          msg="The expected value: \n" + str(expected_results) +
                              "\ndid not equal the actual value: \n" + str(actual_results))
+
+    def test_describe_scene_object_centre_left_and_right_boundaries_default_values(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.00, 0.32, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.00, 0.34, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.67, 1.00, 0.45, 0.55, 0.5, "C"))
+        frame_1.add(Box(0.65, 1.00, 0.45, 0.55, 0.5, "D"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["B", "D"]
+        actual_results: dict = ku.describe_scene()["ahead"]
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
+    def test_describe_scene_multiple_objects_of_same_type(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.45, 0.55, 0.1, 0.3, 0.5, "A"))
+        frame_1.add(Box(0.45, 0.55, 0.3, 0.4, 0.5, "A"))
+        frame_1.add(Box(0.45, 0.55, 0.4, 0.5, 0.5, "A"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["A", "A", "A"]
+        actual_results: dict = ku.describe_scene()["ahead"]
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
+    def test_describe_scene_objects_left(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.00, 0.30, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.00, 0.32, 0.45, 0.55, 0.5, "B"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["A", "B"]
+        actual_results: dict = ku.describe_scene()["left"]
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
+    def test_describe_scene_objects_right(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.67, 0.99, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.70, 0.99, 0.45, 0.55, 0.5, "B"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["A", "B"]
+        actual_results: dict = ku.describe_scene()["right"]
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
+    def test_describe_large_objects_left_ahead_right(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.10, 0.40, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.60, 0.90, 0.45, 0.55, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results_left: list = ["A", "B"]
+        actual_results_left: list = ku.describe_scene()["left"]
+        self.assertEqual(expected_results_left, actual_results_left)
+
+        expected_results_ahead: list = ["A", "B", "C"]
+        actual_results_ahead: list = ku.describe_scene()["ahead"]
+        self.assertEqual(expected_results_ahead, actual_results_ahead)
+
+        expected_results_right: list = ["B", "C"]
+        actual_results_right: list = ku.describe_scene()["right"]
+        self.assertEqual(expected_results_right, actual_results_right)
+
+

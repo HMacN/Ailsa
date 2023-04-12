@@ -101,8 +101,21 @@ class KnowledgeUnit:
 
     def describe_scene(self) -> dict:
         description = dict()
-        items: list = self.__last_frame__.item_types
+        items: BoundingBoxCollection = self.__last_frame__.bboxes
+        items_ahead: list = list()
+        items_left: list = list()
+        items_right: list = list()
 
-        description["ahead of you"] = items
+        for item in items:
+            if item.right_edge > 0.33 and item.left_edge < 0.66:
+                items_ahead.append(item.label)
+            if item.left_edge < 0.33:
+                items_left.append(item.label)
+            if item.right_edge > 0.66:
+                items_right.append(item.label)
+
+        description["ahead"] = items_ahead
+        description["left"] = items_left
+        description["right"] = items_right
 
         return description
