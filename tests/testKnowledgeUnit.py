@@ -410,4 +410,31 @@ class KnowledgeUnitTests(unittest.TestCase):
         actual_results_right: list = ku.describe_scene()["right"]
         self.assertEqual(expected_results_right, actual_results_right)
 
+    def test_set_left_and_right_cut_offs(self):
+        ku = KnowledgeUnit()
+        ku.set_left_and_right(0.2, 0.8)
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
+        frame_1.add(Box(0.79, 0.90, 0.45, 0.55, 0.5, "D"))
+        frame_1.add(Box(0.81, 0.90, 0.45, 0.55, 0.5, "E"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results_left: list = ["A", "B", "C"]
+        actual_results_left: list = ku.describe_scene()["left"]
+        self.assertEqual(expected_results_left, actual_results_left)
+
+        expected_results_ahead: list = ["B", "C", "D"]
+        actual_results_ahead: list = ku.describe_scene()["ahead"]
+        self.assertEqual(expected_results_ahead, actual_results_ahead)
+
+        expected_results_right: list = ["C", "D", "E"]
+        actual_results_right: list = ku.describe_scene()["right"]
+        self.assertEqual(expected_results_right, actual_results_right)
+
+
+
 

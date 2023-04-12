@@ -95,6 +95,8 @@ class KnowledgeUnit:
     class Facts:
         def __init__(self):
             self.items_not_normally_on_floor: list = list()
+            self.left_frame_boundary = 0.33
+            self.right_frame_boundary = 0.66
 
     def set_impossible_items(self, items: list):
         self.__impossible_items__ = items
@@ -102,16 +104,18 @@ class KnowledgeUnit:
     def describe_scene(self) -> dict:
         description = dict()
         items: BoundingBoxCollection = self.__last_frame__.bboxes
+        left_cutoff = self.__facts__.left_frame_boundary
+        right_cutoff = self.__facts__.right_frame_boundary
         items_ahead: list = list()
         items_left: list = list()
         items_right: list = list()
 
         for item in items:
-            if item.right_edge > 0.33 and item.left_edge < 0.66:
+            if item.right_edge > left_cutoff and item.left_edge < right_cutoff:
                 items_ahead.append(item.label)
-            if item.left_edge < 0.33:
+            if item.left_edge < left_cutoff:
                 items_left.append(item.label)
-            if item.right_edge > 0.66:
+            if item.right_edge > right_cutoff:
                 items_right.append(item.label)
 
         description["ahead"] = items_ahead
@@ -119,3 +123,7 @@ class KnowledgeUnit:
         description["right"] = items_right
 
         return description
+
+    def set_left_and_right(self, left_boundary: float, right_boundary: float):
+        self.__facts__.left_frame_boundary = left_boundary
+        self.__facts__.right_frame_boundary = right_boundary
