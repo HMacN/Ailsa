@@ -23,13 +23,13 @@ class KnowledgeUnit:
         self.__last_frame__ = frame
 
         for i in range(len(frame.item_types)):
-            item = frame.item_types[i]
+            item_name = frame.item_types[i]
             count = frame.item_counts[i]
-            impossible = item in self.__impossible_items__
-            if not self.__seen_items__.__contains__(item):
-                self.__add_new_item__(item, count, time)
+            impossible = item_name in self.__impossible_items__
+            if not self.__seen_items__.__contains__(item_name):
+                self.__add_new_item__(item_name, count, time)
             elif not impossible:
-                index = self.__seen_items__.index(item)
+                index = self.__seen_items__.index(item_name)
                 self.__update_item_counts__(count, index)
                 self.__update_list_of_times_item_seen__(index, time)
 
@@ -97,6 +97,7 @@ class KnowledgeUnit:
             self.items_not_normally_on_floor: list = list()
             self.left_frame_boundary = 0.33
             self.right_frame_boundary = 0.66
+            self.custom_categories: dict = dict()
 
     def set_impossible_items(self, items: list):
         self.__impossible_items__ = items
@@ -122,8 +123,26 @@ class KnowledgeUnit:
         description["left"] = items_left
         description["right"] = items_right
 
+        for custom_category in self.__facts__.custom_categories.keys():
+            category_items: list = list()
+            for item in items:
+                if item.label in self.__facts__.custom_categories[custom_category]:
+                    category_items.append(item.label)
+            description[custom_category] = category_items
+
         return description
 
     def set_left_and_right(self, left_boundary: float, right_boundary: float):
         self.__facts__.left_frame_boundary = left_boundary
         self.__facts__.right_frame_boundary = right_boundary
+
+    def set_custom_category(self, name: str, items: list):
+        self.__facts__.custom_categories[name] = items
+
+    def get_list_of_seen_items_in_category(self, category: str) -> list:
+        seen_category_items: list = list()
+        for item_name in self.__seen_items__:
+            if item_name in self.__facts__.custom_categories[category]:
+                seen_category_items.append(item_name)
+        return seen_category_items
+

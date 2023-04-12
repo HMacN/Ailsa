@@ -435,6 +435,113 @@ class KnowledgeUnitTests(unittest.TestCase):
         actual_results_right: list = ku.describe_scene()["right"]
         self.assertEqual(expected_results_right, actual_results_right)
 
+    def test_custom_category_items_mentioned_in_describe_scene(self):
+        ku = KnowledgeUnit()
+        ku.set_custom_category("test", ["A"])
 
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
 
+        ku.add_frame(frame_1, 1)
 
+        expected_results: list = ["A"]
+        actual_results: list = ku.describe_scene()["test"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_custom_category_multiple_items_mentioned_in_describe_scene(self):
+        ku = KnowledgeUnit()
+        ku.set_custom_category("test", ["A", "C", "E"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
+        frame_1.add(Box(0.79, 0.90, 0.45, 0.55, 0.5, "D"))
+        frame_1.add(Box(0.81, 0.90, 0.45, 0.55, 0.5, "E"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["A", "C", "E"]
+        actual_results: list = ku.describe_scene()["test"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_custom_category_duplicate_items_mentioned_in_describe_scene(self):
+        ku = KnowledgeUnit()
+        ku.set_custom_category("test", ["A", "C"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
+        frame_1.add(Box(0.79, 0.90, 0.45, 0.55, 0.5, "C"))
+        frame_1.add(Box(0.81, 0.90, 0.45, 0.55, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["A", "C", "C", "C"]
+        actual_results: list = ku.describe_scene()["test"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_multiple_custom_category_items_mentioned_in_describe_scene(self):
+        ku = KnowledgeUnit()
+        ku.set_custom_category("test", ["A", "B"])
+        ku.set_custom_category("test2", ["A", "C"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["A", "B"]
+        actual_results: list = ku.describe_scene()["test"]
+        self.assertEqual(expected_results, actual_results)
+
+        expected_results: list = ["A", "C"]
+        actual_results: list = ku.describe_scene()["test2"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_get_all_seen_items_in_category(self):
+        ku = KnowledgeUnit()
+        ku.set_custom_category("test", ["A", "C"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
+        ku.add_frame(frame_1, 1)
+
+        frame_2 = BoundingBoxCollection()
+        frame_2.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "B"))
+        ku.add_frame(frame_2, 2)
+
+        frame_3 = BoundingBoxCollection()
+        frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
+        ku.add_frame(frame_3, 3)
+
+        expected_results: list = ["A", "C"]
+        actual_results: list = ku.get_list_of_seen_items_in_category("test")
+
+        self.assertEqual(expected_results, actual_results)
+
+    def test_get_all_seen_items_in_category_returns_empty_list_on_invalid_category(self):
+        ku = KnowledgeUnit()
+
+        expected_results: list = []
+        actual_results: list = ku.get_list_of_seen_items_in_category("test")
+
+        self.assertEqual(expected_results, actual_results)
+
+    def test_describe_location_of_on_other_item(self):    # todo finish this
+        ku = KnowledgeUnit()
+        ku.set_left_and_right(0.2, 0.8)
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.45, 0.55, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.45, 0.55, 0.45, 0.55, 0.5, "B"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results_left: list = ["A", "B"]
+        actual_results_left: list = ku.describe_scene()["left"]
+        self.assertEqual(expected_results_left, actual_results_left)
