@@ -532,16 +532,257 @@ class KnowledgeUnitTests(unittest.TestCase):
 
         self.assertEqual(expected_results, actual_results)
 
-    def test_describe_location_of_on_other_item(self):    # todo finish this
+    def test_where_is_unseen_item(self):
         ku = KnowledgeUnit()
-        ku.set_left_and_right(0.2, 0.8)
 
         frame_1 = BoundingBoxCollection()
-        frame_1.add(Box(0.45, 0.55, 0.45, 0.55, 0.5, "A"))
-        frame_1.add(Box(0.45, 0.55, 0.45, 0.55, 0.5, "B"))
 
         ku.add_frame(frame_1, 1)
 
-        expected_results_left: list = ["A", "B"]
-        actual_results_left: list = ku.describe_scene()["left"]
-        self.assertEqual(expected_results_left, actual_results_left)
+        expected_results: dict = {}
+        actual_results: dict = ku.where_is("A")
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_ahead(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["ahead"]
+        actual_results: dict = ku.where_is("A")["direction"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_left_ahead_right(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.10, 0.32, 0.45, 0.55, 0.5, "A"))
+        frame_1.add(Box(0.10, 0.34, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
+        frame_1.add(Box(0.65, 0.90, 0.45, 0.55, 0.5, "D"))
+        frame_1.add(Box(0.67, 0.90, 0.45, 0.55, 0.5, "E"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["left"]
+        actual_results: dict = ku.where_is("A")["direction"]
+        self.assertEqual(expected_results, actual_results)
+
+        expected_results: list = ["ahead", "left"]
+        actual_results: dict = ku.where_is("B")["direction"]
+        self.assertEqual(expected_results, actual_results)
+
+        expected_results: list = ["ahead", "left", "right"]
+        actual_results: dict = ku.where_is("C")["direction"]
+        self.assertEqual(expected_results, actual_results)
+
+        expected_results: list = ["ahead", "right"]
+        actual_results: dict = ku.where_is("D")["direction"]
+        self.assertEqual(expected_results, actual_results)
+
+        expected_results: list = ["right"]
+        actual_results: dict = ku.where_is("E")["direction"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_beneath_gives_empty_list_if_not_beneath_anything(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = []
+        actual_results: dict = ku.where_is("A")["beneath"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_beneath_wall_object(self):
+        ku = KnowledgeUnit()
+        ku.add_wall_and_ceiling_objects(["B"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+        frame_1.add(Box(0.40, 0.60, 0.70, 0.80, 0.5, "B"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["B"]
+        actual_results: dict = ku.where_is("A")["beneath"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_beneath_wall_object_not_above_bottom_line(self):
+        ku = KnowledgeUnit()
+        ku.add_wall_and_ceiling_objects(["B", "C"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+        frame_1.add(Box(0.40, 0.60, 0.51, 0.80, 0.5, "B"))
+        frame_1.add(Box(0.40, 0.60, 0.49, 0.80, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["B"]
+        actual_results: dict = ku.where_is("A")["beneath"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_beneath_wall_object_only_if_directly_beneath(self):
+        ku = KnowledgeUnit()
+        ku.add_wall_and_ceiling_objects(["B", "C", "D", "E", "F"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.33, 0.66, 0.10, 0.20, 0.5, "A"))
+
+        frame_1.add(Box(0.10, 0.32, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.10, 0.34, 0.45, 0.55, 0.5, "C"))
+        frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "D"))
+        frame_1.add(Box(0.65, 0.90, 0.45, 0.55, 0.5, "E"))
+        frame_1.add(Box(0.67, 0.90, 0.45, 0.55, 0.5, "F"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["C", "D", "E"]
+        actual_results: dict = ku.where_is("A")["beneath"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_on_top_of_returns_empty_str_if_not_on_top_of_other_object(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: str = ""
+        actual_results: dict = ku.where_is("A")["on top of"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_on_top_of_other_object(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+        frame_1.add(Box(0.40, 0.60, 0.40, 0.51, 0.5, "B"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: str = "B"
+        actual_results: dict = ku.where_is("A")["on top of"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_on_top_of_multiple_objects_gives_largest_area_below(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+        frame_1.add(Box(0.40, 0.60, 0.40, 0.71, 0.5, "B"))
+        frame_1.add(Box(0.40, 0.60, 0.30, 0.51, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: str = "C"
+        actual_results: dict = ku.where_is("A")["on top of"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_on_top_of_other_object_only_when_directly_above(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.33, 0.66, 0.10, 0.50, 0.5, "A"))
+
+        frame_1.add(Box(0.10, 0.32, 0.45, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.10, 0.34, 0.45, 0.55, 0.5, "C"))
+        frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "D"))
+        frame_1.add(Box(0.65, 0.90, 0.45, 0.55, 0.5, "E"))
+        frame_1.add(Box(0.67, 0.90, 0.45, 0.55, 0.5, "F"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_on_top: str = "A"
+        not_expected_on_top: str = ""
+
+        actual_results: dict = ku.where_is("B")["on top of"]
+        self.assertEqual(not_expected_on_top, actual_results)
+
+        actual_results: dict = ku.where_is("C")["on top of"]
+        self.assertEqual(expected_on_top, actual_results)
+
+        actual_results: dict = ku.where_is("D")["on top of"]
+        self.assertEqual(expected_on_top, actual_results)
+
+        actual_results: dict = ku.where_is("E")["on top of"]
+        self.assertEqual(expected_on_top, actual_results)
+
+        actual_results: dict = ku.where_is("F")["on top of"]
+        self.assertEqual(not_expected_on_top, actual_results)
+
+    def test_where_is_item_on_top_of_other_object_must_overlap(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+        frame_1.add(Box(0.40, 0.60, 0.31, 0.51, 0.5, "B"))
+        frame_1.add(Box(0.40, 0.60, 0.28, 0.49, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: str = "B"
+        actual_results: dict = ku.where_is("A")["on top of"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_on_top_of_other_object_does_not_give_furniture_on_top_of_items(self):
+        ku = KnowledgeUnit()
+        ku.set_furniture_items(["A"])
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+        frame_1.add(Box(0.40, 0.60, 0.30, 0.55, 0.5, "B"))
+        frame_1.add(Box(0.40, 0.60, 0.40, 0.55, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: str = ""
+        actual_results: dict = ku.where_is("A")["on top of"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_where_is_item_on_top_of_other_object_set_max_gap(self):
+        ku = KnowledgeUnit()
+        ku.set_max_gap_for_item_on_top_of_another_item(0.1)
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+        frame_1.add(Box(0.40, 0.60, 0.31, 0.41, 0.5, "B"))
+        frame_1.add(Box(0.40, 0.60, 0.20, 0.39, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: str = "B"
+        actual_results: dict = ku.where_is("A")["on top of"]
+        self.assertEqual(expected_results, actual_results)
+
+    def test_get_items_in_between_user_and_item_gives_empty_list_when_item_not_seen(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = []
+        actual_results: list = ku.items_between_user_and("A")
+        self.assertEqual(expected_results, actual_results)
+
+    def test_get_items_in_between_user_and_item_gives_list_of_all_items_below_target(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
+        frame_1.add(Box(0.10, 0.20, 0.10, 0.20, 0.5, "B"))
+        frame_1.add(Box(0.20, 0.80, 0.40, 0.55, 0.5, "C"))
+
+        ku.add_frame(frame_1, 1)
+
+        expected_results: list = ["B", "C"]
+        actual_results: list = ku.items_between_user_and("A")
+        self.assertEqual(expected_results, actual_results)

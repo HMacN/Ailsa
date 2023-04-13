@@ -1,4 +1,5 @@
 from util.BoundingBoxCollection import BoundingBoxCollection
+from util.Box import Box
 from util.Debugging import debug_print
 from util.SafeListEditor import safely_remove_list_indexes as safe_del
 
@@ -18,6 +19,7 @@ class KnowledgeUnit:
 
     def add_frame(self, frame_boxes: BoundingBoxCollection, time: int):
 
+        frame_boxes.sort_by_area()
         frame: KnowledgeUnit.Frame = KnowledgeUnit.Frame(frame_boxes)
         self.__rename_impossible_items_in_frame__(frame)
         self.__last_frame__ = frame
@@ -95,9 +97,12 @@ class KnowledgeUnit:
     class Facts:
         def __init__(self):
             self.items_not_normally_on_floor: list = list()
+            self.wall_and_ceiling_items: list = list()
+            self.furniture_items: list = list()
             self.left_frame_boundary = 0.33
             self.right_frame_boundary = 0.66
             self.custom_categories: dict = dict()
+            self.max_gap_for_item_on_top_of_another: float = 0.0
 
     def set_impossible_items(self, items: list):
         self.__impossible_items__ = items
@@ -105,32 +110,40 @@ class KnowledgeUnit:
     def describe_scene(self) -> dict:
         description = dict()
         items: BoundingBoxCollection = self.__last_frame__.bboxes
-        left_cutoff = self.__facts__.left_frame_boundary
-        right_cutoff = self.__facts__.right_frame_boundary
         items_ahead: list = list()
         items_left: list = list()
         items_right: list = list()
 
         for item in items:
-            if item.right_edge > left_cutoff and item.left_edge < right_cutoff:
+            if self.__item_is_ahead__(item):
                 items_ahead.append(item.label)
-            if item.left_edge < left_cutoff:
+            if self.__item_is_left__(item):
                 items_left.append(item.label)
-            if item.right_edge > right_cutoff:
+            if self.__item_is_right__(item):
                 items_right.append(item.label)
 
-        description["ahead"] = items_ahead
-        description["left"] = items_left
-        description["right"] = items_right
+        description["ahead"] = sorted(items_ahead)
+        description["left"] = sorted(items_left)
+        description["right"] = sorted(items_right)
 
         for custom_category in self.__facts__.custom_categories.keys():
             category_items: list = list()
             for item in items:
                 if item.label in self.__facts__.custom_categories[custom_category]:
                     category_items.append(item.label)
-            description[custom_category] = category_items
+            description[custom_category] = sorted(category_items)
 
         return description
+
+    def __item_is_right__(self, item: Box) -> bool:
+        return item.right_edge > self.__facts__.right_frame_boundary
+
+    def __item_is_left__(self, item: Box) -> bool:
+        return item.left_edge < self.__facts__.left_frame_boundary
+
+    def __item_is_ahead__(self, item: Box) -> bool:
+        return item.right_edge > self.__facts__.left_frame_boundary \
+                and item.left_edge < self.__facts__.right_frame_boundary
 
     def set_left_and_right(self, left_boundary: float, right_boundary: float):
         self.__facts__.left_frame_boundary = left_boundary
@@ -145,4 +158,86 @@ class KnowledgeUnit:
             if item_name in self.__facts__.custom_categories[category]:
                 seen_category_items.append(item_name)
         return seen_category_items
+
+    def where_is(self, item_name: str) -> dict:
+        item_location: dict = dict()
+        frame_bboxes: BoundingBoxCollection = self.__last_frame__.bboxes
+
+        for item in frame_bboxes:
+            if item.label == item_name:
+                item_location["direction"] = self.__get_direction_list__(item)
+                item_location["beneath"] = self.__get_beneath_list__(item)
+                item_location["on top of"] = self.__get_on_top_of__(item)
+                return item_location
+
+        return item_location
+
+    def __get_on_top_of__(self, item_on_top: Box) -> str:
+        object_item_is_on_top_of = ""
+        if item_on_top.label in self.__facts__.furniture_items:
+            return object_item_is_on_top_of
+
+        max_area_below: float = 0.0
+        frame_items: BoundingBoxCollection = self.__last_frame__.bboxes
+        for item_below in frame_items:
+            high_enough_to_sit_on = item_below.upper_edge + self.__facts__.max_gap_for_item_on_top_of_another
+            if high_enough_to_sit_on > item_on_top.lower_edge:
+                if item_below.left_edge < item_on_top.right_edge and item_below.right_edge > item_on_top.left_edge:
+                    if item_below is not item_on_top:
+                        area_below = item_below.get_overlap_area(Box(0.0, 1.0, 0.0, item_on_top.lower_edge, 1.0, ""))
+                        if area_below > max_area_below:
+                            max_area_below = area_below
+                            object_item_is_on_top_of = item_below.label
+
+        return object_item_is_on_top_of
+
+    def __get_beneath_list__(self, item_beneath: Box) -> list:
+        item_beneath_these_objects: list = list()
+
+        frame_items: BoundingBoxCollection = self.__last_frame__.bboxes
+        for item_above in frame_items:
+            if item_above.label in self.__facts__.wall_and_ceiling_items:
+                if item_above.lower_edge > item_beneath.lower_edge:
+                    if item_above.right_edge > item_beneath.left_edge \
+                            and item_above.left_edge < item_beneath.right_edge:
+                        item_beneath_these_objects.append(item_above.label)
+
+        return sorted(item_beneath_these_objects)
+
+    def __get_direction_list__(self, item: Box) -> list:
+        direction: list = list()
+        if self.__item_is_ahead__(item):
+            direction.append("ahead")
+        if self.__item_is_left__(item):
+            direction.append("left")
+        if self.__item_is_right__(item):
+            direction.append("right")
+        return sorted(direction)
+
+    def add_wall_and_ceiling_objects(self, objects: list):
+        self.__facts__.wall_and_ceiling_items = objects
+
+    def set_furniture_items(self, furniture_items: list):
+        self.__facts__.furniture_items = furniture_items
+
+    def items_between_user_and(self, item_name: str) -> list:
+        for item in self.__last_frame__.bboxes:
+            if item.label == item_name:
+                return self.__get_intervening_items__(item)
+
+        return list()
+
+    def __get_intervening_items__(self, target_item: Box) -> list:
+        intervening_items: list = list()
+
+        for intervening_item in self.__last_frame__.bboxes:
+            if intervening_item.lower_edge < target_item.lower_edge \
+                    and intervening_item is not target_item:
+                intervening_items.append(intervening_item.label)
+
+        return intervening_items
+
+    def set_max_gap_for_item_on_top_of_another_item(self, max_gap: float):
+        self.__facts__.max_gap_for_item_on_top_of_another = max_gap
+
 
