@@ -1,7 +1,6 @@
 import cv2
 
 from cv2wrapper.Frame import Frame
-from util.Debugging import debug_print
 
 
 class Display:

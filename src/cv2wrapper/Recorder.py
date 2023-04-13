@@ -1,5 +1,4 @@
 import cv2
-from PIL import Image
 
 from cv2wrapper.Frame import Frame
 

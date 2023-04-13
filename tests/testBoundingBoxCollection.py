@@ -2,7 +2,6 @@ import unittest
 
 from util.Box import Box
 from util.BoundingBoxCollection import BoundingBoxCollection
-from util.Debugging import debug_print
 
 
 class BoundingBoxCollectionTests(unittest.TestCase):

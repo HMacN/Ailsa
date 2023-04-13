@@ -1,7 +1,5 @@
 from util.BoundingBoxCollection import BoundingBoxCollection
 from util.Box import Box
-from util.Debugging import debug_print
-from util.SafeListEditor import safely_remove_list_indexes as safe_del
 
 
 class KnowledgeUnit:

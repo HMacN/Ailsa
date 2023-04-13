@@ -1,15 +1,10 @@
-import cv as cv
 import cv2
-import numpy
 import tensorflow_hub as hub
 import tensorflow as tf
-from cv2.gapi.wip.draw import Rect
-# include <opencv2/core/types.hpp>
 
 from cv2wrapper.Frame import Frame
 from util.BoundingBoxCollection import BoundingBoxCollection
 from util.Box import Box
-from util.Debugging import debug_print
 
 
 class Detector:

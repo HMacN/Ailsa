@@ -1,5 +1,4 @@
 from util.Box import Box
-from util.Debugging import debug_print
 
 
 class BoundingBoxCollection:

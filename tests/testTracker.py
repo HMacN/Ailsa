@@ -4,7 +4,6 @@ import unittest
 from model.Tracker import Tracker
 from util.BoundingBoxCollection import BoundingBoxCollection
 from util.Box import Box
-from util.Debugging import debug_print
 
 
 class TrackerTests(unittest.TestCase):
