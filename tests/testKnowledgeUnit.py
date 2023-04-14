@@ -7,6 +7,10 @@ from util.Box import Box
 
 class KnowledgeUnitTests(unittest.TestCase):
     def test_remembers_all_seen_items(self):
+        """
+        Test that the unit remembers what item types it's seen.
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame = BoundingBoxCollection()
@@ -24,6 +28,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_returns_seen_items_in_alphabetical_order(self):
+        """
+        Test that the items returned are in alphabetical order.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame = BoundingBoxCollection()
@@ -41,6 +50,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_remembers_seen_items_across_multiple_frames(self):
+        """
+        Test that the memory of items persists across multiple frames.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -63,6 +77,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_have_you_seen_an_item_returns_1(self):
+        """
+        Test that, having seen an item, the unit returns a value of one.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -85,6 +104,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_have_you_seen_an_item_returns_0(self):
+        """
+        Test that have you seen an item returns zero if the item has not been seen.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -107,6 +131,12 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_have_you_seen_item_returns_count_of_max_number_seen_at_one_time(self):
+        """
+        Test that have you seen an item returns the maximum number seen at one time, rather than a count of the total
+        number seen.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -130,6 +160,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_when_did_you_see_returns_empty_list_if_not_seen(self):
+        """
+        test that an empty list of times seen is returned if an item has nto actually been seen.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -152,6 +187,13 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_when_did_you_see_returns_time_last_seen(self):
+        """
+        Test that a correct list of times is returned from this function.  Each time should correspond to the frame that
+        an object was last seen on a particular sighting.
+
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -178,6 +220,12 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_when_did_you_see_returns_times_item_seen(self):
+        """
+        Test that a correct list of times is returned from this function.  Each time should correspond to the frame that
+        an object was last seen on a particular sighting.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -216,6 +264,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_when_did_you_see_items_times_item_seen_copes_with_frames_at_irregular_time_steps(self):
+        """
+        Test that the function is not thrown off by frames coming in at irregular intervals.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -254,6 +307,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_where_did_you_see_items_returns_empty_list_if_items_not_seen(self):
+        """
+        Test that this function returns an empty list of locations if an object hasn't been seen.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -276,6 +334,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_where_item_returns_empty_str_for_lone_object(self):
+        """
+        Test that this function returns an empty string for objects that have no special categories.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -298,6 +361,12 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_where_item_returns_on_floor_if_item_not_normally_on_floor(self):
+        """
+        Test that objects that are not usually on the floor are mentioned as being on the floor if they are not on top
+        of something.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_items_not_normally_on_floor(["A"])
 
@@ -313,6 +382,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_where_item_returns_on_floor_for_multiple_items(self):
+        """
+        Test that the function can handle being called when multiple items of the ame type have been seen.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_items_not_normally_on_floor(["A", "B"])
 
@@ -337,6 +411,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_renames_impossible_items(self):
+        """
+        Test that any items which have been listed as not possible in the area have been renamed.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_impossible_items(["A"])
 
@@ -351,6 +430,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_describe_scene_object_centre(self):
+        """
+        Test that any items directly ahead have their location properly described.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -364,6 +448,12 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_describe_scene_object_centre_left_and_right_boundaries_default_values(self):
+        """
+        Test that any items which are near the boundaries of being on the left, and right, sides of the frame have
+        their locations correctly described.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -381,6 +471,11 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_describe_scene_multiple_objects_of_same_type(self):
+        """
+        Test that the function can handle multiple items of the same type in scene.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -397,6 +492,12 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_describe_scene_objects_left(self):
+        """
+        Test that any items to the left have their location properly described.
+
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -412,6 +513,12 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_describe_scene_objects_right(self):
+        """
+        Test that any items to the right have their location properly described.
+
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -427,6 +534,13 @@ class KnowledgeUnitTests(unittest.TestCase):
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
     def test_describe_large_objects_left_ahead_right(self):
+        """
+        Test that items that stretch across the left and right boundaries have their  have their location properly
+        described.
+
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -449,6 +563,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results_right, actual_results_right)
 
     def test_set_left_and_right_cut_offs(self):
+        """
+        Test that the left and right cut-off lines can be adjusted.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_left_and_right(0.2, 0.8)
 
@@ -474,6 +593,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results_right, actual_results_right)
 
     def test_custom_category_items_mentioned_in_describe_scene(self):
+        """
+        Test that items in a custom category are described as such in the describe scene function.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A"])
 
@@ -488,6 +612,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_custom_category_multiple_items_mentioned_in_describe_scene(self):
+        """
+        Test that the describe scene function copes with multiple instances of custom category item types.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A", "C", "E"])
 
@@ -505,6 +634,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_custom_category_duplicate_items_mentioned_in_describe_scene(self):
+        """
+        Test that the describe scene function copes with multiple instances of a single category item type.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A", "C"])
 
@@ -522,6 +656,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_multiple_custom_category_items_mentioned_in_describe_scene(self):
+        """
+        Test that the describe scene function copes with multiple custom categories.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A", "B"])
         ku.set_custom_category("test2", ["A", "C"])
@@ -542,6 +681,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_get_all_seen_items_in_category(self):
+        """
+        Test can get all items seen in a custom category.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A", "C"])
 
@@ -563,6 +707,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_get_all_seen_items_in_category_returns_empty_list_on_invalid_category(self):
+        """
+        Test that an invalid category name produces an empty list, instead of throwing an error.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         expected_results: list = []
@@ -571,6 +720,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_unseen_item(self):
+        """
+        Test that the where is function returns an empty dict if an item has not been seen.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -582,6 +736,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_ahead(self):
+        """
+        Test that an item directly ahead is given the correct direction in the where is function.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -594,6 +753,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_left_ahead_right(self):
+        """
+        Test that items in various directions are given the correct directions in the where is function.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -626,6 +790,12 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_beneath_gives_empty_list_if_not_beneath_anything(self):
+        """
+        Test the where is function returns an empty list for "beneath" if there are no wall and ceiling items above the
+        target.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -638,6 +808,12 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_beneath_wall_object(self):
+        """
+        Test the where is function returns an empty list for "beneath" if there are no wall and ceiling items above the
+        target.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.add_wall_and_ceiling_objects(["B"])
 
@@ -652,6 +828,12 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_beneath_wall_object_not_above_bottom_line(self):
+        """
+        Test items are only listed as being beneath something if their bottom edge is below the bottom edge of the wall
+        or ceiling object.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.add_wall_and_ceiling_objects(["B", "C"])
 
@@ -667,6 +849,12 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_beneath_wall_object_only_if_directly_beneath(self):
+        """
+        Test items are only listed as being beneath something if they are actually beneath it.  Defined as having at
+        least some vertical overlap.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.add_wall_and_ceiling_objects(["B", "C", "D", "E", "F"])
 
@@ -686,6 +874,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_on_top_of_returns_empty_str_if_not_on_top_of_other_object(self):
+        """
+        Test that if the item is not on top of anything, that the item it is on top of is listed as an empty string.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -698,6 +891,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_on_top_of_other_object(self):
+        """
+        Test that if an item is on top of another item then it is listed appropriately.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -711,6 +909,12 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_on_top_of_multiple_objects_gives_largest_area_below(self):
+        """
+        Test that the item a target item is on top of is the one that has the largest area below the lower edge of the
+        target item.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -725,6 +929,12 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_on_top_of_other_object_only_when_directly_above(self):
+        """
+        Test that for a target item to be listed as on top of another item, it must have at least some horizontal
+        overlap.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -757,6 +967,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(not_expected_on_top, actual_results)
 
     def test_where_is_item_on_top_of_other_object_must_overlap(self):
+        """
+        Test that a target item will not be listed as on top of another item unless it overlaps.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -771,6 +986,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_on_top_of_other_object_does_not_give_furniture_on_top_of_items(self):
+        """
+        Test that any items listed as being furniture are not listed as being on top of other items.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_furniture_items(["A"])
 
@@ -786,6 +1006,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_where_is_item_on_top_of_other_object_set_max_gap(self):
+        """
+        Test that the maximum vertical gap between items before being listed as being on top of the other is adjustable.
+
+        @return:
+        """
         ku = KnowledgeUnit()
         ku.set_max_gap_for_item_on_top_of_another_item(0.1)
 
@@ -801,6 +1026,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_get_items_in_between_user_and_item_gives_empty_list_when_item_not_seen(self):
+        """
+        Test get items between user and target item does not list any items if there aren't any.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
@@ -812,6 +1042,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         self.assertEqual(expected_results, actual_results)
 
     def test_get_items_in_between_user_and_item_gives_list_of_all_items_below_target(self):
+        """
+        Test get items between user and target item lists all items which may be inbetween the user and the target item.
+
+        @return:
+        """
         ku = KnowledgeUnit()
 
         frame_1 = BoundingBoxCollection()
