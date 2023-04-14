@@ -4,6 +4,13 @@ from colorama import Fore, Back, Style
 
 
 def debug_print(*messages):
+    """
+    A helpful debugging function.  Prints out the given arguments as a string, along with the location and line number
+    of the print statement in the code.
+
+    @param messages: A series of arguments, which are the messages to print to console.
+    @return:
+    """
     print(Fore.YELLOW, end="")
     print("DEBUG >>> ", end='')
     print(Style.RESET_ALL, end="")
@@ -21,6 +28,11 @@ def debug_print(*messages):
 
 
 def __calling_item_on_stack_as_string__() -> str:
+    """
+    Generates a string which corresponds to the stack item that called this function.
+
+    @return: A str which describes the calling stack item.
+    """
     stack = inspect.stack()
     stack_item = stack[2]
 
@@ -35,6 +47,13 @@ def __calling_item_on_stack_as_string__() -> str:
 
 
 def display_progress_percent(current_value: int, final_value: int):
+    """
+    Displays a percentage progress bar to the console.  Deletes and re-writes itself to avoid filling the console.
+
+    @param current_value:   An int, which is the absolute value of current progress.
+    @param final_value:     An int, which is the absolute value of the completed process.
+    @return:
+    """
     progress_percent = int((current_value / final_value) * 100)
 
     print(Style.BRIGHT, Fore.BLACK, Back.LIGHTYELLOW_EX, end="")
