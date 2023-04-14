@@ -3,14 +3,14 @@ import tensorflow_hub as hub
 import tensorflow as tf
 
 from cv2wrapper.Frame import Frame
-from util.BoundingBoxCollection import BoundingBoxCollection
+from util.BoxList import BoxList
 from util.Box import Box
 
 
 class Detector:
     """
     A wrapper class for the OpenCV2 VideoCapture class, and the associated TensorFlowHub model.  This class provides an
-    easier to use API, and converts the cv2 format object detection data into a BoundingBoxCollection object.
+    easier to use API, and converts the cv2 format object detection data into a BoxList object.
     """
 
     def __init__(self, model_url: str, file_path: str):
@@ -25,7 +25,7 @@ class Detector:
         self.__model__ = hub.load(model_url).signatures['default']
         self.__video_capture__ = cv2.VideoCapture(file_path)
         self.__current_frame__: Frame | None = None
-        self.__current_bounding_boxes__: BoundingBoxCollection | None = None
+        self.__current_bounding_boxes__: BoxList | None = None
 
         self.__detection_confidence_threshold__: float = 0.1
         self.__nms_overlap_threshold__: float = 0.1
@@ -76,15 +76,15 @@ class Detector:
         return results
 
     @staticmethod
-    def __convert_cv2_results_to_bounding_box_collection__(detection_results: dict) -> BoundingBoxCollection:
+    def __convert_cv2_results_to_bounding_box_collection__(detection_results: dict) -> BoxList:
         """
         Converts the CV2 format detection results into an easier to use form.
 
         @param detection_results: A dict which is the CV2 format detection results to be converted.
-        @return: A BoundingBoxCollection which is the reformatted detection results.
+        @return: A BoxList which is the reformatted detection results.
         """
 
-        boxes = BoundingBoxCollection()
+        boxes = BoxList()
 
         for i in range(len(detection_results["detection_boxes"])):
             new_box = Box(left_edge=detection_results["detection_boxes"][i][1],
@@ -105,12 +105,12 @@ class Detector:
         """
         return self.__current_frame__
 
-    def get_bounding_boxes(self) -> BoundingBoxCollection:
+    def get_bounding_boxes(self) -> BoxList:
         """
         A getter for the most recent set of bounding boxes found by the Detector.  This corresponds to the results
         gained from the last time the 'run_detection_on_current_frame()' function was run.
 
-        @return: A BoundingBoxCollection object which contains the bounding boxes identified in the most recent frame.
+        @return: A BoxList object which contains the bounding boxes identified in the most recent frame.
         """
         return self.__current_bounding_boxes__
 

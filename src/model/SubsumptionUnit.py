@@ -1,4 +1,4 @@
-from util.BoundingBoxCollection import BoundingBoxCollection
+from util.BoxList import BoxList
 from util.Box import Box
 
 
@@ -34,17 +34,17 @@ class SubsumptionUnit:
             else:
                 self.__items_to_sub__[sub_able_item].append(can_be_substituted_for)
 
-    def subsume_bboxes(self, boxes: BoundingBoxCollection) -> BoundingBoxCollection:
+    def subsume_bboxes(self, boxes: BoxList) -> BoxList:
         """
         Perform subsumption on the given list of bounding boxes.  Bounding boxes of the same type, and of types which
         may be subsumed into the appropriate type, are removed if they have a suitably large overlap with another
         bounding box.
 
-        @param boxes:   A BoundingBoxCollection object which contains the list of bounding boxes to subsume into each
+        @param boxes:   A BoxList object which contains the list of bounding boxes to subsume into each
                         other if possible.
-        @return:        A BoundingBoxCollection object that has had boxes that can be subsumed into another box removed.
+        @return:        A BoxList object that has had boxes that can be subsumed into another box removed.
         """
-        boxes_to_return: BoundingBoxCollection = BoundingBoxCollection()
+        boxes_to_return: BoxList = BoxList()
         boxes.sort_by_area()
         list_of_boxes_subbed_into_own_type: list = [False] * len(boxes)
         for index in range(len(boxes)):
@@ -57,7 +57,7 @@ class SubsumptionUnit:
         return boxes_to_return
 
     def __try_to_sub_box__(self, index_of_box_to_be_subbed: int,
-                           boxes: BoundingBoxCollection,
+                           boxes: BoxList,
                            list_of_boxes_subbed_into_own_type: list) -> (bool, bool):
         """
         Attempts to subsume a given bounding box into another, and returns a boolean describing if this could be done.
@@ -65,7 +65,7 @@ class SubsumptionUnit:
         stop boxes of the same type "pairing up" and subsuming into each other.
 
         @param index_of_box_to_be_subbed:           An int which is the index of the target box in the box collection.
-        @param boxes:                               A BoundingBoxCollection object containing the boxes to try to
+        @param boxes:                               A BoxList object containing the boxes to try to
                                                     subsume the target box into.
         @param list_of_boxes_subbed_into_own_type:  A list of bool values describing which indexes in the box collection
                                                     have been subsumed into boxes of their own type.

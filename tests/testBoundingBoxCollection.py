@@ -1,7 +1,7 @@
 import unittest
 
 from util.Box import Box
-from util.BoundingBoxCollection import BoundingBoxCollection
+from util.BoxList import BoxList
 
 
 class BoundingBoxCollectionTests(unittest.TestCase):
@@ -12,7 +12,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         given_box = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test")
         box_collection.add(given_box)
         retrieved_box = box_collection.get(0)
@@ -25,7 +25,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -44,7 +44,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.1, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.3, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.2, "test3")
@@ -65,7 +65,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         given_box = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test")
         box_collection.add(given_box)
         retrieved_box = box_collection.get(1)
@@ -78,7 +78,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.1, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.3, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.2, "test3")
@@ -99,7 +99,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.1, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.3, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.2, "test3")
@@ -120,7 +120,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.7, "test3")
@@ -137,7 +137,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
 
         self.assertEqual(0, box_collection.size())
 
@@ -147,7 +147,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.7, "test3")
@@ -172,8 +172,8 @@ class BoundingBoxCollectionTests(unittest.TestCase):
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.7, "test3")
 
-        c_1 = BoundingBoxCollection()
-        c_2 = BoundingBoxCollection()
+        c_1 = BoxList()
+        c_2 = BoxList()
 
         c_1.add(box_0)
         c_1.add(box_1)
@@ -195,8 +195,8 @@ class BoundingBoxCollectionTests(unittest.TestCase):
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.7, "test3")
         box_3 = Box(0.0, 0.4, 0.2, 0.3, 0.7, "test3")
 
-        c_1 = BoundingBoxCollection()
-        c_2 = BoundingBoxCollection()
+        c_1 = BoxList()
+        c_2 = BoxList()
 
         c_1.add(box_0)
         c_1.add(box_1)
@@ -214,7 +214,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -231,7 +231,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -247,7 +247,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -266,7 +266,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -285,8 +285,8 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
-        box_collection_2 = BoundingBoxCollection()
+        box_collection = BoxList()
+        box_collection_2 = BoxList()
 
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
@@ -307,7 +307,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -326,7 +326,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -344,7 +344,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -363,7 +363,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -382,7 +382,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
@@ -399,7 +399,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         @return:
         """
-        box_collection = BoundingBoxCollection()
+        box_collection = BoxList()
         box_0 = Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1")
         box_1 = Box(0.0, 0.2, 0.0, 0.2, 0.5, "test2")
         box_2 = Box(0.0, 0.3, 0.0, 0.3, 0.5, "test3")

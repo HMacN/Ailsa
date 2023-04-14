@@ -1,7 +1,7 @@
 import unittest
 
 from model.KnowledgeUnit import KnowledgeUnit
-from util.BoundingBoxCollection import BoundingBoxCollection
+from util.BoxList import BoxList
 from util.Box import Box
 
 
@@ -13,7 +13,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame = BoundingBoxCollection()
+        frame = BoxList()
         frame.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1"))
         frame.add(Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2"))
         frame.add(Box(0.0, 0.3, 0.2, 0.3, 0.7, "test3"))
@@ -35,7 +35,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame = BoundingBoxCollection()
+        frame = BoxList()
         frame.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         frame.add(Box(0.1, 0.4, 0.1, 0.6, 0.5, "C"))
         frame.add(Box(0.0, 0.3, 0.2, 0.3, 0.7, "B"))
@@ -57,15 +57,15 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         ku.add_frame(frame_1, 1)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "B"))
         ku.add_frame(frame_2, 2)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_3, 3)
 
@@ -84,15 +84,15 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         ku.add_frame(frame_1, 1)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "B"))
         ku.add_frame(frame_2, 2)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_3, 3)
 
@@ -111,15 +111,15 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         ku.add_frame(frame_1, 1)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "B"))
         ku.add_frame(frame_2, 2)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_3, 3)
 
@@ -139,16 +139,16 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "B"))
         ku.add_frame(frame_1, 1)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "B"))
         frame_2.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_2, 2)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "B"))
         ku.add_frame(frame_3, 3)
 
@@ -167,15 +167,15 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         ku.add_frame(frame_1, 1)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_2, 2)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_3, 3)
 
@@ -196,19 +196,19 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         ku.add_frame(frame_1, 2)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_2, 3)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_3, 4)
 
-        frame_4 = BoundingBoxCollection()
+        frame_4 = BoxList()
         frame_4.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_4, 5)
 
@@ -228,31 +228,31 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         ku.add_frame(frame_1, 2)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_2, 3)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_3, 4)
 
-        frame_4 = BoundingBoxCollection()
+        frame_4 = BoxList()
         frame_4.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_4, 5)
 
-        frame_5 = BoundingBoxCollection()
+        frame_5 = BoxList()
         frame_5.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_5, 6)
 
-        frame_6 = BoundingBoxCollection()
+        frame_6 = BoxList()
         frame_6.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_6, 7)
 
-        frame_7 = BoundingBoxCollection()
+        frame_7 = BoxList()
         frame_7.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_7, 8)
 
@@ -271,31 +271,31 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         ku.add_frame(frame_1, 1)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_2, 2)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_3, 8)
 
-        frame_4 = BoundingBoxCollection()
+        frame_4 = BoxList()
         frame_4.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_4, 10)
 
-        frame_5 = BoundingBoxCollection()
+        frame_5 = BoxList()
         frame_5.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_5, 16)
 
-        frame_6 = BoundingBoxCollection()
+        frame_6 = BoxList()
         frame_6.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_6, 18)
 
-        frame_7 = BoundingBoxCollection()
+        frame_7 = BoxList()
         frame_7.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
         ku.add_frame(frame_7, 20)
 
@@ -314,15 +314,15 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
         ku.add_frame(frame_1, 2)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.2, 0.2, 0.3, 0.3, 0.5, "B"))
         ku.add_frame(frame_2, 3)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.3, 0.3, 0.4, 0.4, 0.5, "C"))
         ku.add_frame(frame_3, 4)
 
@@ -341,15 +341,15 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
         ku.add_frame(frame_1, 2)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.2, 0.2, 0.3, 0.3, 0.5, "B"))
         ku.add_frame(frame_2, 3)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.3, 0.3, 0.4, 0.4, 0.5, "C"))
         ku.add_frame(frame_3, 4)
 
@@ -370,7 +370,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_items_not_normally_on_floor(["A"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
         ku.add_frame(frame_1, 2)
 
@@ -390,11 +390,11 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_items_not_normally_on_floor(["A", "B"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
         ku.add_frame(frame_1, 2)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.2, 0.2, 0.3, 0.3, 0.5, "B"))
         ku.add_frame(frame_2, 3)
 
@@ -419,7 +419,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_impossible_items(["A"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "A"))
         ku.add_frame(frame_1, 2)
 
@@ -437,7 +437,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.45, 0.55, 0.45, 0.55, 0.5, "A"))
         ku.add_frame(frame_1, 1)
 
@@ -456,7 +456,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.00, 0.32, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.00, 0.34, 0.45, 0.55, 0.5, "B"))
         frame_1.add(Box(0.67, 1.00, 0.45, 0.55, 0.5, "C"))
@@ -478,7 +478,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.45, 0.55, 0.1, 0.3, 0.5, "A"))
         frame_1.add(Box(0.45, 0.55, 0.3, 0.4, 0.5, "A"))
         frame_1.add(Box(0.45, 0.55, 0.4, 0.5, 0.5, "A"))
@@ -500,7 +500,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.00, 0.30, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.00, 0.32, 0.45, 0.55, 0.5, "B"))
 
@@ -521,7 +521,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.67, 0.99, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.70, 0.99, 0.45, 0.55, 0.5, "B"))
 
@@ -543,7 +543,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.10, 0.40, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "B"))
         frame_1.add(Box(0.60, 0.90, 0.45, 0.55, 0.5, "C"))
@@ -571,7 +571,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_left_and_right(0.2, 0.8)
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
         frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
@@ -601,7 +601,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
 
@@ -620,7 +620,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A", "C", "E"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
         frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
@@ -642,7 +642,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A", "C"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
         frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
@@ -665,7 +665,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku.set_custom_category("test", ["A", "B"])
         ku.set_custom_category("test2", ["A", "C"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.10, 0.19, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.10, 0.21, 0.45, 0.55, 0.5, "B"))
         frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
@@ -689,15 +689,15 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_custom_category("test", ["A", "C"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
         ku.add_frame(frame_1, 1)
 
-        frame_2 = BoundingBoxCollection()
+        frame_2 = BoxList()
         frame_2.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "B"))
         ku.add_frame(frame_2, 2)
 
-        frame_3 = BoundingBoxCollection()
+        frame_3 = BoxList()
         frame_3.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
         ku.add_frame(frame_3, 3)
 
@@ -727,7 +727,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
 
         ku.add_frame(frame_1, 1)
 
@@ -743,7 +743,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
 
         ku.add_frame(frame_1, 1)
@@ -760,7 +760,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.10, 0.32, 0.45, 0.55, 0.5, "A"))
         frame_1.add(Box(0.10, 0.34, 0.45, 0.55, 0.5, "B"))
         frame_1.add(Box(0.10, 0.90, 0.45, 0.55, 0.5, "C"))
@@ -798,7 +798,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
 
         ku.add_frame(frame_1, 1)
@@ -817,7 +817,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.add_wall_and_ceiling_objects(["B"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
         frame_1.add(Box(0.40, 0.60, 0.70, 0.80, 0.5, "B"))
 
@@ -837,7 +837,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.add_wall_and_ceiling_objects(["B", "C"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
         frame_1.add(Box(0.40, 0.60, 0.51, 0.80, 0.5, "B"))
         frame_1.add(Box(0.40, 0.60, 0.49, 0.80, 0.5, "C"))
@@ -858,7 +858,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.add_wall_and_ceiling_objects(["B", "C", "D", "E", "F"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.33, 0.66, 0.10, 0.20, 0.5, "A"))
 
         frame_1.add(Box(0.10, 0.32, 0.45, 0.55, 0.5, "B"))
@@ -881,7 +881,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
 
         ku.add_frame(frame_1, 1)
@@ -898,7 +898,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
         frame_1.add(Box(0.40, 0.60, 0.40, 0.51, 0.5, "B"))
 
@@ -917,7 +917,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
         frame_1.add(Box(0.40, 0.60, 0.40, 0.71, 0.5, "B"))
         frame_1.add(Box(0.40, 0.60, 0.30, 0.51, 0.5, "C"))
@@ -937,7 +937,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.33, 0.66, 0.10, 0.50, 0.5, "A"))
 
         frame_1.add(Box(0.10, 0.32, 0.45, 0.55, 0.5, "B"))
@@ -974,7 +974,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
         frame_1.add(Box(0.40, 0.60, 0.31, 0.51, 0.5, "B"))
         frame_1.add(Box(0.40, 0.60, 0.28, 0.49, 0.5, "C"))
@@ -994,7 +994,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_furniture_items(["A"])
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
         frame_1.add(Box(0.40, 0.60, 0.30, 0.55, 0.5, "B"))
         frame_1.add(Box(0.40, 0.60, 0.40, 0.55, 0.5, "C"))
@@ -1014,7 +1014,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         ku = KnowledgeUnit()
         ku.set_max_gap_for_item_on_top_of_another_item(0.1)
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
         frame_1.add(Box(0.40, 0.60, 0.31, 0.41, 0.5, "B"))
         frame_1.add(Box(0.40, 0.60, 0.20, 0.39, 0.5, "C"))
@@ -1033,7 +1033,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
 
         ku.add_frame(frame_1, 1)
 
@@ -1049,7 +1049,7 @@ class KnowledgeUnitTests(unittest.TestCase):
         """
         ku = KnowledgeUnit()
 
-        frame_1 = BoundingBoxCollection()
+        frame_1 = BoxList()
         frame_1.add(Box(0.40, 0.60, 0.50, 0.60, 0.5, "A"))
         frame_1.add(Box(0.10, 0.20, 0.10, 0.20, 0.5, "B"))
         frame_1.add(Box(0.20, 0.80, 0.40, 0.55, 0.5, "C"))

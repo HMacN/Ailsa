@@ -1,6 +1,6 @@
 import copy
 
-from util.BoundingBoxCollection import BoundingBoxCollection
+from util.BoxList import BoxList
 from util.SafeListEditor import safely_remove_list_indexes as safe_rm
 from util.Box import Box
 
@@ -32,12 +32,12 @@ class Tracker:
         self.__min_iou_to_continue_track__ = iou_threshold
         self.__next_track_uid__ = 0
 
-    def add_new_frame(self, frame_bounding_boxes: BoundingBoxCollection):
+    def add_new_frame(self, frame_bounding_boxes: BoxList):
         """
         Adds a new frame to the tracker.  Updates any items currently being tracked, and adds and removes tracks for
         items as required.
 
-        @param frame_bounding_boxes: A BoundingBoxCollection object which is the bounding boxes for items in the frame.
+        @param frame_bounding_boxes: A BoxList object which is the bounding boxes for items in the frame.
         @return:
         """
         self.__frame_count__ = self.__frame_count__ + 1
@@ -60,12 +60,12 @@ class Tracker:
 
         safe_rm(self.__tracks__, indexes_to_remove)
 
-    def __add_frame_bounding_boxes_to_tracks__(self, frame_boxes: BoundingBoxCollection):
+    def __add_frame_bounding_boxes_to_tracks__(self, frame_boxes: BoxList):
         """
         Takes a collection of bounding boxes and add new ones to the list of tracks.  Bounding boxes which correspond to
         existing tracks are identified, and the appropriate tracks updated.
 
-        @param frame_boxes: A BoundingBoxCollection object which contains the items identified in this frame.
+        @param frame_boxes: A BoxList object which contains the items identified in this frame.
         @return:
         """
         bbox_indexes_to_remove = list()
@@ -113,11 +113,11 @@ class Tracker:
             new_bbox.label = tracked_bbox.label
 
     @classmethod
-    def __get_rid_of_boxes_that_are_now_updated_tracks__(cls, boxes: BoundingBoxCollection, indexes: list):
+    def __get_rid_of_boxes_that_are_now_updated_tracks__(cls, boxes: BoxList, indexes: list):
         """
         An explanatory function.  The function name describes what the actual safe_rm() call is supposed to achieve.
 
-        @param boxes:   A BoundingBoxCollection object which is to have any boxes corresponding to existing tracks
+        @param boxes:   A BoxList object which is to have any boxes corresponding to existing tracks
                         removed.
         @param indexes: A list of int values, which are the indices of the bounding boxes in the collection which have
                         been used to update existing tracks.
@@ -125,11 +125,11 @@ class Tracker:
         """
         safe_rm(boxes, indexes)
 
-    def __add_remaining_boxes_as_new_tracks__(self, frame_boxes: BoundingBoxCollection):
+    def __add_remaining_boxes_as_new_tracks__(self, frame_boxes: BoxList):
         """
         Adds the given bounding boxes to the list of current tracks.
 
-        @param frame_boxes: A BoundingBoxCollection object, which contains the boxes to add as new tracks.
+        @param frame_boxes: A BoxList object, which contains the boxes to add as new tracks.
         @return:
         """
         current_frame = copy.deepcopy(self.__frame_count__)
@@ -138,16 +138,16 @@ class Tracker:
             self.__tracks__.append(new_track)
             self.__next_track_uid__ += 1
 
-    def get_current_tracks(self) -> (BoundingBoxCollection, list):
+    def get_current_tracks(self) -> (BoxList, list):
         """
         A getter for the currently tracked items.  Will return tracks that haven't been seen for a set number of frames,
         and will not return tracks that have only been seen for fewer than a given number of frames.  Both of these
         thresholds are set in the class constructor.
 
-        @return:    A tuple containing a BoundingBoxCollection, and a list of int values.  These are the currently
+        @return:    A tuple containing a BoxList, and a list of int values.  These are the currently
                     tracked bounding boxes, and the unique tracking ID numbers for the corresponding tracks.
         """
-        active_tracks = BoundingBoxCollection()
+        active_tracks = BoxList()
         track_uids = list()
         for index in range(len(self.__tracks__)):
             track: Tracker.Track = self.__tracks__[index]

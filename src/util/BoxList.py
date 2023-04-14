@@ -1,7 +1,7 @@
 from util.Box import Box
 
 
-class BoundingBoxCollection:
+class BoxList:
     """
     A wrapper class for a Python list() containing Box objects.  This class exists to hold a series of commonly used
     functions for manipulating the lists of Box objects.
@@ -128,11 +128,11 @@ class BoundingBoxCollection:
         """
         return self.__boxes__.pop(index)
 
-    def __iter__(self) -> 'BoundingBoxCollection':
+    def __iter__(self) -> 'BoxList':
         """
         Override of the iter function, which allows the collection to be used like a normal list.
 
-        @return: A BoundingBoxCollection object, which is the iterable object.
+        @return: A BoxList object, which is the iterable object.
         """
         self.iter_value = 0
         return self

@@ -1,4 +1,4 @@
-from util.BoundingBoxCollection import BoundingBoxCollection
+from util.BoxList import BoxList
 from util.Box import Box
 
 
@@ -27,12 +27,12 @@ class KnowledgeUnit:
         """
         return sorted(self.__recorded_items__.keys())
 
-    def add_frame(self, frame_boxes: BoundingBoxCollection, time: int):
+    def add_frame(self, frame_boxes: BoxList, time: int):
         """
         Add a new frame to the Unit.  Future queries about what items have been detected will be answered using the most
         recent frame data.
 
-        @param frame_boxes: A BoundingBoxCollection which is the boxes detected in this frame.
+        @param frame_boxes: A BoxList which is the boxes detected in this frame.
         @param time:        An int which is the current time.  The units are not defined.
         @return:
         """
@@ -168,7 +168,7 @@ class KnowledgeUnit:
         @return: A dict object which contains information with which to describe the scene to the user.
         """
         description = dict()
-        items: BoundingBoxCollection = self.__current_frame__.bboxes
+        items: BoxList = self.__current_frame__.bboxes
         items_ahead: list = list()
         items_left: list = list()
         items_right: list = list()
@@ -269,7 +269,7 @@ class KnowledgeUnit:
                             the user.
         """
         item_location: dict = dict()
-        frame_bboxes: BoundingBoxCollection = self.__current_frame__.bboxes
+        frame_bboxes: BoxList = self.__current_frame__.bboxes
 
         for item in frame_bboxes:
             if item.label == item_name:
@@ -293,7 +293,7 @@ class KnowledgeUnit:
             return object_item_is_on_top_of
 
         max_area_below: float = 0.0
-        frame_items: BoundingBoxCollection = self.__current_frame__.bboxes
+        frame_items: BoxList = self.__current_frame__.bboxes
         for item_below in frame_items:
             high_enough_to_sit_on = item_below.upper_edge + self.__facts__.max_gap_for_item_on_top_of_another
             if high_enough_to_sit_on > item_on_top.lower_edge:
@@ -318,7 +318,7 @@ class KnowledgeUnit:
         """
         item_beneath_these_objects: list = list()
 
-        frame_items: BoundingBoxCollection = self.__current_frame__.bboxes
+        frame_items: BoxList = self.__current_frame__.bboxes
         for item_above in frame_items:
             if item_above.label in self.__facts__.wall_and_ceiling_items:
                 if item_above.lower_edge > item_beneath.lower_edge:
@@ -440,14 +440,14 @@ class KnowledgeUnit:
         """
         A class to hold data about a particular frame, which can then be easily accessed by the parent class.
         """
-        def __init__(self, bboxes: BoundingBoxCollection):
+        def __init__(self, bboxes: BoxList):
             """
             The class constructor.  Takes in a collection of the bounding boxes which were identified in the frame, and
             then generates some useful summary data about the frame which can be readily accessed by the parent class.
 
-            @param bboxes:  A BoundingBoxCollection object which contains the bounding boxes identified in the frame.
+            @param bboxes:  A BoxList object which contains the bounding boxes identified in the frame.
             """
-            self.bboxes: BoundingBoxCollection = bboxes
+            self.bboxes: BoxList = bboxes
             self.item_types: list = list()
             self.item_counts: list = list()
 

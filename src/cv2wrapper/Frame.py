@@ -2,7 +2,7 @@ from PIL import Image, ImageColor, ImageFont, ImageDraw
 import cv2
 import numpy
 
-from util.BoundingBoxCollection import BoundingBoxCollection
+from util.BoxList import BoxList
 from util.Box import Box
 
 
@@ -62,11 +62,11 @@ class Frame:
         """
         return self.__cv2_img__
 
-    def draw_bounding_boxes(self, box_collection: BoundingBoxCollection):
+    def draw_bounding_boxes(self, box_collection: BoxList):
         """
         Draw the given set of bounding boxes onto the picture in this frame.
 
-        @param box_collection:  A BoundingBoxCollection object which contains the boxes to draw onto the Frame.
+        @param box_collection:  A BoxList object which contains the boxes to draw onto the Frame.
         @return:
         """
         colors = list(ImageColor.colormap.values())

@@ -2,7 +2,7 @@ import copy
 import unittest
 
 from model.SubsumptionUnit import SubsumptionUnit
-from util.BoundingBoxCollection import BoundingBoxCollection
+from util.BoxList import BoxList
 from util.Box import Box
 
 
@@ -15,7 +15,7 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.001, 0.099, 0.001, 0.099, 0.5, "test2"))
 
@@ -23,7 +23,7 @@ class MyTestCase(unittest.TestCase):
 
         su.add_list(subsumption_list)
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
 
@@ -39,7 +39,7 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.2, 0.35, 0.2, 0.3, 0.5, "test2"))
 
@@ -47,7 +47,7 @@ class MyTestCase(unittest.TestCase):
 
         su.add_list(subsumption_list)
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         expected_result.add(Box(0.2, 0.35, 0.2, 0.3, 0.5, "test2"))
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
@@ -64,7 +64,7 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.0, 0.05, 0.0, 0.1, 0.5, "test2"))
         given_box_collection.add(Box(0.05, 0.1, 0.0, 0.1, 0.5, "test3"))
@@ -73,7 +73,7 @@ class MyTestCase(unittest.TestCase):
 
         su.add_list(subsumption_list)
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
 
@@ -89,7 +89,7 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.0, 0.05, 0.0, 0.1, 0.5, "test2"))
 
@@ -102,7 +102,7 @@ class MyTestCase(unittest.TestCase):
         su.add_list(subsumption_list_1)
         su.add_list(subsumption_list_2)
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         expected_result.add(Box(0.3, 0.4, 0.3, 0.4, 0.5, "test3"))
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
@@ -119,7 +119,7 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.00, 0.1, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.01, 0.1, 0.0, 0.1, 0.5, "test2"))
         given_box_collection.add(Box(0.02, 0.1, 0.0, 0.1, 0.5, "test2"))
@@ -129,7 +129,7 @@ class MyTestCase(unittest.TestCase):
 
         su.add_list(subsumption_list_1)
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
 
@@ -145,7 +145,7 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.00, 0.1, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.01, 0.1, 0.0, 0.1, 0.5, "test2"))
         given_box_collection.add(Box(0.02, 0.1, 0.0, 0.1, 0.5, "test3"))
@@ -159,7 +159,7 @@ class MyTestCase(unittest.TestCase):
         su.add_list(subsumption_list_2)
         su.add_list(subsumption_list_3)
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
 
@@ -175,7 +175,7 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.03, 0.1, 0.0, 0.1, 0.5, "test4"))
         given_box_collection.add(Box(0.00, 0.1, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.02, 0.1, 0.0, 0.1, 0.5, "test3"))
@@ -189,7 +189,7 @@ class MyTestCase(unittest.TestCase):
         su.add_list(subsumption_list_2)
         su.add_list(subsumption_list_3)
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
 
@@ -206,7 +206,7 @@ class MyTestCase(unittest.TestCase):
         su = SubsumptionUnit()
         su.set_overlap_threshold(0.5)
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.0000, 0.1000, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.0499, 0.1499, 0.0, 0.1, 0.5, "test2"))
         given_box_collection.add(Box(0.0501, 0.1501, 0.0, 0.1, 0.5, "test3"))
@@ -215,7 +215,7 @@ class MyTestCase(unittest.TestCase):
 
         su.add_list(subsumption_list_1)
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0000, 0.1000, 0.0, 0.1, 0.5, "test1"))
         expected_result.add(Box(0.0501, 0.1501, 0.0, 0.1, 0.5, "test3"))
 
@@ -233,11 +233,11 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.0000, 0.1000, 0.0, 0.1, 0.5, "test1"))
         given_box_collection.add(Box(0.0001, 0.0999, 0.0, 0.1, 0.5, "test1"))
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1"))
 
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
@@ -254,14 +254,14 @@ class MyTestCase(unittest.TestCase):
         """
         su = SubsumptionUnit()
 
-        given_box_collection = BoundingBoxCollection()
+        given_box_collection = BoxList()
         given_box_collection.add(Box(0.00, 0.90, 0.00, 0.90, 0.5, "test1"))
         given_box_collection.add(Box(0.00, 0.10, 0.00, 0.10, 0.5, "test1"))
         given_box_collection.add(Box(0.01, 0.09, 0.01, 0.09, 0.5, "test1"))
         given_box_collection.add(Box(0.30, 0.60, 0.30, 0.60, 0.5, "test1"))
         given_box_collection.add(Box(0.40, 0.50, 0.40, 0.50, 0.5, "test1"))
 
-        expected_result = BoundingBoxCollection()
+        expected_result = BoxList()
         expected_result.add(Box(0.00, 0.90, 0.00, 0.90, 0.5, "test1"))
 
         actual_result = su.subsume_bboxes(copy.deepcopy(given_box_collection))
