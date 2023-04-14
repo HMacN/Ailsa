@@ -9,6 +9,11 @@ from util.Box import Box
 class TrackerTests(unittest.TestCase):
 
     def test_track_new_items(self):
+        """
+        Test that the tracker starts new tracks for new items.
+
+        @return:
+        """
         tracker = Tracker()
 
         box_collection = BoundingBoxCollection()
@@ -29,6 +34,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal tracked boxes: \n" + str(current_tracks)))
 
     def test_track_existing_items_after_multiple_frame_absence(self):
+        """
+        Test that the tracker continues to track items after an absence of several frames.
+
+        @return:
+        """
         tracker = Tracker(allowed_absence=6)
 
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
@@ -58,6 +68,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal tracked items: \n" + str(current_tracks)))
 
     def test_stop_tracking_items_after_multiple_frame_absence(self):
+        """
+        Test that the tracker stops tracking items after a suitable number of frames has elapsed.
+
+        @return:
+        """
         tracker = Tracker(allowed_absence=6)
 
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
@@ -89,6 +104,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal tracked items: \n" + str(current_tracks)))
 
     def test_set_allowed_frame_absence(self):
+        """
+        Test that the number of frames an item can be absent for is adjustable.
+
+        @return:
+        """
         tracker = Tracker(allowed_absence=2)
 
         box_0 = Box(0.2, 0.3, 0.2, 0.6, 0.5, "test1")
@@ -122,6 +142,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal current tracks: \n" + str(actual_result)))
 
     def test_frame_overlap_to_keep_tracking(self):
+        """
+        Test that the tracker will continue to track item which overlap with their previously recorded bounding box.
+
+        @return:
+        """
         tracker = Tracker(allowed_absence=2)
 
         box_1 = Box(0.0, 0.1, 0.0, 0.1, 0.7, "test3")
@@ -142,7 +167,12 @@ class TrackerTests(unittest.TestCase):
                          msg="Expected tracks after new frame: \n" + str(expected_result) +
                              "\n does not equal current tracks: \n" + str(actual_result))
 
-    def test_keep_tracking_for__appropriate_iou(self):
+    def test_keep_tracking_for_appropriate_iou(self):
+        """
+        Test that the tracker keeps tracking an item if its new bounding box has a high enough IoU with the old one.
+
+        @return:
+        """
         tracker = Tracker(iou_threshold=0.143, allowed_absence=20)
 
         box_1 = Box(0.0, 0.1, 0.0, 0.1, 0.7, "test3")
@@ -164,7 +194,13 @@ class TrackerTests(unittest.TestCase):
                          msg="Expected tracks with given IoU: \n" + str(expected_result) +
                              "\n does not equal current tracks: \n" + str(actual_result))
 
-    def test_iou_too_high_stops_tracking(self):
+    def test_stops_tracking_for_appropriate_iou(self):
+        """
+        Test that the tracker stops tracking an item if its new bounding box does not have a high enough IoU with the
+        old one.
+
+        @return:
+        """
         tracker = Tracker(iou_threshold=0.143, allowed_absence=20)
 
         box_1 = Box(0.05, 0.15, 0.05, 0.15, 0.7, "test3")
@@ -193,6 +229,11 @@ class TrackerTests(unittest.TestCase):
                              "\n does not equal current tracks: \n" + str(actual_result))
 
     def test_does_not_return_track_if_below_min_frames(self):
+        """
+        Test that the tracker does not report tracks that have not been observed for a set number of frames.
+
+        @return:
+        """
         tracker = Tracker(min_frames=5)
 
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
@@ -212,6 +253,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal tracked items: \n" + str(actual_result)))
 
     def test_returns_track_after_min_frames(self):
+        """
+        Test that the tracker does report tracks after the minimum number of frames has elapsed.
+
+        @return:
+        """
         tracker = Tracker(min_frames=5)
 
         box_1 = Box(0.1, 0.4, 0.1, 0.6, 0.5, "test2")
@@ -232,6 +278,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal tracked items: \n" + str(actual_result)))
 
     def test_returns_most_likely_object_classification(self):
+        """
+        Test that the tracker returns the item classification associated with the highest confidence identification.
+
+        @return:
+        """
         tracker = Tracker()
 
         box_collection = BoundingBoxCollection()
@@ -249,6 +300,12 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal tracked items: \n" + str(actual_result)))
 
     def test_returns_most_likely_object_classification_after_lower_likelihood_classification(self):
+        """
+        Tests that the tracker still returns the most likely item classification , even after it stops being the most
+        recent.
+
+        @return:
+        """
         tracker = Tracker()
 
         box_collection = BoundingBoxCollection()
@@ -268,6 +325,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal tracked items: \n" + str(actual_result)))
 
     def test_tracker_returns_empty_list_of_track_ids_when_no_tracks(self):
+        """
+        Test that the tracker returns an empty list of track unique id numbers when there are no tracks.
+
+        @return:
+        """
         tracker = Tracker()
 
         box_collection = BoundingBoxCollection()
@@ -281,6 +343,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal actual track ids: \n" + str(actual_result)))
 
     def test_tracker_returns_unique_track_ids(self):
+        """
+        Test that the tracker returns a list of the unique ids for each current track.
+
+        @return:
+        """
         tracker = Tracker()
 
         box_collection = BoundingBoxCollection()
@@ -302,6 +369,11 @@ class TrackerTests(unittest.TestCase):
                               "\n does not equal actual track ids: \n" + str(actual_result)))
 
     def test_tracker_returns_correct_uid_list_after_item_no_longer_tracked(self):
+        """
+        Test tracker returns the correct list of unique id numbers after an item stops being tracked.
+
+        @return:
+        """
         tracker = Tracker(allowed_absence=1)
 
         box_0 = Box(0.0, 0.1, 0.0, 0.1, 0.5, "test1")
