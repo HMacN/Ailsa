@@ -177,7 +177,7 @@ class BoundingBoxCollectionTests(unittest.TestCase):
 
         self.assertFalse(box_collection.contains(box_2))
 
-    def test_pop_item_from_collection(self):
+    def test_pop_item_removes_from_collection(self):
         box_collection = BoundingBoxCollection()
         box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
         box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
@@ -190,6 +190,20 @@ class BoundingBoxCollectionTests(unittest.TestCase):
         box_collection.pop(1)
 
         self.assertFalse(box_collection.contains(box_1))
+
+    def test_pop_item_returns_box(self):
+        box_collection = BoundingBoxCollection()
+        box_0 = Box(0.2, 0.3, 0.2, 0.3, 0.5, "test1")
+        box_1 = Box(0.1, 0.3, 0.2, 0.3, 0.5, "test2")
+        box_2 = Box(0.0, 0.3, 0.2, 0.3, 0.5, "test3")
+
+        box_collection.add(box_0)
+        box_collection.add(box_1)
+        box_collection.add(box_2)
+
+        popped_box: Box = box_collection.pop(1)
+
+        self.assertEqual(box_1, popped_box)
 
     def test_can_iterate_over_collection(self):
         box_collection = BoundingBoxCollection()
