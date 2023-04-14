@@ -8,6 +8,11 @@ from util.Box import Box
 
 class MyTestCase(unittest.TestCase):
     def test_subsumes_bboxes_to_first_value_on_subsumption_list_(self):
+        """
+        Test that the unit subsumes items into the correct type.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
@@ -27,6 +32,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_does_not_subsume_bboxes_that_are_not_overlapping(self):
+        """
+        Test that the unit does not subsume items that are not overlapping.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
@@ -47,6 +57,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_can_subsume_multiple_items(self):
+        """
+        Test that the unit can subsume multiple items into each other.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
@@ -67,6 +82,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_can_handle_multiple_subsumption_lists(self):
+        """
+        Test that the unit can handle multiple lists of possible items to subsume.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
@@ -92,6 +112,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_can_handle_multiple_nested_bboxes(self):
+        """
+        Test that nested items are subsumed properly.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
@@ -113,6 +138,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_chain_of_subsume_ops(self):
+        """
+        Test items are subsumed correctly, even if the item they are subsumed into is also subsumed.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
@@ -138,6 +168,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_chain_of_subsume_ops_order_does_not_matter(self):
+        """
+        Test that the order the items are subsumed in does not matter.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
@@ -163,6 +198,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_set_overlap_threshold(self):
+        """
+        Test that the amount an item must be overlapping another by to be subsumed can be set.
+
+        @return:
+        """
         su = SubsumptionUnit()
         su.set_overlap_threshold(0.5)
 
@@ -186,6 +226,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_subsumes_items_of_same_type_automatically(self):
+        """
+        Test that, even without a dedicated list of item to subsume, items are subsumed into items of their own type.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
@@ -202,6 +247,11 @@ class MyTestCase(unittest.TestCase):
                               "\n does not equal actual tracks: \n" + str(actual_result)))
 
     def test_items_of_same_type_subsume_into_largest_box(self):
+        """
+        Test that items of the same type subsume into the largest bounding box by area.
+
+        @return:
+        """
         su = SubsumptionUnit()
 
         given_box_collection = BoundingBoxCollection()
