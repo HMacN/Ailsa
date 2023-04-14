@@ -215,6 +215,44 @@ class KnowledgeUnitTests(unittest.TestCase):
                          msg="The expected value: \n" + str(expected_results) +
                              "\ndid not equal the actual value: \n" + str(actual_results))
 
+    def test_when_did_you_see_items_times_item_seen_copes_with_frames_at_irregular_time_steps(self):
+        ku = KnowledgeUnit()
+
+        frame_1 = BoundingBoxCollection()
+        frame_1.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "A"))
+        ku.add_frame(frame_1, 1)
+
+        frame_2 = BoundingBoxCollection()
+        frame_2.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_2, 2)
+
+        frame_3 = BoundingBoxCollection()
+        frame_3.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_3, 8)
+
+        frame_4 = BoundingBoxCollection()
+        frame_4.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_4, 10)
+
+        frame_5 = BoundingBoxCollection()
+        frame_5.add(Box(0.2, 0.3, 0.2, 0.6, 0.5, "C"))
+        ku.add_frame(frame_5, 16)
+
+        frame_6 = BoundingBoxCollection()
+        frame_6.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_6, 18)
+
+        frame_7 = BoundingBoxCollection()
+        frame_7.add(Box(0.0, 0.1, 0.0, 0.1, 0.5, "B"))
+        ku.add_frame(frame_7, 20)
+
+        expected_results: list = [10, 20]
+        actual_results: list = ku.when_did_you_see("B")
+
+        self.assertEqual(expected_results, actual_results,
+                         msg="The expected value: \n" + str(expected_results) +
+                             "\ndid not equal the actual value: \n" + str(actual_results))
+
     def test_where_did_you_see_items_returns_empty_list_if_items_not_seen(self):
         ku = KnowledgeUnit()
 
