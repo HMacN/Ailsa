@@ -4,7 +4,7 @@ from util.Box import Box
 from util.BoxList import BoxList
 
 
-class BoundingBoxCollectionTests(unittest.TestCase):
+class BoxListTests(unittest.TestCase):
 
     def test_can_add_and_get_one_bounding_box(self):
         """

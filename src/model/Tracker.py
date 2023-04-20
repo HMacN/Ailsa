@@ -10,7 +10,7 @@ class Tracker:
     A class to "smooth out" the tracking of identified items.  The object recognition software can occasionally fail to
     identify objects in a frame.  Doing so may lead to objects in a scene not being described to the user.  This class
     provides a degree of "inertia" to bounding box identifications, so as to reduce the chances of boxes which have been
-    identified for a single frame, or boxes which have dropped out of a single frame, from being erroneously describes
+    identified for a single frame, or boxes which have dropped out of a single frame, from being erroneously described
     (or not described) to the user.
     """
 
