@@ -12,8 +12,6 @@ from util.Debugging import display_progress_percent
 
 class MainClass:
     if __name__ == "__main__":
-        print("Main class running!")
-
         # Set up Tracker
         tracker = Tracker(min_frames=20, allowed_absence=20, iou_threshold=0.7)
 
@@ -23,7 +21,7 @@ class MainClass:
 
         # Set up Subsumption Unit
         sub_unit = SubsumptionUnit()
-        sub_unit.set_overlap_threshold(0.7)
+        sub_unit.set_overlap_threshold(0.6)
         sub_unit.add_list(["Book case", "Shelf"])
         sub_unit.add_list(["Chair", "Table", "Shelf", "Footwear"])
         sub_unit.add_list(["Person", "Clothing", "Human face", "Human leg"])
@@ -31,6 +29,7 @@ class MainClass:
 
         # Set up CV2 Wrapper classes.
         detector_model = "https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1"
+        # detector_model = "https://tfhub.dev/google/faster_rcnn/openimages_v4/inception_resnet_v2/1"
         # video_file = ".\\movie_002_2023-03-11"  # First Unity scene.
         video_file = ".\\..\\Videos\\tracker_test_video"  # Tracker test (living room chair).
         file_extension = ".mp4"
@@ -38,7 +37,7 @@ class MainClass:
         # webcam_detector = Detector("https://tfhub.dev/google/openimages_v4/ssd/mobilenet_v2/1")
         file_detector = Detector(detector_model, video_file + file_extension)
         detector = file_detector
-        detector.set_perform_nms(False)  # Set to not perform NMS so s not to interfere with the Subsumption Unit
+        detector.set_perform_nms(False)  # Set to not perform NMS so as not to interfere with the Subsumption Unit
         detector.set_detection_confidence_threshold(0.1)
         detector.set_nms_overlap_threshold(0.1)
         detector.set_nms_eta_parameter(None)
@@ -86,7 +85,20 @@ class MainClass:
 
             # Handle any key presses:
             if key_pressed == ord('z'):
-                print(knowledge.get_list_of_all_seen_items())
+                paused = not paused
+                print("===========================================================")
+                print("DESCRIBED SCENE:")
+                print(knowledge.describe_scene())
+                print("===========================================================")
+                print("ITEM FINDING:")
+                target = "Chair"
+                print(knowledge.where_is(target))
+                print(knowledge.items_between_user_and(target))
+                print("===========================================================")
+                print("OBJECT RECORDING:")
+                secondary_target = 'Chair'
+                print(knowledge.how_many_have_you_seen(secondary_target))
+                print(knowledge.when_did_you_see(secondary_target))
             elif key_pressed == ord(' '):
                 paused = not paused
             elif key_pressed == 'q':

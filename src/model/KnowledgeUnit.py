@@ -1,5 +1,6 @@
 from util.BoxList import BoxList
 from util.Box import Box
+from util.Debugging import debug_print
 
 
 class KnowledgeUnit:
@@ -15,7 +16,7 @@ class KnowledgeUnit:
         self.__impossible_items__: list = list()
         self.__recorded_items__: dict = dict()
         self.__facts__: KnowledgeUnit.Facts = KnowledgeUnit.Facts()
-        self.__standard_strings__: KnowledgeUnit.StandardStrings = KnowledgeUnit.StandardStrings()
+        self.__strs__: KnowledgeUnit.StandardStrings = KnowledgeUnit.StandardStrings()
         self.__current_frame__: KnowledgeUnit.Frame | None = None
         self.__last_frame_time__: int = 0
 
@@ -81,7 +82,7 @@ class KnowledgeUnit:
         """
         for i in range(len(frame.item_types)):
             if frame.item_types[i] in self.__impossible_items__:
-                frame.item_types[i] = self.__standard_strings__.unknown_item
+                frame.item_types[i] = self.__strs__.unknown_item
 
     def __add_new_item__(self, item_name: str, item_count_in_frame: int, time: int):
         """
@@ -135,8 +136,8 @@ class KnowledgeUnit:
         """
         if item_name in self.get_list_of_all_seen_items():
             if item_name in self.__facts__.items_not_normally_on_floor:
-                return [self.__standard_strings__.on_the_floor]
-            return [self.__standard_strings__.empty_str]
+                return [self.__strs__.on_the_floor]
+            return [self.__strs__.empty_str]
         return list()
 
     def set_items_not_normally_on_floor(self, items: list):
@@ -181,9 +182,9 @@ class KnowledgeUnit:
             if self.__item_is_right__(item):
                 items_right.append(item.label)
 
-        description[self.__standard_strings__.ahead] = sorted(items_ahead)
-        description[self.__standard_strings__.left] = sorted(items_left)
-        description[self.__standard_strings__.right] = sorted(items_right)
+        description[self.__strs__.ahead] = sorted(items_ahead)
+        description[self.__strs__.left] = sorted(items_left)
+        description[self.__strs__.right] = sorted(items_right)
 
         for custom_category in self.__facts__.custom_categories.keys():
             category_items: list = list()
@@ -273,9 +274,9 @@ class KnowledgeUnit:
 
         for item in frame_bboxes:
             if item.label == item_name:
-                item_location[self.__standard_strings__.direction] = self.__get_direction_list__(item)
-                item_location[self.__standard_strings__.beneath] = self.__get_list_of_items_above_this__(item)
-                item_location[self.__standard_strings__.on_top_of] = self.__get_on_top_of__(item)
+                item_location[self.__strs__.direction] = self.__get_direction_list__(item)
+                item_location[self.__strs__.beneath] = self.__get_list_of_items_above_this__(item)
+                item_location[self.__strs__.on_top_of] = self.__get_on_top_of__(item)
                 return item_location
 
         return item_location
@@ -288,7 +289,7 @@ class KnowledgeUnit:
         @param item_on_top: A str which is the name of the item in the current frame which may be on top of something.
         @return:            A str which is the name ("" if none) of the item the given item is on top of.
         """
-        object_item_is_on_top_of = self.__standard_strings__.empty_str
+        object_item_is_on_top_of = self.__strs__.empty_str
         if item_on_top.label in self.__facts__.furniture_items:
             return object_item_is_on_top_of
 
@@ -360,11 +361,11 @@ class KnowledgeUnit:
         """
         direction: list = list()
         if self.__item_is_ahead__(item):
-            direction.append(self.__standard_strings__.ahead)
+            direction.append(self.__strs__.ahead)
         if self.__item_is_left__(item):
-            direction.append(self.__standard_strings__.left)
+            direction.append(self.__strs__.left)
         if self.__item_is_right__(item):
-            direction.append(self.__standard_strings__.right)
+            direction.append(self.__strs__.right)
         return sorted(direction)
 
     def set_furniture_items(self, furniture_items: list):
@@ -382,7 +383,7 @@ class KnowledgeUnit:
         """
         Returns a list of all items in the current frame which are in-between the user and the target item.  Please note
         that "in-between" is defined as any item that has a lower edge in the current frame than the target item (as
-        this should mean that it is closer to the user), and that no effort is made ot determine if an item is not
+        this should mean that it is closer to the user), and that no effort is made to determine if an item is not
         actually on a direct line between the user and the target.  This is to avoid mistakes in the system erroneously
         describing there being no intervening items to a user.  Please also note that the behaviour of this function is
         undefined for instances where there are multiple instances of the target item in the current frame.
